@@ -1,0 +1,5 @@
+import {sqliteTable,text,integer,primaryKey} from "drizzle-orm/sqlite-core";
+export const gymStates=sqliteTable("gym_states",{userId:text("user_id").primaryKey(),payload:text("payload").notNull(),revision:integer("revision").notNull().default(0),updatedAt:text("updated_at").notNull()});
+export const gymAccess=sqliteTable('gym_access',{ownerId:text('owner_id').notNull(),userId:text('user_id').notNull(),name:text('name').notNull(),role:text('role').notNull(),branches:text('branches').notNull(),revoked:integer('revoked').notNull().default(0)},t=>[primaryKey({columns:[t.ownerId,t.userId]})]);
+export const gymInvites=sqliteTable('gym_invites',{tokenHash:text('token_hash').primaryKey(),ownerId:text('owner_id').notNull(),role:text('role').notNull(),branches:text('branches').notNull(),expiresAt:text('expires_at').notNull(),claimedBy:text('claimed_by')});
+export const gymRecovery=sqliteTable('gym_recovery',{id:text('id').primaryKey(),ownerId:text('owner_id').notNull(),payload:text('payload').notNull(),createdAt:text('created_at').notNull()});

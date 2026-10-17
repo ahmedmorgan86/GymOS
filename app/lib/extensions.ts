@@ -1,0 +1,34 @@
+import {trainingOperation} from "./training.ts";
+import {RuleError,addDays,days,type GymState,type Member,type Operation} from './domain.ts';
+export type Plan={id:string;name:string;days:number;visits:number|null;minor:number;branch:string;archived:boolean};
+export type Invoice={id:string;member:string;title:string;total:number;due:string;branch:string;allocations:{payment:string;minor:number}[];voided:boolean};
+export type FollowUp={id:string;pulse:string;member:string;day:string;outcome:'contacted'|'no-answer'|'renewed'|'returned';note:string;branch:string};
+export type Freeze={from:string;to:string;cancelled?:boolean};
+export function normalize(s:GymState):GymState {s.plans??=[];s.invoices??=[];s.followUps??=[];s.programs??=[];s.trainingAssignments??=[];s.trainingSessions??=[];return s;}
+const fail=(code='invalid'):never=>{throw new RuleError(code);};
+const str=(v:unknown,max=150)=>typeof v==='string'&&v.trim().length>0&&v.trim().length<=max?v.trim():fail();
+const integer=(v:unknown,min=0,max=1e10)=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<=max?v:fail('amount');
+const date=(v:unknown)=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&Number.isFinite(Date.parse(v))&&new Date(v+'T12:00:00Z').toISOString().slice(0,10)===v?v:fail('dates');
+export function membershipIssue(s:GymState,m:Member,on:string):string|null{
+ if(m.contract&&m.contract.start>on)return "inactive";
+ if(m.archived||m.joined>on||m.expires<on)return 'inactive';
+ if(m.freezes?.some(f=>!f.cancelled&&f.from<=on&&f.to>=on))return 'frozen';
+ if(m.contract?.visits!=null&&s.visits.filter(v=>v.member===m.id&&v.day>=m.contract!.start).length>=m.contract.visits)return 'quota';
+ return null;
+}
+export function outstanding(s:GymState,i:Invoice){return i.voided?0:i.total-i.allocations.filter(a=>s.payments.some(p=>p.id===a.payment&&!p.voided)).reduce((sum,a)=>sum+a.minor,0);}
+export function extension(s:GymState,op:Operation,today:string,now:string,newId:()=>string):boolean{
+ normalize(s);if(trainingOperation(s,op,today,newId))return true;const member=()=>s.members.find(m=>m.id===op.id&&m.branch===op.branch)??fail('notFound');
+ switch(op.type){
+ case 'plan.save':{const p:Plan={id:newId(),name:str(op.name),days:integer(op.days,1,3660),visits:op.visits===null?null:integer(op.visits,1,10000),minor:integer(op.minor,1),branch:op.branch,archived:false};s.plans!.push(p);return true;}
+ case 'plan.archive':{const p=s.plans!.find(p=>p.id===op.id&&p.branch===op.branch)??fail('notFound');p.archived=!p.archived;return true;}
+ case 'plan.assign':{const m=member();if(m.archived)fail('inactive');const p=s.plans!.find(p=>p.id===op.plan&&p.branch===op.branch&&!p.archived)??fail('notFound');const start=date(op.start);if(start<today||start>addDays(today,365))fail('dates');if(m.freezes?.some(f=>!f.cancelled&&f.to>=today))fail('frozen');const paid=integer(op.paid,0,p.minor);if(!['cash','card','transfer'].includes(String(op.method)))fail();m.contract={id:newId(),plan:p.id,start,visits:p.visits};m.expires=addDays(start,p.days-1);const invoice:Invoice={id:newId(),member:m.id,title:p.name,total:p.minor,due:date(op.due),branch:op.branch,allocations:[],voided:false};if(paid){const id=newId();s.payments.push({id,member:m.id,minor:paid,method:String(op.method),day:today,branch:op.branch,voided:false});invoice.allocations.push({payment:id,minor:paid});}s.invoices!.push(invoice);return true;}
+ case 'member.freeze':{const m=member();const to=date(op.to);if(membershipIssue(s,m,today)||to<today||to>addDays(today,365))fail('inactive');m.freezes??=[];m.freezes.push({from:today,to});m.expires=addDays(m.expires,days(today,to)+1);return true;}
+ case 'member.unfreeze':{const m=member();const f=m.freezes?.find(f=>!f.cancelled&&f.from<=today&&f.to>=today)??fail('notFound');m.expires=addDays(m.expires,-(days(today,f.to)+1));if(f.from===today)f.cancelled=true;else f.to=addDays(today,-1);return true;}
+ case 'invoice.pay':{const i=s.invoices!.find(i=>i.id===op.id&&i.branch===op.branch&&!i.voided)??fail('notFound');const minor=integer(op.minor,1,outstanding(s,i));if(!['cash','card','transfer'].includes(String(op.method)))fail();const id=newId();s.payments.push({id,member:i.member,minor,day:today,method:String(op.method),branch:op.branch,voided:false});i.allocations.push({payment:id,minor});return true;}
+ case 'invoice.void':{const i=s.invoices!.find(i=>i.id===op.id&&i.branch===op.branch&&!i.voided)??fail('notFound');str(op.reason,500);if(i.allocations.some(a=>s.payments.some(p=>p.id===a.payment&&!p.voided)))fail('hasPayments');i.voided=true;return true;}
+ case 'cards.issue':{if(!Array.isArray(op.ids)||op.ids.length<1||op.ids.length>100)fail();const ids=new Set(op.ids as string[]);const ms=s.members.filter(m=>ids.has(m.id)&&m.branch===op.branch&&!m.archived);if(ms.length!==ids.size)fail('notFound');for(const m of ms)if(!m.card)m.card='GOS'+newId().replaceAll('-','').slice(0,24).toUpperCase();return true;}
+ case 'pulse.followup':{const p=s.pulse.find(p=>p.id===op.id&&p.branch===op.branch&&p.status==='approved')??fail('approval');if(!['contacted','no-answer','renewed','returned'].includes(String(op.outcome)))fail();s.followUps!.push({id:newId(),pulse:p.id,member:p.member,day:today,outcome:op.outcome as FollowUp['outcome'],note:str(op.note,500),branch:op.branch});return true;}
+ default:return false;
+ }
+}

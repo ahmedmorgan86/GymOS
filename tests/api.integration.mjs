@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+const origin='http://127.0.0.1:5173';
+const login=await fetch(origin+'/signin-with-chatgpt?return_to=/',{redirect:'manual'});
+const baseCookie=login.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ');
+async function request(path,body,cookie=baseCookie){const response=await fetch(origin+path,{method:body?'POST':'GET',headers:{cookie,...(body?{Origin:origin,'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});return{status:response.status,data:await response.json(),cookie:response.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ')};}
+const original=await request('/api/workspace');assert.equal(original.status,200);assert.equal(original.data.role,'owner');
+const claimed=await request('/api/team',{action:'claim',code:'a'.repeat(64)});assert.equal(claimed.status,200);const staffCookie=baseCookie+'; '+claimed.cookie;
+const staff=await request('/api/workspace',undefined,staffCookie);assert.equal(staff.data.role,'reception');assert.equal(staff.data.owner,'qa-tenant');assert.equal(staff.data.state.payments.length,0);assert.equal(staff.data.state.invoices.length,0);assert.equal(staff.data.state.events.length,0);
+for(const type of ['payment.add','plan.assign','settings.save','member.save','cards.issue'])assert.equal((await request('/api/workspace',{revision:staff.data.revision,requestId:randomUUID(),operation:{type,branch:'main'}},staffCookie)).status,403);
+assert.equal((await request('/api/backup',undefined,staffCookie)).status,403);assert.equal((await request('/api/team',undefined,staffCookie)).status,403);
+assert.equal((await request('/api/team',{action:'invite',role:'manager',branches:['main']},staffCookie)).status,403);
+assert.equal((await request('/api/team',{action:'claim',code:'a'.repeat(64)})).status,400);
+const envelope={revision:staff.data.revision,requestId:randomUUID(),operation:{type:'visit.scan',branch:'main',code:'GOS'+'F'.repeat(24)}};
+const checked=await request('/api/workspace',envelope,staffCookie);assert.equal(checked.status,200);assert.equal(checked.data.state.visits.length,1);
+const replay=await request('/api/workspace',envelope,staffCookie);assert.equal(replay.status,200);assert.equal(replay.data.state.visits.length,1);
+assert.equal((await request('/api/workspace',{...envelope,operation:{...envelope.operation,code:'GOS'+'E'.repeat(24)}},staffCookie)).status,409);
+assert.equal((await request('/api/workspace',{...envelope,requestId:randomUUID()},staffCookie)).data.error,'conflict');
+assert.equal((await request('/api/workspace',{...envelope,revision:checked.data.revision,requestId:randomUUID(),operation:{...envelope.operation,branch:'foreign'}},staffCookie)).status,403);
+const backup=await request('/api/backup');assert.equal(backup.status,200);assert.equal(backup.data.tenant,'local_seedy');
+const bad=structuredClone(backup.data);bad.tenant='qa-tenant';assert.equal((await request('/api/backup',{backup:bad,revision:original.data.revision,confirm:'RESTORE'})).status,400);
+const restored=await request('/api/backup',{backup:backup.data,revision:original.data.revision,confirm:'RESTORE'});assert.equal(restored.status,200);
+const after=await request('/api/workspace');assert.equal(after.data.revision,original.data.revision+1);assert.notEqual(after.data.state.generation,original.data.state.generation);
+assert.equal((await request('/api/backup',{backup:backup.data,revision:original.data.revision,confirm:'RESTORE'})).status,409);
+const recoveries=await request('/api/backup?list=1');assert.ok(recoveries.data.snapshots.length);const recovery=await request('/api/backup?recovery='+recoveries.data.snapshots[0].id);assert.equal(recovery.status,200);assert.equal(recovery.data.state.members.length,original.data.state.members.length);
+console.log('PASS: staff claim/redaction, write authorization, one-use invitation, tenant/branch isolation, check-in, idempotency/replay/conflict, owner backup/restore and recovery snapshots.');

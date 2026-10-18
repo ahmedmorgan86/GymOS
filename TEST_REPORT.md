@@ -31,3 +31,8 @@ Live new-project checks passed: GET /sign-in 200; GET /api/health 200 with statu
 
 Pinned package engines and .nvmrc to Node 24 for @zxing/library 0.23.0. Removed unused drizzle-kit (historical SQLite tooling), which removes both deprecated @esbuild-kit packages. On Node 24.19.0: npm ci installed 583 packages without EBADENGINE or those deprecation warnings; all 36 tests and the native Next production build including TypeScript passed. npm emitted a separate allow-scripts notice for unrs-resolver; scripts were not broadly approved. This runtime update still needs PR merge and a new production deployment.
 
+
+## npm environment warnings
+
+The Vercel npm runner maps legacy npm_config_cache_dir to the supported npm_config_cache before npm starts, preserving the cache path. package.json explicitly denies the unneeded unrs-resolver postinstall instead of enabling dependency scripts. A clean npm ci with an injected legacy cache variable installed 583 packages without the reported warnings. All 36 tests passed. Production build result is recorded in the PR validation.
+

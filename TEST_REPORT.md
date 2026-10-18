@@ -13,10 +13,16 @@
 
 The earlier Sites/D1 integration results apply only to the old hosting; they are not evidence that the Supabase migration has passed integration testing.
 
-Local production HTTP verification passed: /api/workspace, /api/team and /api/backup reject anonymous requests and spoofed legacy identity headers with 401; cross-origin POST is 403; root redirects to /sign-in and the login document has no offline-shell marker. Browser verified Arabic RTL and English LTR login labels. Database privileges were verified through Supabase metadata (business CRUD and session identifier columns only); the attempted SET ROLE test was denied and created no test rows.
+Local production HTTP verification passed: /api/workspace, /api/team and /api/backup reject anonymous requests and spoofed legacy identity headers with 401; cross-origin POST is 403; root redirects to /sign-in and the login document has no offline-shell marker. Browser verified Arabic RTL and English LTR login labels. Database privileges were verified through Supabase metadata (business CRUD; direct Auth-table access was subsequently revoked); the attempted SET ROLE test was denied and created no test rows.
 
 Production deployment succeeded on 2026-10-18: commit 29eb8cf2ba6e7120af0c4d9fc625c31f94841cec, Vercel deployment dpl_CaNppq5Bh2zBAFtQ8wssWX7nN4c1, https://gym-os-liart.vercel.app. Supabase Auth Site URL and the exact /auth/callback redirect were configured for that origin. Owner registration/confirmation is still pending, so authenticated writes and data import must not be marked complete.
 
 ## Login regression fix
 
 Vercel logs tied error digest 492543978 to permission denied for schema auth after email confirmation. The application now verifies identity through Supabase Auth getUser() for every protected request, without querying managed auth.sessions. Direct session-table column privileges were revoked. Three added tests cover a fresh verified identity for each request, invalid/missing/anonymous identity rejection, and non-authoritative editable metadata. Production build and all 36 tests passed before deployment.
+
+## Fresh Vercel project
+
+Created gymos-enterprise on 2026-10-18 from main at 7cbc610. Deployment dpl_96BUbWg68NSggnrK2Hd5Cwhxx54r is Ready at https://gymos-enterprise.vercel.app. The previous gym-os project was absent from the authenticated team project list; this run did not delete it. Supabase data and existing accounts were retained. Site URL and the exact /auth/callback redirect now include the new production origin.
+
+Live new-project checks passed: GET /sign-in 200; GET /api/health 200 with status ready; GET /api/workspace without a session 401. Browser rendered the Arabic login. Authenticated dashboard loading and writes still require the owner to sign in; no claim of end-to-end completion is made.

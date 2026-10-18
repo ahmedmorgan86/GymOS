@@ -7,7 +7,7 @@
 - Build: npm run build
 - Install: npm ci
 - Output: .next
-- Node: 22.x
+- Node: 24.x
 
 اربط مشروع Supabase ثم اضبط DATABASE_URL وNEXT_PUBLIC_SUPABASE_URL وNEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY داخل Vercel. لا تضع الأسرار داخل GitHub. لتهيئة قاعدة أخرى، نفّذ npm run db:migrate باتصال إداري منفصل اسمه MIGRATION_DATABASE_URL على جهاز موثوق. حساب التشغيل gymos_app لا يملك تعديل الجداول، ولا يُحفظ الاتصال الإداري في التطبيق. قاعدة GymOS الحالية تمت تهيئتها بالفعل. لا يتم تشغيل الترحيل تلقائيًا أثناء البناء.
 

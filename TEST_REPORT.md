@@ -43,3 +43,12 @@ The Vercel npm runner maps legacy npm_config_cache_dir to the supported npm_conf
 
 Final production webpack build including TypeScript passed after removal of stale generated development types for the deleted preview route. Production route list contains no shop-preview endpoint.
 
+
+## Camera, serials, speech and Windows backups
+
+47 Node tests passed, including atomic bounded photo saving/removal, external serial normalization/leading zeros/duplicates/check-in, announcement validation and one-minute deduplication window. Windows console smoke passed with SQLite 3.53.3: encrypted blob payload, latest snapshot per tenant and missing-tenant rejection. SQLitePCLRaw bundle pinned to 2.1.12 to remove the earlier vulnerable native SQLite dependency warning.
+
+Temporary browser fixture verified voice enumeration (3 English, 0 Arabic), message/voice/time selection and schedule saving without arming audio, photo consent/capture UI rendering, external serial assignment, QR/Code128 rendering and Enter-driven check-in success. No live camera frames or actual audible output were tested. Temporary route/data were removed. Actual USB scanner, speaker audio, camera permission/capture, Windows toolbar WebView owner-session integration and production persistence still require acceptance testing. No changes to Supabase permissions/schema were made. Local SQLite encryption/data isolation were tested independently of the GUI.
+
+Production Next webpack/TypeScript build passed; self-contained single-file win-x64 publish completed with no SQLite vulnerability warnings. EXE uses the configured production URL; web additions still require merge/deployment. EXE is not code-signed and requires WebView2. GUI launch, actual speaker/camera/scanner hardware and authenticated backup integration were not marked tested.
+

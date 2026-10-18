@@ -1,4 +1,4 @@
-import {db} from '../../lib/database';
+import {persistSpace} from '../../lib/entity-store';
 import {applyOperation,RuleError,type Operation} from '../../lib/domain';
 import {permitted} from '../../lib/access';
 import {administrator,context,readSpace,packet,reply,sameOrigin,hash} from '../../lib/server-workspace';
@@ -12,6 +12,6 @@ export async function POST(request:Request){try{
  if(['settings.save','logo.set','branch.add','demo.seed','demo.clear'].includes(body.operation.type)&&!(await administrator(ctx)))return reply({error:'forbidden'},403);
  const current=await readSpace(ctx.owner),digest=await hash(JSON.stringify(body.operation)),receipt=current.state.receipts.find(r=>r.id===ctx.user.userId+':'+body.requestId);
  if(receipt){if(receipt.digest!==digest)return reply({error:'replay'},409);return reply(packet(current,ctx));}if(body.revision!==current.revision)return reply({error:'conflict'},409);
- const state=applyOperation(current.state,body.operation,new Date().toISOString(),ctx.user.displayName,()=>crypto.randomUUID());state.receipts.push({id:ctx.user.userId+':'+body.requestId,digest});if(state.receipts.length>1000)state.receipts.shift();const payload=JSON.stringify(state);if(new TextEncoder().encode(payload).byteLength>1_600_000)return reply({error:'limit'},413);
- const result=await db.prepare('UPDATE gym_states SET payload=?,revision=revision+1,updated_at=? WHERE user_id=? AND revision=?').bind(payload,new Date().toISOString(),ctx.owner,current.revision).run();if(result.meta.changes!==1)return reply({error:'conflict'},409);return reply(packet({state,revision:current.revision+1},ctx));
+ const state=applyOperation(current.state,body.operation,new Date().toISOString(),ctx.user.displayName,()=>crypto.randomUUID());state.receipts.push({id:ctx.user.userId+':'+body.requestId,digest});if(state.receipts.length>1000)state.receipts.shift();const payload=JSON.stringify(state);if(new TextEncoder().encode(payload).byteLength>20_000_000)return reply({error:'limit'},413);
+ if(!await persistSpace(ctx.owner,current,state))return reply({error:'conflict'},409);return reply(packet({state,revision:current.revision+1},ctx));
  }catch(e){if(e instanceof RuleError)return reply({error:e.code},400);if(e instanceof SyntaxError||e instanceof RangeError)return reply({error:'invalid'},400);return reply({error:e instanceof Error&&e.message==='forbidden'?'forbidden':'unavailable'},e instanceof Error&&e.message==='forbidden'?403:503);}}

@@ -79,3 +79,6 @@ next-env.d.ts
 /tests/windows-backup/obj/
 
 /windows/publish-v2/
+
+/tests/windows-speech/bin/
+/tests/windows-speech/obj/

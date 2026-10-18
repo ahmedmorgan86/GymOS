@@ -1,16 +1,16 @@
-# Verification — Operations release
+# Vercel + Supabase migration verification
 
-- 21 automated tests passed: original cards/Pulse, plans/quotas/freeze/installments/backup/access and service-worker recursive assets/fonts and offline cache fallback.
-- Local HTTP integration passed: real D1 + API + native local identity, receptionist redaction and authorization, single-use invitation, branch/tenant scope, duplicate request replay, optimistic conflict, owner restore and recoverable pre-restore snapshot.
-- Browser confirmed: plan creation, partial collection, outstanding 600 from invoice 800 and paid 200; two cards generated together; visit queued while local server stopped and accepted once after restart.
-- Independent decoder verified original QR and Code128 pass tokens.
-- TypeScript check passed. Production web build and Windows self-contained build are checked during packaging.
-- Offline cold-opening in browser was attempted; preview-browser/dev-cache issues prevented final confirmation of cold-opening. Service-worker shell/asset fallback is covered by automated tests.
-- Not tested: physical USB reader, physical camera, physical print output, Windows cloud login/offline launch, real employee accounts through platform sharing, load/performance/security audit.
+2026-10-18
 
-No production member data was used for local tests. Site sharing remains unchanged.
+- 33 automated tests passed: cards, attendance, Pulse, billing, freezes, quotas, backup, staff permission rules, 13 training presets, SQL parameter conversion, native Next configuration and separation of login from the offline shell.
+- Native Next.js 16.3.4 production build passed, including TypeScript, routes and .next/routes-manifest.json.
+- Windows x64 self-contained publish completed; WebView2 runtime is still required on target Windows.
+- Live Supabase schemas were created: four business tables in private gymos schema, all with RLS enabled. anon and authenticated have no schema access. A dedicated gymos_app login has no superuser/create-role/create-db/bypass-RLS privileges.
+- Supabase security advisor returned no findings after schema creation.
+- Direct PostgreSQL connection from this workstation has timed out. Therefore database password authentication and application request round-trip are not yet verified. The production health route reports readiness without exposing data.
+- Not yet verified: deployed sign-up/sign-in/session refresh, employee invitation, cross-tenant HTTP access, backup import on Supabase, Windows live login, physical scanning and physical printing.
+- Existing club data has not been copied to a new owner identity. The old hosting remains the source of truth until backup import and record comparison.
 
-## Training extension
-28 automated tests now pass (7 new training tests). Covered ready templates, assignment history, copy/archive behavior, malformed exercise data, branch isolation, daily completion uniqueness, backup references, demo cleanup and reception write restrictions. Physical printed training sheets and coaching suitability are not verified.
+The earlier Sites/D1 integration results apply only to the old hosting; they are not evidence that the Supabase migration has passed integration testing.
 
-Local browser verified preset assignment to a demo member, day completion once with disabled repeat button, and print preview containing the correct member/program/schedule. No production member assignments were created during verification.
+Local production HTTP verification passed: /api/workspace, /api/team and /api/backup reject anonymous requests and spoofed legacy identity headers with 401; cross-origin POST is 403; root redirects to /sign-in and the login document has no offline-shell marker. Browser verified Arabic RTL and English LTR login labels. Database privileges were verified through Supabase metadata (business CRUD and session identifier columns only); the attempted SET ROLE test was denied and created no test rows.

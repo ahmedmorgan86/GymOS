@@ -62,3 +62,13 @@ next-env.d.ts
 
 /*.log
 /tsconfig.tsbuildinfo
+
+!.env.example
+
+/windows/bin/
+/windows/obj/
+/windows/release/
+
+/migration-files.json
+/.migration-transfer.json
+/.package-files.json

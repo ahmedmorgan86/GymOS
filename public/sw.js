@@ -1,4 +1,4 @@
-const CACHE='gymos-shell-v7';
+const CACHE='gymos-shell-v8';
 const local=['localhost','127.0.0.1'].includes(self.location.hostname);
 const asset=url=>/\.(?:js|mjs|css|woff2|woff|ttf|svg|png)$/.test(url.pathname)||(local&&(/\.(?:ts|tsx)$/.test(url.pathname)||url.pathname.startsWith('/@')));
 self.addEventListener('install',()=>self.skipWaiting());

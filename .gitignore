@@ -72,3 +72,5 @@ next-env.d.ts
 /migration-files.json
 /.migration-transfer.json
 /.package-files.json
+
+/.migration-paths.txt

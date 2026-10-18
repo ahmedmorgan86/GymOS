@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {verifiedUser} from '../app/lib/verified-user.ts';
+test('Protected identity requires a successful fresh Supabase Auth response',async()=>{let calls=0;const auth={getUser:async()=>{calls++;return{data:{user:{id:'owner',email:'owner@example.invalid',user_metadata:{name:'Owner'}}},error:null};}};assert.equal((await verifiedUser(auth)).userId,'owner');assert.equal((await verifiedUser(auth)).userId,'owner');assert.equal(calls,2);});
+test('Invalid, missing and anonymous identities cannot open a workspace',async()=>{for(const result of [{data:{user:{id:'spoofed'}},error:{message:'Invalid JWT'}},{data:{user:null},error:null},{data:{user:{id:'anonymous',is_anonymous:true}},error:null}])assert.equal(await verifiedUser({getUser:async()=>result}),null);});
+test('Editable metadata cannot grant a role or change the verified owner identity',async()=>{const result=await verifiedUser({getUser:async()=>({data:{user:{id:'verified-id',email:'member@example.invalid',user_metadata:{name:'Member',role:'owner',userId:'another-owner',branches:['all']}}},error:null})});assert.deepEqual(result,{userId:'verified-id',displayName:'Member',email:'member@example.invalid',fullName:'Member'});});

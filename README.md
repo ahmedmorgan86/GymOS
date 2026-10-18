@@ -33,7 +33,7 @@ npm run build
 
 Node 22 is the deployment target. Unit tests require Node 22.18+ or Node 24 for native TypeScript stripping. Use npm start after database migration and environment setup. Physical QR scanning, physical printing and production Neon migration require separate end-to-end verification.
 
-Database tables live in the unexposed gymos schema. anon/authenticated have no direct grants. The dedicated gymos_app database login has only business-table access and SELECT(id,user_id) on auth.sessions for revocation checks. The server validates Supabase getUser(), session_id existence, tenant, staff role and branch before querying/updating data. Frontend metadata is display-only. DATABASE_URL must never be public. TLS verification uses the official Supabase CA bundled under certs/.
+Database tables live in the unexposed gymos schema. anon/authenticated have no direct grants. The dedicated gymos_app database login has only business-table access and no direct access to the managed Auth schema. The server validates identity through a fresh Supabase Auth getUser() response, tenant, staff role and branch before querying/updating data. Frontend metadata is display-only. DATABASE_URL must never be public. TLS verification uses the official Supabase CA bundled under certs/.
 
 ## Current deployment
 

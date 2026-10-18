@@ -14,8 +14,6 @@ REVOKE ALL ON ALL TABLES IN SCHEMA gymos FROM PUBLIC,anon,authenticated;
 
 GRANT USAGE ON SCHEMA gymos TO gymos_app;
 GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA gymos TO gymos_app;
-GRANT USAGE ON SCHEMA auth TO gymos_app;
-GRANT SELECT(id,user_id) ON auth.sessions TO gymos_app;
 DROP POLICY IF EXISTS server_access ON gymos.gym_states;
 CREATE POLICY server_access ON gymos.gym_states TO gymos_app USING(true) WITH CHECK(true);
 DROP POLICY IF EXISTS server_access ON gymos.gym_access;

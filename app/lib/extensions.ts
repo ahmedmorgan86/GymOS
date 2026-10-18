@@ -4,7 +4,7 @@ export type Plan={id:string;name:string;days:number;visits:number|null;minor:num
 export type Invoice={id:string;member:string;title:string;total:number;due:string;branch:string;allocations:{payment:string;minor:number}[];voided:boolean};
 export type FollowUp={id:string;pulse:string;member:string;day:string;outcome:'contacted'|'no-answer'|'renewed'|'returned';note:string;branch:string};
 export type Freeze={from:string;to:string;cancelled?:boolean};
-export function normalize(s:GymState):GymState {s.announcements??=[];s.products??=[];s.stockLots??=[];s.shopSales??=[];s.plans??=[];s.invoices??=[];s.followUps??=[];s.programs??=[];s.trainingAssignments??=[];s.trainingSessions??=[];return s;}
+export function normalize(s:GymState):GymState {s.cashClosures??=[];s.suppliers??=[];s.announcements??=[];s.products??=[];s.stockLots??=[];s.shopSales??=[];s.plans??=[];s.invoices??=[];s.followUps??=[];s.programs??=[];s.trainingAssignments??=[];s.trainingSessions??=[];return s;}
 const fail=(code='invalid'):never=>{throw new RuleError(code);};
 const str=(v:unknown,max=150)=>typeof v==='string'&&v.trim().length>0&&v.trim().length<=max?v.trim():fail();
 const integer=(v:unknown,min=0,max=1e10)=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=min&&v<=max?v:fail('amount');

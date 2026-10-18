@@ -1,0 +1,2 @@
+using GymOS.Windows;
+using var speech=new NativeSpeech();var voices=speech.Voices();Console.WriteLine("PASS: Windows Media voice enumeration: "+voices.Length+" installed Arabic/English voices");foreach(var text in new[]{"",new string('x',1001)}){try{await speech.Speak(text,"invalid",1);throw new Exception("Accepted invalid speech text");}catch(InvalidOperationException){}}speech.Stop();Console.WriteLine("PASS: bounded speech text validation and stop; no audio played");

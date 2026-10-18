@@ -26,3 +26,8 @@ Vercel logs tied error digest 492543978 to permission denied for schema auth aft
 Created gymos-enterprise on 2026-10-18 from main at 7cbc610. Deployment dpl_96BUbWg68NSggnrK2Hd5Cwhxx54r is Ready at https://gymos-enterprise.vercel.app. The previous gym-os project was absent from the authenticated team project list; this run did not delete it. Supabase data and existing accounts were retained. Site URL and the exact /auth/callback redirect now include the new production origin.
 
 Live new-project checks passed: GET /sign-in 200; GET /api/health 200 with status ready; GET /api/workspace without a session 401. Browser rendered the Arabic login. Authenticated dashboard loading and writes still require the owner to sign in; no claim of end-to-end completion is made.
+
+## Node runtime alignment
+
+Pinned package engines and .nvmrc to Node 24 for @zxing/library 0.23.0. Removed unused drizzle-kit (historical SQLite tooling), which removes both deprecated @esbuild-kit packages. On Node 24.19.0: npm ci installed 583 packages without EBADENGINE or those deprecation warnings; all 36 tests and the native Next production build including TypeScript passed. npm emitted a separate allow-scripts notice for unrs-resolver; scripts were not broadly approved. This runtime update still needs PR merge and a new production deployment.
+

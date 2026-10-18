@@ -4,9 +4,9 @@ Arabic/English Cairo UI, member cards (QR + Code128), attendance, billing, staff
 
 ## Deployment
 
-This edition runs native Next.js on Node 22 with PostgreSQL and Supabase Auth email/password sessions. Previous platform build files are retained as historical sources but excluded from TypeScript and unused by npm build. Do not run the old Vinext/Sites scripts.
+This edition runs native Next.js on Node 24 with PostgreSQL and Supabase Auth email/password sessions. Previous platform build files are retained as historical sources but excluded from TypeScript and unused by npm build. Do not run the old Vinext/Sites scripts.
 
-1. Connect this repository to the existing Vercel project gym-os. Framework: Next.js. Root directory: repository root. Use the committed vercel.json settings.
+1. Connect this repository to the existing Vercel project gymos-enterprise. Framework: Next.js. Root directory: repository root. Use the committed vercel.json settings.
 2. In Vercel Storage/Marketplace connect the Supabase PostgreSQL project to this project. Prefer a pooled DATABASE_URL.
 3. Configure DATABASE_URL, NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Set each environment separately; do not mix production and preview databases. Never commit or paste secret values in chat.
 4. Securely pull Development variables using the authenticated Vercel CLI. Run npm ci, then supply a separate administrative MIGRATION_DATABASE_URL on a trusted machine before npm run db:migrate. The runtime gymos_app login cannot alter schemas; never store the administrative URL in the frontend or production runtime. This creates GYM OS tables; Supabase manages its own Auth schema; builds do not migrate or mutate the database.
@@ -31,7 +31,7 @@ npm test
 npm run typecheck
 npm run build
 
-Node 22 is the deployment target. Unit tests require Node 22.18+ or Node 24 for native TypeScript stripping. Use npm start after database migration and environment setup. Physical QR scanning, physical printing and production Neon migration require separate end-to-end verification.
+Node 24 is the deployment target. Unit tests use Node 24 native TypeScript stripping. Use npm start after database migration and environment setup. Physical QR scanning, physical printing and Supabase backup import require separate end-to-end verification.
 
 Database tables live in the unexposed gymos schema. anon/authenticated have no direct grants. The dedicated gymos_app database login has only business-table access and no direct access to the managed Auth schema. The server validates identity through a fresh Supabase Auth getUser() response, tenant, staff role and branch before querying/updating data. Frontend metadata is display-only. DATABASE_URL must never be public. TLS verification uses the official Supabase CA bundled under certs/.
 

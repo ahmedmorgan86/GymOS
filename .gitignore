@@ -74,3 +74,8 @@ next-env.d.ts
 /.package-files.json
 
 /.migration-paths.txt
+
+/tests/windows-backup/bin/
+/tests/windows-backup/obj/
+
+/windows/publish-v2/

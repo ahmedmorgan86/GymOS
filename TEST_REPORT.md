@@ -52,3 +52,13 @@ Temporary browser fixture verified voice enumeration (3 English, 0 Arabic), mess
 
 Production Next webpack/TypeScript build passed; self-contained single-file win-x64 publish completed with no SQLite vulnerability warnings. EXE uses the configured production URL; web additions still require merge/deployment. EXE is not code-signed and requires WebView2. GUI launch, actual speaker/camera/scanner hardware and authenticated backup integration were not marked tested.
 
+
+## Windows sign-in investigation
+
+Production was serving commit 2531151 after an older #4 redeploy superseded the already-ready #5 merge. Promoted ready deployment AoBb4nFd14yiKYxS8UkuyS96RAUL (952391c); authenticated browser now visibly shows Voice announcements, opened for the user. Existing browser sessions do not establish that a fresh Windows password exchange succeeds. The exact Windows failure remains unconfirmed without a new attempt.
+
+Added same-origin /api/session password exchange with Origin/content-type/body validation, no credential logging, Supabase-managed cookies and bounded diagnostic codes. Login trims only email and preserves password characters, offers show/hide and applies the 12-character minimum only to registration. Login endpoint skips stale-session refresh middleware while protected routes retain verification. Windows shows active origin, maps known retired GYM OS origins to current production, and provides explicit auth-cookie/cache refresh without deleting local snapshots or offline attendance. 49 unit tests passed. Live successful credential sign-in in Windows still requires the user; do not mark it fixed solely from compilation.
+
+
+Final Next production build and self-contained Windows publish passed. Local production HTTP checks passed: cross-origin session POST 403, wrong content type 415, invalid fields 400, oversized body 413, no session cookies on rejection; protected workspace remained 401 anonymously.
+

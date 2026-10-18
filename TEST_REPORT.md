@@ -62,3 +62,9 @@ Added same-origin /api/session password exchange with Origin/content-type/body v
 
 Final Next production build and self-contained Windows publish passed. Local production HTTP checks passed: cross-origin session POST 403, wrong content type 415, invalid fields 400, oversized body 413, no session cookies on rejection; protected workspace remained 401 anonymously.
 
+
+## Integrated controls and staff edits
+
+51 Node tests passed. Added staff validation covers owner reassignment rejection, role allowlist, exact nonempty unique branch scope, and role downgrade write restrictions. Windows smoke passed encrypted SQLite tenant selection and the exact native command allowlist. Native shell build removes the custom toolbar. Actual WebView native dialog clicks still require user acceptance. Staff invitation/edit/revoke/restore in a real second account are not marked end-to-end tested. Official Windows TextToSpeech capability installation was requested for all ar-/en- capabilities; installation results are recorded separately in outputs, not bundled with the public source.
+
+2026-10-18 final scope: 53 Node tests pass with `node --test --experimental-test-isolation=none tests/*.test.mjs` (sandbox blocks child-process test isolation). Includes 14 theme round-trips, invalid theme rejection, full-branch administration and denial of receptionist writes. Windows encrypted backup and command allowlist smoke tests pass. Anonymous team GET/POST return 401 and cross-origin POST returns 403 on the local production server. Real staff invitation redemption/role changes and native GUI clicks have not been tested with a second account. Earlier notes describing reception attendance writes or manager exclusion from global administration are superseded by this policy.

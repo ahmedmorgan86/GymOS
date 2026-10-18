@@ -1,3 +1,3 @@
 export type Role='owner'|'manager'|'reception';
-const reception=new Set(['visit.add','visit.scan','visit.offline','class.book']);
-export function permitted(role:Role,type:string){if(role==='owner')return true;if(role==='reception')return reception.has(type);return !['settings.save','logo.set','branch.add','demo.seed','demo.clear','backup.restore'].includes(type);}
+export function permitted(role:Role,_type:string){return role==='owner'||role==='manager';}
+export function fullAdministration(role:Role,scope:string[]|null,branches:string[]){return role==='owner'||(role==='manager'&&Array.isArray(scope)&&branches.every(id=>scope.includes(id)));}

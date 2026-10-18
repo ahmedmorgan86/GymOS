@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {staffAccess} from '../app/lib/staff.ts';import {permitted} from '../app/lib/access.ts';
+const valid={user:'staff-id',name:' Member ',role:'manager',branches:['main']};
+test('Staff edits validate role and exact branch scope without owner reassignment',()=>{assert.deepEqual(staffAccess(valid,['main'],'owner'),{...valid,name:'Member'});for(const change of [{user:'owner'},{role:'owner'},{branches:[]},{branches:['other']},{branches:['main','main']},{name:' '},{user:''}])assert.equal(staffAccess({...valid,...change},['main'],'owner'),null);});
+test('Role downgrade removes financial, shop and member writes including attendance',()=>{for(const type of ['payment.add','shop.sale.add','member.save','announcement.save']){assert.equal(permitted('manager',type),true);assert.equal(permitted('reception',type),false);}assert.equal(permitted('reception','visit.scan'),false);});

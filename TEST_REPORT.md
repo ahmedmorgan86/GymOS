@@ -36,3 +36,10 @@ Pinned package engines and .nvmrc to Node 24 for @zxing/library 0.23.0. Removed 
 
 The Vercel npm runner maps legacy npm_config_cache_dir to the supported npm_config_cache before npm starts, preserving the cache path. package.json explicitly denies the unneeded unrs-resolver postinstall instead of enabling dependency scripts. A clean npm ci with an injected legacy cache variable installed 583 packages without the reported warnings. All 36 tests passed. Production build result is recorded in the PR validation.
 
+
+## Supplement store verification
+
+43 tests passed (7 new shop tests): FEFO allocation, integer totals and historical snapshots; atomic rejection of overselling, invalid methods/quantities and expired/archived goods; one-time full void restoring exact stock; branch/role boundaries; backup tamper rejection and legacy compatibility; currency/SKU validation. Browser verification used a temporary, local in-memory fixture (not a production account): Arabic sale/receipt reduced available stock from 36 to 35; full void returned it to 36 and sales collected to zero; English LTR also rendered. The temporary preview route and fixture were removed before commit. Physical printing/scanning, authenticated Supabase sales persistence and production deployment are not covered by this preview.
+
+Final production webpack build including TypeScript passed after removal of stale generated development types for the deleted preview route. Production route list contains no shop-preview endpoint.
+

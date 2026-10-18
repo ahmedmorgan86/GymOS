@@ -37,5 +37,5 @@ Database tables live in the unexposed gymos schema. anon/authenticated have no d
 
 ## Current deployment
 
-Production: https://gym-os-liart.vercel.app
+Production: https://gymos-enterprise.vercel.app
 Supabase project: GymOS (frsstuqstutbflkaffcx). Production health and anonymous API rejection passed. Create and confirm the owner account before importing the old backup. Authenticated end-to-end acceptance and old-data transfer remain pending; see TEST_REPORT.md.

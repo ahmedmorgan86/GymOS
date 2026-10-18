@@ -39,3 +39,9 @@ Database tables live in the unexposed gymos schema. anon/authenticated have no d
 
 Production: https://gymos-enterprise.vercel.app
 Supabase project: GymOS (frsstuqstutbflkaffcx). Production health and anonymous API rejection passed. Create and confirm the owner account before importing the old backup. Authenticated end-to-end acceptance and old-data transfer remain pending; see TEST_REPORT.md.
+
+## Supplement store
+
+Owner/manager navigation includes a bilingual supplement store with product categories, unique per-branch SKU/barcode search, stock receiving by batch/expiry/unit cost, low-stock and expiry summaries, and a multi-product cart. Sales use integer minor currency units and server-side prices with FEFO batch allocation. Expired batches, overselling and cross-branch references are rejected atomically. Walk-in or real member sales support cash/card/transfer recording. Receipts preserve historical prices/costs; full void with a reason restores exact batches and reverses the store collection summary. Receipts are internal, non-tax documents, with a print layout. Store collections are separate from membership payments. Cash/card/transfer are recording methods, not payment processor integrations.
+
+Store data uses the existing tenant-scoped, revision-checked workspace payload and event log; no database migration or new grants are required. Reception staff receive no store arrays and cannot perform store operations. Backup validation includes product/lot/sale references, totals and stock conservation. Legacy backups without store fields remain valid. Authenticated server persistence, actual printer/scanner hardware, and production acceptance remain pending. No partial returns, tax integration, supplier accounts or online checkout are included in this version.

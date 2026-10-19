@@ -2,22 +2,22 @@
 import {useEffect,useEffectEvent,useRef,useState,useSyncExternalStore} from 'react';
 import {Music2,Upload,Play,Trash2,SkipForward,SkipBack,Square,Shuffle,Repeat2,Volume2} from 'lucide-react';
 import {musicLink,musicPlatforms,nextMusicIndex,type MusicLink} from './lib/music';
-import {addTracks,listTracks,removeTrack,type LocalTrack} from './lib/music-storage';
+import {addTracks,listTracks,removeTrack,relocateMusic,type LocalTrack} from './lib/music-storage';
 import {usePreference} from './use-preference';
 
 type MusicHost={postMessage:(v:unknown)=>void;addEventListener:(t:string,h:(e:{data:unknown})=>void)=>void;removeEventListener:(t:string,h:(e:{data:unknown})=>void)=>void};
 function musicHost(){return (window as Window&{chrome?:{webview?:MusicHost}}).chrome?.webview;}
-export default function MusicRoom({scope,ar,canEdit,visible}:{scope:string;ar:boolean;canEdit:boolean;visible:boolean}){
+export default function MusicRoom({scope,legacyScope,ar,canEdit,visible}:{scope:string;legacyScope?:string;ar:boolean;canEdit:boolean;visible:boolean}){
  const t=(a:string,b:string)=>ar?a:b;
  const native=useSyncExternalStore(()=>()=>{},()=>Boolean(musicHost()),()=>false),[nativeVersion,setNativeVersion]=useState('');
  useEffect(()=>{const host=musicHost();if(!host)return;const receive=(event:{data:unknown})=>{const data=event.data as {type?:string;version?:string};if(data?.type==='gymos-desktop-status'&&typeof data.version==='string')setNativeVersion(data.version);};host.addEventListener('message',receive);host.postMessage({type:'gymos-desktop',action:'status'});return()=>{host.postMessage({type:'gymos-desktop',action:'musicStop'});host.removeEventListener('message',receive);};},[]);
  const nativeReady=native&&Boolean(nativeVersion)&&nativeVersion.localeCompare('1.1.4',undefined,{numeric:true})>=0;
  const [tracks,setTracks]=useState<LocalTrack[]>([]),[active,setActive]=useState(''),[status,setStatus]=useState(''),[busy,setBusy]=useState(false),[shuffle,setShuffle]=useState(false),[repeat,setRepeat]=useState(false),[volume,setVolume]=useState(0.65),[selected,setSelected]=useState<MusicLink|null>(null),[embedOpen,setEmbedOpen]=useState(false),[url,setUrl]=useState(''),[name,setName]=useState(''),[playing,setPlaying]=useState(false),[effectiveVolume,setEffectiveVolume]=useState(0.65);
  const [saved,setSaved]=usePreference<string>('gymos.music.links.v1.'+scope,'[]');
- let links:MusicLink[]=[];try{const values=JSON.parse(saved);if(Array.isArray(values))links=values.slice(0,50).flatMap(x=>{const link=x&&typeof x.url==='string'?musicLink(x.url,typeof x.name==='string'?x.name:''):null;return link?[link]:[];});}catch{}
+ let links:MusicLink[]=[];try{const values=JSON.parse(saved);if(Array.isArray(values))links=values.slice(0,100).flatMap(x=>{const link=x&&typeof x.url==='string'?musicLink(x.url,typeof x.name==='string'?x.name:''):null;return link?[link]:[];});}catch{}
  const platformInput=useRef<HTMLInputElement>(null),audio=useRef<HTMLAudioElement>(null),volumeRef=useRef(0.65),speech=useRef(new Set<string>()),playIntent=useRef(false);
  const track=tracks.find(x=>x.id===active);
- useEffect(()=>{let live=true;void listTracks(scope).then(value=>{if(live)setTracks(value);},()=>{if(live)setStatus(ar?'التخزين المحلي غير متاح. راجع إعدادات الجهاز.':'Local storage unavailable. Check device settings.');});return()=>{live=false;};},[scope,ar]);
+ useEffect(()=>{let live=true;void (legacyScope?relocateMusic(legacyScope,scope):Promise.resolve()).then(()=>listTracks(scope)).then(value=>{if(live)setTracks(value);},()=>{if(live)setStatus(ar?'التخزين المحلي غير متاح. راجع إعدادات الجهاز.':'Local storage unavailable. Check device settings.');});return()=>{live=false;};},[scope,legacyScope,ar]);
  useEffect(()=>{const current=audio.current;if(!track||!current)return;const objectUrl=URL.createObjectURL(track.blob);current.src=objectUrl;current.load();return()=>{current.pause();current.removeAttribute('src');current.load();URL.revokeObjectURL(objectUrl);};},[track]);
  useEffect(()=>{volumeRef.current=volume;if(audio.current)audio.current.volume=speech.current.size?volume*0.15:volume;},[volume]);
  useEffect(()=>{const current=audio.current;const onSpeech=(event:Event)=>{const {id,active:started}=(event as CustomEvent<{id:string;active:boolean}>).detail;if(started){speech.current.add(id);musicHost()?.postMessage({type:'gymos-desktop',action:'musicStop'});}else speech.current.delete(id);if(current)current.volume=speech.current.size?volumeRef.current*0.15:volumeRef.current;};window.addEventListener('gymos-speech-activity',onSpeech);return()=>{window.removeEventListener('gymos-speech-activity',onSpeech);current?.pause();};},[]);

@@ -1,0 +1,7 @@
+Corresponding source access for the separate voice worker:
+1. voice-worker-source.zip beside this file contains the Nabra source, bundled generated eSpeak module, custom worker entry, wrapper.c, reproducible eSpeak build script, and package lock for ONNX Runtime / esbuild.
+2. eSpeak NG 1.52.0 unmodified source: https://github.com/espeak-ng/espeak-ng/tree/1.52.0
+   Full source archive: https://github.com/espeak-ng/espeak-ng/archive/refs/tags/1.52.0.zip
+3. Phonemizer-derived processing is included in src/g2p/punctuation.ts inside voice-worker-source.zip.
+4. Upstream ONNX runtime source: https://github.com/microsoft/onnxruntime/tree/v1.23.2
+The eSpeak wrapper/build changes are supplied alongside the object code. These directions provide access to the upstream source and local modifications; no payment or account is required.

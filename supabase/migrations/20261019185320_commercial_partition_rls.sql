@@ -40,3 +40,6 @@ DECLARE tenant_key text; license_row gymos.tenant_licenses%ROWTYPE; staff_count 
   INSERT INTO gymos.tenant_memberships(tenant_id,user_id,role,branches,name,revoked) VALUES(tenant_key,NEW.user_id,NEW.role,NEW.branches::jsonb,NEW.name,NEW.revoked<>0)
   ON CONFLICT(tenant_id,user_id) DO UPDATE SET role=excluded.role,branches=excluded.branches,name=excluded.name,revoked=excluded.revoked;
  END IF;RETURN NEW;END $fn$;
+
+CREATE INDEX tenant_licenses_plan ON gymos.tenant_licenses(plan_id);
+CREATE INDEX activation_requests_plan ON gymos.activation_requests(plan_id);

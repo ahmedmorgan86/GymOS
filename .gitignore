@@ -85,3 +85,6 @@ next-env.d.ts
 
 /tests/windows-branding/bin/
 /tests/windows-branding/obj/
+
+/supabase/.temp/
+/supabase/.branches/

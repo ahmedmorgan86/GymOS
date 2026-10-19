@@ -1,0 +1,9 @@
+import {cookies} from 'next/headers';
+import {getChatGPTUser} from '../../chatgpt-auth';
+import {commercialAction,commercialDirectory,commercialEnabled} from '../../lib/commercial';
+import {CommercialError} from '../../lib/licensing';
+import {reply,sameOrigin} from '../../lib/server-workspace';
+export const dynamic='force-dynamic';
+function failure(error:unknown){if(error instanceof CommercialError)return reply({error:error.code},error.status);if(error instanceof SyntaxError)return reply({error:'invalid'},400);if((error as {code?:string})?.code==='23505')return reply({error:(error as {constraint?:string}).constraint==='activation_requests_unique_transfer'?'paymentAlreadyUsed':'openRequest'},409);return reply({error:'unavailable'},503);}
+export async function GET(request:Request){try{if(!commercialEnabled())return reply({error:'notFound'},404);const user=await getChatGPTUser();if(!user)return reply({error:'auth'},401);return reply(await commercialDirectory(user,new URL(request.url).searchParams.get('platform')==='1'));}catch(error){return failure(error);}}
+export async function POST(request:Request){try{if(!commercialEnabled())return reply({error:'notFound'},404);if(!sameOrigin(request))return reply({error:'origin'},403);if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return reply({error:'invalid'},415);const user=await getChatGPTUser();if(!user)return reply({error:'auth'},401);const raw=await request.text();if(Buffer.byteLength(raw)>30000)return reply({error:'limit'},413);const body=JSON.parse(raw);if(!body||typeof body!=='object'||Array.isArray(body))return reply({error:'invalid'},400);const result=await commercialAction(user,body);if(body.action==='select'&&'id'in result&&typeof result.id==='string')(await cookies()).set('gymos-space',result.id,{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'lax',path:'/',maxAge:31536000});return reply(result);}catch(error){return failure(error);}}

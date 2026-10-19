@@ -1,6 +1,6 @@
-const CACHE='gymos-shell-v8';
+const CACHE='gymos-shell-v9';
 const local=['localhost','127.0.0.1'].includes(self.location.hostname);
-const asset=url=>/\.(?:js|mjs|css|woff2|woff|ttf|svg|png)$/.test(url.pathname)||(local&&(/\.(?:ts|tsx)$/.test(url.pathname)||url.pathname.startsWith('/@')));
+const asset=url=>url.pathname.startsWith('/voices/nabra/')||/\.(?:js|mjs|css|woff2|woff|ttf|svg|png)$/.test(url.pathname)||(local&&(/\.(?:ts|tsx)$/.test(url.pathname)||url.pathname.startsWith('/@')));
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',event=>event.waitUntil((async()=>{await self.clients.claim();})()));
 async function shell(response){return response.ok&&response.headers.get('content-type')?.includes('text/html')&&(await response.clone().text()).includes('name="gymos-offline-shell"');}

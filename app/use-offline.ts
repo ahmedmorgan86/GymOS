@@ -1,5 +1,5 @@
 "use client";
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useEffectEvent,useRef,useState} from 'react';
 import {useBooleanPreference,useNetworkStatus} from './use-preference';
 import type {Packet} from './lib/client-types';
 import {storage} from './lib/offline-store';
@@ -9,9 +9,12 @@ const keyOf=(p:Packet)=>p.user.id+'|'+p.owner+'|'+p.role;
 export default function useOffline(packet:Packet|null,setPacket:(p:Packet)=>void,notify:(message:string,error?:boolean)=>void,ar:boolean){
  const online=useNetworkStatus();const [enabled,setEnabled]=useBooleanPreference("gymos.offline-enabled");const [queue,setQueue]=useState<Queued[]>([]),[syncing,setSyncing]=useState(false),[paused,setPaused]=useBooleanPreference("gymos.sync-paused"),[reachable,setReachable]=useState(true);const ref=useRef(packet),locked=useRef(false);const enabledRef=useRef(false),pausedRef=useRef(false);
  const t=(a:string,e:string)=>ar?a:e;
- useEffect(()=>{ref.current=packet;if(packet&&enabledRef.current){localStorage.setItem('gymos.offline-profile',keyOf(packet));void storage('set','packet:'+keyOf(packet),packet).catch(()=>notify(t('تعذر حفظ النسخة المحلية.','Could not save offline copy.'),true));}},[packet]);
- useEffect(()=>{pausedRef.current=localStorage.getItem('gymos.sync-paused')==='yes';const isEnabled=localStorage.getItem('gymos.offline-enabled')==='yes';enabledRef.current=isEnabled;const on=()=>{void sync();},off=()=>{};window.addEventListener('online',on);window.addEventListener('offline',off);if('serviceWorker' in navigator)void navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(()=>notify(t('تعذر تجهيز فتح التطبيق دون اتصال.','Offline app shell could not be installed.'),true));return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off);};},[]);
- useEffect(()=>{if(packet){void refreshQueue();if(navigator.onLine){void sync();if(enabledRef.current)void prepareShell().catch(()=>notify(t('تعذر تحديث بعض ملفات العمل دون اتصال. أعد التجهيز وأنت متصل.','Some offline files could not be refreshed. Prepare again while connected.'),true));}}},[packet?.user.id,packet?.owner,packet?.role]);
+ const report=useEffectEvent((a:string,b:string)=>notify(t(a,b),true));
+ const syncLatest=useEffectEvent(()=>{void sync();});
+ const prepareLatest=useEffectEvent(()=>{if(packet){void refreshQueue();if(navigator.onLine){void sync();if(enabledRef.current)void prepareShell().catch(()=>report('تعذر تحديث بعض ملفات العمل دون اتصال. أعد التجهيز وأنت متصل.','Some offline files could not be refreshed. Prepare again while connected.'));}}});
+ useEffect(()=>{ref.current=packet;if(packet&&enabledRef.current){localStorage.setItem('gymos.offline-profile',keyOf(packet));void storage('set','packet:'+keyOf(packet),packet).catch(()=>report('تعذر حفظ النسخة المحلية.','Could not save offline copy.'));}},[packet]);
+ useEffect(()=>{pausedRef.current=localStorage.getItem('gymos.sync-paused')==='yes';const isEnabled=localStorage.getItem('gymos.offline-enabled')==='yes';enabledRef.current=isEnabled;const on=()=>syncLatest(),off=()=>{};window.addEventListener('online',on);window.addEventListener('offline',off);if('serviceWorker' in navigator)void navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(()=>report('تعذر تجهيز فتح التطبيق دون اتصال.','Offline app shell could not be installed.'));return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off);};},[]);
+ useEffect(()=>prepareLatest(),[packet?.user.id,packet?.owner,packet?.role]);
  async function prepareShell(){if('serviceWorker' in navigator){const registration=await navigator.serviceWorker.ready;await new Promise<void>((resolve,reject)=>{const channel=new MessageChannel();const timer=setTimeout(()=>reject(Error('prepareTimeout')),60000);channel.port1.onmessage=event=>{clearTimeout(timer);if(event.data?.ok)resolve();else reject(Error('prepareFailed'));};registration.active?.postMessage({type:'PREPARE',urls:performance.getEntriesByType('resource').map(e=>e.name)},[channel.port2]);});}}
  async function refreshQueue(){const p=ref.current;if(!p)return;setQueue(await storage<Queued[]>('get','queue:'+keyOf(p))??[]);}
  async function cached(){if(localStorage.getItem('gymos.offline-enabled')!=='yes')return null;const key=localStorage.getItem('gymos.offline-profile');if(!key)return null;return await storage<Packet>('get','packet:'+key)??null;}

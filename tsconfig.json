@@ -48,6 +48,8 @@
     "vite.config.ts",
     "drizzle.config.ts",
     "cloudflare-env.d.ts",
-    "lib/connector-preview.d.ts"
+    "lib/connector-preview.d.ts",
+    "work",
+    "outputs"
   ]
 }

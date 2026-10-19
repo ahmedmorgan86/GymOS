@@ -1,6 +1,7 @@
 "use client";
 import {useCallback,useEffect,useEffectEvent,useRef,useState} from 'react';
 import {playLocalVoice,prepareLocalVoice,stopLocalVoice,unlockLocalAudio} from './lib/local-voice';
+import {relocateSpeechHistory} from './lib/local-migration';
 import DesktopTools from './desktop-tools';
 import {announcementOccurrence,type Announcement} from './lib/announcements';
 import {usePreference} from './use-preference';
@@ -8,11 +9,12 @@ import type {GymState,Operation} from './lib/domain';import type {Role} from './
 type SpeechHost={postMessage:(value:unknown)=>void;addEventListener:(type:string,handler:(e:{data:unknown})=>void)=>void;removeEventListener:(type:string,handler:(e:{data:unknown})=>void)=>void};
 function host(){return (window as Window&{chrome?:{webview?:SpeechHost}}).chrome?.webview;}
 type Playback={id:string;at:string;status:'requested'|'finished'|'failed';scheduled:boolean};
-export default function Announcements({state,branch,owner,ar,role,visible,busy,mutate}:{state:GymState;branch:string;owner:string;ar:boolean;role:Role;visible:boolean;busy:boolean;mutate:(op:Omit<Operation,'branch'>&{type:string})=>Promise<boolean>}){
+export default function Announcements({state,branch,owner,legacyOwner,ar,role,visible,busy,mutate}:{state:GymState;branch:string;owner:string;legacyOwner?:string;ar:boolean;role:Role;visible:boolean;busy:boolean;mutate:(op:Omit<Operation,'branch'>&{type:string})=>Promise<boolean>}){
  const [voices,setVoices]=useState<SpeechSynthesisVoice[]>([{voiceURI:'local:nabra-ar',name:'Nabra · نبرة — فصحى محلية مجانية',lang:'ar',localService:true,default:false}]),[text,setText]=useState(''),[lang,setLang]=useState('ar'),[voice,setVoice]=useState(''),[rate,setRate]=useState(0.9),[arm,setArm]=useState({scope:'',enabled:false}),[status,setStatus]=useState('');
  const scope=owner+'|'+branch+'|'+role,armed=arm.scope===scope&&arm.enabled;
  const [historyValue,setHistoryValue]=usePreference<string>('gymos.speech-history.'+owner+'.'+branch,'[]');
  let history:Playback[]=[];try{const data=JSON.parse(historyValue);if(Array.isArray(data))history=data.filter(x=>x&&typeof x.id==='string'&&typeof x.at==='string'&&['requested','finished','failed'].includes(x.status)).slice(-100);}catch{}
+ useEffect(()=>{if(!legacyOwner)return;void Promise.resolve().then(()=>relocateSpeechHistory(legacyOwner,owner,branch,(state.announcements??[]).filter(item=>item.branch===branch).map(item=>item.id))).catch(()=>setStatus(ar?'تعذر نقل سجل النداء السابق؛ السجل الأصلي محفوظ.':'Previous announcement history could not migrate; the original remains saved.'));},[legacyOwner,owner,branch,state.announcements,ar]);
  const pending=useRef(new Map<string,{finish:(ok:boolean)=>void;timer:ReturnType<typeof setTimeout>}>());
  const t=(a:string,b:string)=>ar?a:b;
  const record=useCallback((id:string,result:Playback['status'],scheduled:boolean)=>{const key='gymos.speech-history.'+owner+'.'+branch;const raw=localStorage.getItem(key);let previous:Playback[]=[];try{const value=JSON.parse(raw??'[]');if(Array.isArray(value))previous=value.filter(x=>x&&typeof x.id==='string');}catch{}setHistoryValue(JSON.stringify([...previous.filter(x=>x.id!==id),{id,at:new Date().toISOString(),status:result,scheduled}].slice(-100)));},[owner,branch,setHistoryValue]);

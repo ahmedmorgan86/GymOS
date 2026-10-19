@@ -1,0 +1,3 @@
+import {createHash} from 'node:crypto';import {brandManifest} from '../../../lib/branding';import {currentBrand} from '../../../lib/server-branding';
+export const dynamic='force-dynamic';
+export async function GET(request:Request){try{const brand=await currentBrand(request);if(!brand)return Response.redirect(new URL('/manifest.webmanifest',request.url));const version=createHash('sha256').update(brand.name+(brand.logo??'')).digest('hex').slice(0,16);return Response.json(brandManifest(brand.name,brand.owner,version),{headers:{'Content-Type':'application/manifest+json','Cache-Control':'private, no-store','Vary':'Cookie'}});}catch{return new Response(null,{status:503});}}

@@ -82,3 +82,6 @@ next-env.d.ts
 
 /tests/windows-speech/bin/
 /tests/windows-speech/obj/
+
+/tests/windows-branding/bin/
+/tests/windows-branding/obj/

@@ -11,3 +11,5 @@ for size in [32,64,180,192,256,512]:im.resize((size,size),Image.Resampling.LANCZ
 im.resize((256,256),Image.Resampling.LANCZOS).save('public/favicon.ico',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
 Path('windows/GymOS.ico').write_bytes(Path('public/favicon.ico').read_bytes())
 mask=Image.new('RGBA',(512,512),'#7955f6');mask.alpha_composite(im.resize((400,400),Image.Resampling.LANCZOS),(56,56));mask.save(out/'maskable-512.png')
+
+im.resize((512,512),Image.Resampling.LANCZOS).save('windows/SplashLogo.png')

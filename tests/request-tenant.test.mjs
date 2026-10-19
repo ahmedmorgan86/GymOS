@@ -1,0 +1,3 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {assertRequestTenant} from '../app/lib/request-tenant.ts';
+test('A stale browser tab cannot apply its operation to a newly selected club',()=>{const request=id=>new Request('https://gym.test/api/workspace',{method:'POST',headers:id?{'x-gymos-tenant':id}:{}});assert.doesNotThrow(()=>assertRequestTenant(request('club-a'),'club-a',true));for(const id of ['club-b',undefined])assert.throws(()=>assertRequestTenant(request(id),'club-a',true),error=>error.code==='clubChanged'&&error.status===409);assert.doesNotThrow(()=>assertRequestTenant(request(),'legacy',false));});

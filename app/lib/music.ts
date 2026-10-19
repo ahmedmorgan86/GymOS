@@ -25,13 +25,19 @@ export function musicLink(raw:string,name=''):MusicLink|null{
    else if(list&&/^[\w-]{10,100}$/.test(list))embed='https://www.youtube.com/embed/videoseries?list='+list;
   }else if(host==='soundcloud.com'||host==='www.soundcloud.com'){
    platform='SoundCloud';if(path.split('/').filter(Boolean).length>=2)embed='https://w.soundcloud.com/player/?url='+encodeURIComponent('https://soundcloud.com'+path)+'&auto_play=false';
-  }else if(host==='play.anghami.com'||host==='www.anghami.com'||host==='anghami.com')platform='Anghami';
-  else if(host==='music.apple.com')platform='Apple Music';
-  else if(host==='deezer.com'||host==='www.deezer.com')platform='Deezer';
-  else if(host==='listen.tidal.com'||host==='tidal.com')platform='TIDAL';
+  }else if(['play.anghami.com','mobile.anghami.com','www.anghami.com','anghami.com','widget.anghami.com'].includes(host)){
+   platform='Anghami';const match=path.match(/^\/(song|album|playlist|artist)\/(\d+)\/?$/);if(match)embed=`https://widget.anghami.com/${match[1]}/${match[2]}/?theme=fulldark&layout=list&lang=ar`;
+  }else if(host==='music.apple.com'||host==='embed.music.apple.com'){
+   platform='Apple Music';if(/^\/[a-z]{2}\/(album|playlist|song|music-video)\/[^/]+\/[\w.-]+\/?$/i.test(path)){const target=new URL('https://embed.music.apple.com'+path);const song=u.searchParams.get('i');if(song&&/^\d+$/.test(song))target.searchParams.set('i',song);embed=target.href;}
+  }else if(host==='deezer.com'||host==='www.deezer.com'||host==='widget.deezer.com'){
+   platform='Deezer';const match=path.match(/^\/(?:[a-z]{2}\/|widget\/(?:auto|dark|light)\/)?(track|album|playlist|artist|show|episode)\/(\d+)\/?$/);if(match)embed=`https://widget.deezer.com/widget/auto/${match[1]}/${match[2]}`;
+  }else if(['listen.tidal.com','tidal.com','www.tidal.com','embed.tidal.com'].includes(host)){
+   platform='TIDAL';const match=path.match(/^\/(?:browse\/)?(track|album|video|playlist)s?\/([\w-]+)\/?$/);if(match)embed=`https://embed.tidal.com/${match[1]}s/${match[2]}`;
+  }
   else return null;
   // Strip tracking and fragments; retain only content identifiers for YouTube.
   const clean=new URL('https://'+host+path);if(platform.startsWith('YouTube'))for(const key of ['v','list']){const value=u.searchParams.get(key);if(value)clean.searchParams.set(key,value);}
+  if(platform==='Apple Music'){const song=u.searchParams.get('i');if(song&&/^\d+$/.test(song))clean.searchParams.set('i',song);}
   return {name:name.trim().slice(0,100)||platform,url:clean.href,platform,...(embed?{embed}:{})};
  }catch{return null;}
 }

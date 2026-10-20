@@ -1,70 +1,53 @@
-# GYM OS — Vercel edition
+# GYM OS Enterprise
 
-Arabic/English Cairo UI, member cards (QR + Code128), attendance, billing, staff roles, deterministic Gym Pulse and 13 customizable training templates.
+Arabic/English Cairo interface for Windows and web. Windows release: 1.1.5. The portable WPF/WebView2 host uses the same Next.js interface as the website.
 
-## Deployment
+Production service: https://gymos-enterprise.vercel.app/
 
-This edition runs native Next.js on Node 24 with PostgreSQL and Supabase Auth email/password sessions. Previous platform build files are retained as historical sources but excluded from TypeScript and unused by npm build. Do not run the old Vinext/Sites scripts.
+## Product access
 
-1. Connect this repository to the existing Vercel project gymos-enterprise. Framework: Next.js. Root directory: repository root. Use the committed vercel.json settings.
-2. In Vercel Storage/Marketplace connect the Supabase PostgreSQL project to this project. Prefer a pooled DATABASE_URL.
-3. Configure DATABASE_URL, NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Set each environment separately; do not mix production and preview databases. Never commit or paste secret values in chat.
-4. Securely pull Development variables using the authenticated Vercel CLI. Run npm ci, then supply a separate administrative MIGRATION_DATABASE_URL on a trusted machine before npm run db:migrate. The runtime gymos_app login cannot alter schemas; never store the administrative URL in the frontend or production runtime. This creates GYM OS tables; Supabase manages its own Auth schema; builds do not migrate or mutate the database.
-5. Deploy and verify sign-up, sign-in, tenant isolation, operations and backup restore. Registration creates an empty personal workspace. A staff member signs up separately and claims a one-time gym invitation.
+Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is currently read-only, including attendance. Do not grant broader permissions merely to bypass this product limitation.
 
-## Move existing club data
+Monthly, annual and perpetual licenses with annual maintenance are supported. Activation uses quotation/manual transfer review; no electronic payment gateway is included. Pending/expired/suspended clubs retain read/export access while operational writes/restore are blocked.
 
-Download a full JSON backup from the old site's Club operations → Workspace & device → Backup. Create the owner's account on the new deployment. From the same screen, check Import this club backup from previous hosting into my current account, upload the JSON, review it, and restore. This explicitly rebinds data to the authenticated owner and retains a pre-restore recovery snapshot. Cards, IDs, attendance, finances and training history remain in the backup. New Supabase Auth accounts, passwords, staff invitations and staff grants must be created again; old platform login identities are not migrated. Pending offline attendance must be synchronized on the old origin first. Local offline data does not move between domains. Do not delete the old workspace until verification is complete.
+## Safe setup on new hosting
 
-## Authentication limits
+1. Use Node 24 and the committed package lock. Install with npm ci. Build using npm run build (Next.js webpack), never the historical Vinext/Sites scripts.
+2. Create separate Supabase/Vercel resources in the intended owner's accounts. Configure the private backend DATABASE_URL and public NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Keep development, preview and production data separate.
+3. Provision a limited runtime database login. A separate administrative MIGRATION_DATABASE_URL is required for migrations and must not be stored in the frontend or production runtime.
+4. Review base db/*.sql and commercial supabase/migrations/*.sql in dependency order against the target migration history. npm run db:migrate applies only the base schema files; it does NOT install the complete commercial schema. Do not blindly push migrations or replay already-applied policies.
+5. Configure Supabase Auth Site URL, callback/recovery redirect allowlists and production email delivery. Sign-up, sign-in and forgot/reset-password UI are implemented; device/email delivery acceptance and provider setup remain necessary. MFA UI is not implemented.
+6. Bootstrap a confirmed platform administrator using scripts/platform-admin.mjs on a trusted administrative machine. Never ship this administrative procedure/credentials in the ordinary club package. Enable GYMOS_COMMERCIAL=1 only after commercial setup is complete.
+7. Configure windows/gymos.json with the intended HTTPS origin and rebuild for independent hosting. Do not transfer the existing shared production database/project to an individual club.
 
-Email/password registration and sessions are implemented with Supabase Auth rate limiting. Email confirmation uses Supabase Auth. Configure Auth Site URL and redirect allowlist for /auth/callback. Production email delivery requires your own SMTP provider; the built-in sender is restricted. Password-reset UI and MFA are not implemented. Never trust the old platform's identity headers on Vercel.
+## Data migration and backups
 
-## Windows
+Synchronize old-origin offline attendance before moving. Preserve source backups until acceptance. In commercial mode, backup restore is restricted to the current tenant/its verified legacy partition; an import checkbox does not permit unrelated cross-club restore. A move to a newly created independent tenant requires a reviewed, authorized migration procedure.
 
-The existing Windows wrapper still points to the old site. The new Windows source in windows/ reads the deployment HTTPS origin from gymos.json beside the executable. Configure the confirmed deployment URL, rebuild, and distribute after web verification.
+Operational backups do not move Auth passwords, staff invitations/grants or device-local music. JSON exports are unencrypted. Backups up to 64 MiB use scoped 384 KiB chunks and SHA256 verification. Live operational state remains capped at 20,000,000 bytes. Activity history is retained in an append-only archive; the live window is 2000 events and the activity page supports older pages. Apply supabase/migrations/20261020183809_reliable_backups_activity_archive.sql before deploying this release. See PRODUCT_REVIEW_2026-10-20.md.
 
-## Local checks
+Normalized entities/photos are stored separately in PostgreSQL, but current read/validation paths reconstruct complete club state and use a workspace revision. Entitlement limits are not load-test capacity promises.
 
-npm ci
-npm test
-npm run typecheck
-npm run build
+## Windows 1.1.5
 
-Node 24 is the deployment target. Unit tests use Node 24 native TypeScript stripping. Use npm start after database migration and environment setup. Physical QR scanning, physical printing and Supabase backup import require separate end-to-end verification.
+Windows 10/11 x64, self-contained .NET 10, requires official Microsoft Edge WebView2 Runtime. Portable executable; no code signing or automatic updater is provided.
 
-Database tables live in the unexposed gymos schema. anon/authenticated have no direct grants. The dedicated gymos_app database login has only business-table access and no direct access to the managed Auth schema. The server validates identity through a fresh Supabase Auth getUser() response, tenant, staff role and branch before querying/updating data. Frontend metadata is display-only. DATABASE_URL must never be public. TLS verification uses the official Supabase CA bundled under certs/.
+Native controls are inside Settings > Windows app settings: choose SQLite backup location, save snapshot, export latest JSON, refresh sign-in and manage official Windows voices. Supabase remains authoritative. SQLite snapshots use Windows DPAPI CurrentUser; export JSON before moving machines/accounts. No database secrets are embedded in the executable. The backup bridge obtains a fresh tenant context and sends X-GymOS-Tenant.
 
-## Current deployment
+Official music embeds now live inside the music page. The optional expanded native provider player is docked within the main application layout, not a floating or external window. Local music is device/club/branch scoped. Provider accounts/subscriptions/regions can limit playback. Announcements duck local music and stop provider playback; restart the provider manually. Scheduled announcements require the app open and device awake, with one armed speaker device.
 
-Production: https://gymos-enterprise.vercel.app
-Supabase project: GymOS (frsstuqstutbflkaffcx). Production health and anonymous API rejection passed. Create and confirm the owner account before importing the old backup. Authenticated end-to-end acceptance and old-data transfer remain pending; see TEST_REPORT.md.
+Copyright displays © Ahmed Morgan with the current year on web/Windows, including the native splash.
 
-## Supplement store
+## Checks and manuals
 
-Owner/manager navigation includes a bilingual supplement store with product categories, unique per-branch SKU/barcode search, stock receiving by batch/expiry/unit cost, low-stock and expiry summaries, and a multi-product cart. Sales use integer minor currency units and server-side prices with FEFO batch allocation. Expired batches, overselling and cross-branch references are rejected atomically. Walk-in or real member sales support cash/card/transfer recording. Receipts preserve historical prices/costs; full void with a reason restores exact batches and reverses the store collection summary. Receipts are internal, non-tax documents, with a print layout. Store collections are separate from membership payments. Cash/card/transfer are recording methods, not payment processor integrations.
+- npm test
+- npm run typecheck
+- npm run build
+- npm run dev
+- dotnet publish windows/GymOS.Windows.csproj -c Release -r win-x64 --self-contained true -o windows/release
+- dotnet run --project tests/windows-backup/BackupSmoke.csproj -c Release
+- dotnet run --project tests/windows-branding/BrandingSmoke.csproj -c Release -- public/icons/icon-512.png
 
-Store data uses the existing tenant-scoped, revision-checked workspace payload and event log; no database migration or new grants are required. Reception staff receive no store arrays and cannot perform store operations. Backup validation includes product/lot/sale references, totals and stock conservation. Legacy backups without store fields remain valid. Authenticated server persistence, actual printer/scanner hardware, and production acceptance remain pending. No partial returns, tax integration, supplier accounts or online checkout are included in this version.
+Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_manuals.py. Generated files are under ignored outputs/manuals/output/pdf/. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
 
-## Member photo, card serial and announcements
-
-Member forms can capture a square JPEG from the device camera, with explicit camera access and a consent reminder. Images are reduced to 160x160, capped at 22 KB each and saved atomically with the member; camera tracks stop after capture or leaving the form. Photos remain subject to the current 1.6 MB total workspace payload limit, so photo storage is intended for compact portraits, not original-resolution files. Removal is supported. Backups validate photo format/size.
-
-Member passes support an externally assigned serial (1–64 ASCII letters/numbers or . _ -), normalized to uppercase with leading zeros retained. Duplicate serials within the gym are rejected. Reassignment invalidates the previous serial; the same value generates QR/Code128 and works in the card check-in form or reception panel. A USB HID keyboard scanner should send the serial followed by Enter with the scan field focused. Native RFID/serial-port devices that do not emulate a keyboard require their vendor integration and are not covered.
-
-Voice announcements support Arabic/English text, available installed/browser voices, test playback, speed and one-time schedules. Arm the intended speaker device explicitly. The app must remain open and the device awake; this is not a background Windows service. A one-minute due window skips stale/missed messages. A per-tenant/branch/device playback marker and browser Web Locks prevent duplicate scheduled requests in tabs sharing that browser profile. Use only one armed physical device; this does not coordinate multiple PCs. Voice names are device-specific. Scheduled speech requires the saved voice on that device. The test browser exposed three English voices and no Arabic voice; install a Windows Arabic speech language pack for Arabic playback. Audible output and real camera/USB hardware still require device acceptance testing.
-
-## Windows encrypted local backup database
-
-The Windows toolbar lets the user choose a SQLite .sqlite file, save an owner-authorized cloud backup, and export the latest snapshot for the currently authenticated owner as JSON for the existing restore screen. Supabase remains authoritative. Choosing another file selects a different backup destination; it does not move previous snapshots or the WebView profile. Backups are manual and require an online owner session. Payloads are encrypted with Windows DPAPI CurrentUser; keep the same Windows account/machine for decryption. For transfer to another PC, export JSON first. Exported JSON is not encrypted and must be protected by the user. The executable contains no database credentials.
-
-Publish Windows: dotnet publish windows/GymOS.Windows.csproj -c Release -r win-x64 --self-contained true -o windows/publish-v2. The single-file executable still requires Microsoft Edge WebView2 Runtime on Windows 10/11 x64. It is unsigned; no code-signing certificate was provided. Backup integration accepts messages only from the configured HTTPS origin during an explicit toolbar request. Smoke test: dotnet run --project tests/windows-backup/BackupSmoke.csproj -c Release.
-
-## Integrated Windows controls and staff administration
-
-The Windows shell no longer has its custom toolbar. Native functions are inside Settings → Windows app settings, with compact voice-management/session-refresh controls also on voice announcements and sign-in. The origin-scoped WebView bridge accepts only status, chooseDatabase, save, export, refreshSignIn and speechSettings; no arbitrary executable, URL or file path is accepted from web content. The voice settings command opens the fixed official Windows Speech Settings URI. Local snapshot operations still require the server's owner authorization.
-
-Owners have a Users & permissions page: create one-time 24-hour invitation codes, edit the staff display name, select manager/reception role and branch grants, revoke gym access, or explicitly restore access. Revocation preserves the person's Auth account and historical business data. Owner identity cannot be reassigned or revoked here. These are role/branch permissions, not arbitrary per-operation custom roles. No email is sent automatically; staff register their own credentials and redeem the code through Club operations → Club tools. Manager/reception requests cannot administer the team. All UPDATE statements are scoped to the verified owner; an ordinary edit preserves a revoked row's state, and restore is explicit.
-
-### Shared appearance and administrators
-Fourteen bilingual light/dark themes are selected in Settings and stored in the gym state, shared by Windows and the website. Windows branding no longer shows WEB. The existing `manager` role is now displayed as Administrator: it can edit assigned branches; user administration, global settings, branding and backup/restore require access to every current branch. The owner always retains control. Reception is read only, including attendance and booking; new and queued writes are checked on the server. Assign every branch to an administrator who should manage the whole gym. A newly added branch must also be assigned before a scoped administrator regains global administration.
+Current review records responsive/emulated coverage and physical-device limitations. Historical *_VERIFICATION.md / TEST_REPORT.md files describe their dated releases and are not blanket certification of current production.

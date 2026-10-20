@@ -12,7 +12,7 @@ test('calendar renewals preserve UTC time, clamp month ends and stack from unexp
  assert.equal(plusMonths(now,1),'2026-02-28T12:30:00.000Z');assert.equal(plusMonths('2024-02-29T00:00:00.000Z',12),'2025-02-28T00:00:00.000Z');
  assert.equal(licenseGrant(base,'monthly',now).ends_at,'2026-03-28T12:30:00.000Z');
  assert.equal(licenseGrant({...base,ends_at:'2025-01-01'},'monthly',now).ends_at,'2026-02-28T12:30:00.000Z');
- assert.equal(licenseGrant(base,'trial',now).ends_at,'2026-02-14T12:30:00.000Z');
+ assert.equal(licenseGrant(base,'trial',now).ends_at,'2026-03-02T12:30:00.000Z');
  assert.throws(()=>plusMonths(now,0));assert.throws(()=>plusMonths('bad',1));
 });
 test('perpetual maintenance renews support without expiring core access',()=>{

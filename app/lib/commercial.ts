@@ -34,7 +34,7 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
  const settings=(await client.query('SELECT payload,revision FROM gymos.platform_settings WHERE id=1')).rows[0];
  const orders=platformView?(await client.query('SELECT r.*,t.name AS club_name FROM gymos.activation_requests r JOIN gymos.tenants t ON t.id=r.tenant_id ORDER BY r.created_at DESC LIMIT 200')).rows:[];
  const events=platformView?(await client.query('SELECT * FROM gymos.commercial_audit ORDER BY at DESC LIMIT 100')).rows:[];
- return{platform,clubs,plans,settings,orders,events};
+ const trialUsed=(await client.query('SELECT owner_id FROM gymos.trial_claims WHERE owner_id=$1',[user.userId])).rowCount!==0;return{platform,clubs,plans,settings,orders,events,trialUsed};
  });}
 export async function commercialAction(user:ChatGPTUser,body:Record<string,unknown>){return commercialTransaction(user,(client,platform)=>commercialWork(client,platform,user,body));}
 export async function commercialWork(client:PoolClient,platform:boolean,user:ChatGPTUser,body:Record<string,unknown>){
@@ -74,6 +74,7 @@ export async function commercialWork(client:PoolClient,platform:boolean,user:Cha
  const club=await selectClub(client,user.userId,text(body.tenant));if(!club)throw new CommercialError('forbidden',403);
  if(action==='select')return{id:club.id};
  if(club.role!=='owner')throw new CommercialError('forbidden',403);
+ if(action==='trial.start'){try{const result=await client.query('SELECT gymos.start_public_trial($1) AS trial',[club.id]);return{ok:true,...result.rows[0].trial};}catch(e){const message=e instanceof Error?e.message:'';if(message.includes('trial_used'))throw new CommercialError('trialUsed',409);if(message.includes('trial_unavailable'))throw new CommercialError('trialUnavailable',409);throw e;}}
  if(action==='owner.add'||action==='owner.remove'){
   if(body.confirm!=='CHANGE_OWNERSHIP')throw new CommercialError('confirmation');
   await client.query('SELECT id FROM gymos.tenants WHERE id=$1 FOR UPDATE',[club.id]);

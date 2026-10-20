@@ -14,7 +14,9 @@ export function licenseGrant(current:License,mode:'monthly'|'annual'|'perpetual'
  if(mode==='maintenance'){if(current.mode!=='perpetual')throw new CommercialError('maintenanceRequiresPerpetual');const start=current.maintenance_until&&current.maintenance_until>now?current.maintenance_until:now;return{mode:current.mode,starts_at:current.starts_at??now,ends_at:null,maintenance_until:plusMonths(start,12)};}
  const continuing=current.mode===mode&&licenseState(current,Date.parse(now)).writable;
  const start=continuing&&current.ends_at&&current.ends_at>now?current.ends_at:now;
- return{mode,starts_at:continuing?current.starts_at:now,ends_at:mode==='perpetual'?null:mode==='trial'?new Date(Date.parse(now)+14*86400000).toISOString():plusMonths(start,mode==='monthly'?1:12),maintenance_until:mode==='perpetual'?plusMonths(now,12):null};
+ return{mode,starts_at:continuing?current.starts_at:now,ends_at:mode==='perpetual'?null:mode==='trial'?new Date(Date.parse(now)+30*86400000).toISOString():plusMonths(start,mode==='monthly'?1:12),maintenance_until:mode==='perpetual'?plusMonths(now,12):null};
 }
 export function assertGrowth(cap:Limits,before:{branches:number;members:number},after:{branches:number;members:number}){for(const field of ['branches','members'] as const)if(after[field]>cap[field]&&after[field]>before[field])throw new CommercialError(field==='branches'?'branchLimit':'memberLimit',403);}
 export function priceMinor(value:unknown,optional=false){if(optional&&(value===null||value===''))return null;const amount=typeof value==='string'?Number(value):value;if(!Number.isSafeInteger(amount)||Number(amount)<0||Number(amount)>100000000000)throw new CommercialError('amount');return Number(amount);}
+
+export function trialClosed(license:License|null|undefined,now=Date.now()){return license?.mode==='trial'&&!licenseState(license,now).writable;}

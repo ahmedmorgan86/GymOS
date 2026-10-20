@@ -45,8 +45,8 @@ Date: 20 October 2026. Baseline source: 6d597fa plus this release's changes. Pro
 
 ## الاختبارات / Verification
 
-- تسجل النتائج النهائية، بما فيها اختبارات PostgreSQL المعزولة، في unit-tests.txt.
-  Final suite results, including isolated PostgreSQL checks, are recorded in unit-tests.txt.
+- نجح 79 اختبارًا مختلفًا: 76 محليًا و3 اختبارات قاعدة بيانات متصلة؛ يعاد اختبار اثنين محليين أيضًا في ملف النسخ.
+  79 distinct tests passed: 76 local plus three connected database tests. See unit-tests.txt; two pure checks repeat in the backup test file.
 - TypeScript نجح. نتائج ESLint والبناء النهائي تسجل في ملفات الحزمة بعد اكتمالها.
   TypeScript passed. Final lint/build results are recorded in the release verification file.
 - فحص 16 قسمًا باللغتين على عروض 320 و360 و390 و768 و1024 و1440 و1920. القياسات محفوظة في responsive/measurements-*.json. بعد أي تعديل شريط هاتف يعاد فحص المقاسات المتأثرة.
@@ -70,3 +70,6 @@ No live plan/role changes, real transfer approvals or production restore were pe
 
 حزمة العميل تستبعد دليل المنصة والمصدر والمفاتيح وبيانات الأعضاء. حزمة الاستضافة المستقلة اختيارية لمالك التطبيق/المشغل التقني وتحتاج موارد جديدة، وليست نقلًا لموارد المنصة المشتركة.
 The customer package excludes platform-owner docs, source, keys and member data. The optional independent-hosting kit is for the vendor/operator and requires fresh resources, not transfer of the shared service.
+
+اتصال الجهاز بالقاعدة انقطع أثناء محاولات نقل كبيرة قبل نجاح الفحص المنفصل؛ أضيفت مهلات للطلبات ومعالجة انقطاع الاتصال. لم يختبر ملف 64 MiB كامل على الإنتاج ولم تنفذ استعادة لبيانات حقيقية.
+The local database transport interrupted some large-payload attempts. Bounded query waits and connection-error handling were added. A complete 64 MiB production restore was not executed; no real club data was replaced.

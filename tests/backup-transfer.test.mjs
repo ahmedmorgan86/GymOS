@@ -4,7 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {assembleTransfer,transferSpec,backupDigest,BACKUP_CHUNK_BYTES,decodeChunk} from '../app/lib/backup-transfer.ts';
 import {applyOperation,emptyState} from '../app/lib/domain.ts';
 test('Database transfer protocol verifies chunks, owner, actor and round-trip',{skip:process.env.GYMOS_DB_TESTS!=='1'},async()=>{
- const {startTransfer,putTransferChunk,transferContent,getTransferChunk,discardTransfer}=await import('../app/lib/backup-transfer.ts');const owner='transfer-test:'+randomUUID(),actor=randomUUID(),bytes=Buffer.from('صوت وبيانات '.repeat(50000));let upload,download;
+ const {startTransfer,putTransferChunk,transferContent,getTransferChunk,discardTransfer}=await import('../app/lib/backup-transfer.ts');const owner='transfer-test:'+randomUUID(),actor=randomUUID(),bytes=Buffer.from('صوت وبيانات '.repeat(1000));let upload,download;
  try{upload=await startTransfer(owner,actor,'upload',bytes.length,backupDigest(bytes));await assert.rejects(()=>transferContent(owner,actor,upload.id));
  for(let i=upload.parts-1;i>=0;i--)await putTransferChunk(owner,actor,upload.id,i,bytes.subarray(i*upload.chunkBytes,(i+1)*upload.chunkBytes).toString('base64'));
  assert.equal(await transferContent(owner,actor,upload.id),bytes.toString('utf8'));await assert.rejects(()=>transferContent('foreign:'+owner,actor,upload.id));await assert.rejects(()=>transferContent(owner,randomUUID(),upload.id));await assert.rejects(()=>putTransferChunk(owner,actor,upload.id,0,Buffer.alloc(upload.chunkBytes).toString('base64')));

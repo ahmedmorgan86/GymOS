@@ -51,3 +51,11 @@ Copyright displays © Ahmed Morgan with the current year on web/Windows, includi
 Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_manuals.py. Generated files are under ignored outputs/manuals/output/pdf/. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
 
 Current review records responsive/emulated coverage and physical-device limitations. Historical *_VERIFICATION.md / TEST_REPORT.md files describe their dated releases and are not blanket certification of current production.
+
+## Public 30-day demo
+
+/demo provides the self-service trial entry. Owners register their own email/password, create a club, start the free trial once and upload their logo in Settings. Trial entitlement: 1 branch, 1000 members, 5 staff; 30 × 24 hours from database activation, no automatic charge. Apply 20261020192657_public_month_trial.sql before deployment.
+
+The private start_public_trial function is the narrow, audited write boundary: it checks creator/active ownership, serializes claims, refuses existing activation and retains immutable per-owner/per-club claims. Operational APIs reject closed trials using server time. Backup export and the club/billing directory remain available to authorized owners. Trial offline attendance/cached workspace access is disabled.
+
+Windows 1.1.6 also saves a DPAPI-protected local first-trial receipt. It never extends the earlier deadline, counts elapsed calendar time while closed, rejects material clock rollback and checks local time against the server at activation. The server remains authoritative; this is not tamper-proof offline DRM against a machine administrator or a new identity. Local receipts are scoped to the Windows profile; reinstalling does not reset the existing account's server claim.

@@ -68,3 +68,6 @@ The Windows music view previously denied every permission, including autoplay. I
 
 Spotify reference: https://developer.spotify.com/documentation/embeds/tutorials/troubleshooting
 Deezer widget reference: https://newsroom-deezer.com/2021/04/deezers-new-embeddable-widget-player-adds-instant-audio-to-any-website/
+
+### Legacy gym import
+Operations → Import legacy data (owner or full administrator). Export comma-separated CSV UTF-8 from Excel. Import members and membership dates first, then plans and historical payments. Each row needs a stable legacy `id`; payment `member` refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, decimal amounts use a dot, and card/phone columns must remain text. Maximum 500 records and 1 MB per file. Preview and map columns before approving. Any invalid row blocks the whole save; existing differing records are never overwritten. Imported memberships preserve dates but do not infer historical plan contracts, debts, invoices, visits, marketing consent or credentials. Proprietary backups and XLSX files need export/conversion first.

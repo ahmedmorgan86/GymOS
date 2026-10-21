@@ -59,3 +59,15 @@ Current review records responsive/emulated coverage and physical-device limitati
 The private start_public_trial function is the narrow, audited write boundary: it checks creator/active ownership, serializes claims, refuses existing activation and retains immutable per-owner/per-club claims. Operational APIs reject closed trials using server time. Backup export and the club/billing directory remain available to authorized owners. Trial offline attendance/cached workspace access is disabled.
 
 Windows 1.1.6 also saves a DPAPI-protected local first-trial receipt. It never extends the earlier deadline, counts elapsed calendar time while closed, rejects material clock rollback and checks local time against the server at activation. The server remains authoritative; this is not tamper-proof offline DRM against a machine administrator or a new identity. Local receipts are scoped to the Windows profile; reinstalling does not reset the existing account's server claim.
+
+## Provider preview playback — Windows 1.1.7
+
+On Windows, opening/saving a provider link now defaults to that provider's canonical web player in the existing docked app panel, rather than its embed widget. Widget URLs normalize to provider content URLs. Sign in inside this isolated provider profile; account, DRM, region and provider support still determine full playback. The official embed remains an explicit fallback on web/Windows; GymOS does not turn previews into full tracks.
+
+The Windows music view previously denied every permission, including autoplay. It now prompts the user for autoplay only on the exact supported provider hosts; other permissions remain denied. This does not install a DRM component, bypass provider rules or certify playback with a paid subscription. Full-track provider playback still needs an acceptance check with the customer's actual account/device.
+
+Spotify reference: https://developer.spotify.com/documentation/embeds/tutorials/troubleshooting
+Deezer widget reference: https://newsroom-deezer.com/2021/04/deezers-new-embeddable-widget-player-adds-instant-audio-to-any-website/
+
+### Legacy gym import
+Operations → Import legacy data (owner or full administrator). Export comma-separated CSV UTF-8 from Excel. Import members and membership dates first, then plans and historical payments. Each row needs a stable legacy `id`; payment `member` refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, decimal amounts use a dot, and card/phone columns must remain text. Maximum 500 records and 1 MB per file. Preview and map columns before approving. Any invalid row blocks the whole save; existing differing records are never overwritten. Imported memberships preserve dates but do not infer historical plan contracts, debts, invoices, visits, marketing consent or credentials. Proprietary backups and XLSX files need export/conversion first.

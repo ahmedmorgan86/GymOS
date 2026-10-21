@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {musicLink,nextMusicIndex,validMusicFile,MUSIC_FILE_BYTES} from '../app/lib/music.ts';
+import {musicLink,musicPlaybackTarget,nextMusicIndex,validMusicFile,MUSIC_FILE_BYTES} from '../app/lib/music.ts';
 test('Music accepts exact provider hosts, strips tracking and rejects executable URLs',()=>{
  for(const url of ['javascript:alert(1)','http://open.spotify.com/track/abc','https://open.spotify.com.evil.test/track/abc','https://user:pass@open.spotify.com/track/abc','https://open.spotify.com:444/track/abc','https://evil.test/x'])assert.equal(musicLink(url),null);
  const item=musicLink('https://open.spotify.com/playlist/abc123?si=secret',' Workout ');assert.equal(item.name,'Workout');assert.equal(item.url,'https://open.spotify.com/playlist/abc123');assert.equal(item.embed,'https://open.spotify.com/embed/playlist/abc123');
@@ -26,4 +26,10 @@ test('All eight platforms use official internal embeds and preserve Apple song s
  for(const [url,host] of cases){const link=musicLink(url);assert.ok(link?.embed,url);assert.equal(new URL(link.embed).hostname,host);assert.equal(new URL(link.embed).protocol,'https:');}
  const apple=musicLink(cases[1][0]);assert.match(apple.embed,/\?i=456$/);assert.match(apple.url,/\?i=456$/);assert.equal(musicLink('https://listen.tidal.com/playlist/abc-123').embed,'https://embed.tidal.com/playlists/abc-123');
  for(const url of ['https://play.anghami.com/song/../../evil','https://www.deezer.com/en/track/%3Cscript%3E','https://music.apple.com/us/evil/test/123'])assert.equal(musicLink(url)?.embed,undefined);
+});
+
+test('Desktop playback uses full canonical provider URLs; web retains official embeds',()=>{
+ const inputs=['https://open.spotify.com/track/abc','https://widget.anghami.com/song/123','https://embed.music.apple.com/us/album/test/123?i=456','https://widget.deezer.com/widget/auto/track/123','https://embed.tidal.com/tracks/123'];
+ for(const input of inputs){const link=musicLink(input);assert.ok(link?.embed);const desktop=musicPlaybackTarget(link,true),web=musicPlaybackTarget(link,false);assert.equal(desktop.mode,'native');assert.equal(desktop.url,link.url);assert.equal(web.url,link.embed);assert.ok(!/widget\.|embed\.|\/embed\//.test(desktop.url));}
+ assert.equal(musicLink(inputs[1]).url,'https://play.anghami.com/song/123');assert.equal(musicLink(inputs[3]).url,'https://www.deezer.com/track/123');assert.equal(musicLink(inputs[4]).url,'https://listen.tidal.com/track/123');
 });

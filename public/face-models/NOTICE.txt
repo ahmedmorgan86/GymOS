@@ -1,0 +1,22 @@
+Local face models used by GYM OS
+
+Human 3.3.6: Vladimir Mandic, MIT (LICENSE-HUMAN.txt).
+Model weights are converted/quantized by Human; original provenance remains
+in each model JSON. Models are not retrained by GYM OS.
+
+blazeface: Google MediaPipe BlazeFace, Apache 2.0.
+https://github.com/google-ai-edge/mediapipe
+faceres: Andrey Savchenko / HSE_FaceRec_tf, Apache 2.0.
+https://github.com/av-savchenko/HSE_FaceRec_tf
+liveness: leokwu/livenessnet, Apache 2.0.
+https://github.com/leokwu/livenessnet
+
+See the accompanying upstream license files. Human model provenance:
+https://github.com/vladmandic/human/wiki/Models
+
+The optional Kaggle antispoof weights are not distributed or enabled.
+Camera identification is optional and needs explicit member consent.
+A liveness model is a heuristic, not proof of identity or a certified
+anti-spoofing system. Accuracy and thresholds must be checked on the
+customer's camera and lighting before camera attendance is relied upon.
+Use a card instead when matching is unclear. No camera video is saved.

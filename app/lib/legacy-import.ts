@@ -34,3 +34,5 @@ export function previewImport(original:GymState,branch:string,source:string,kind
  if(state.members.length>10000||(state.plans?.length??0)>1000||state.payments.length>100000)errors.push({row:0,message:'Workspace capacity exceeded'});
  return{state,added,skipped,errors};
 }
+
+export function parseLegacyFile(text:string,kind:ImportKind){if(!text.trimStart().startsWith('[')&&!text.trimStart().startsWith('{'))return parseCSV(text);if(new TextEncoder().encode(text).length>1_000_000)throw Error('Max 1 MB');const parsed=JSON.parse(text),rows=Array.isArray(parsed)?parsed:parsed[kind];if(!Array.isArray(rows)||!rows.length||rows.length>500||rows.some(r=>!r||Array.isArray(r)||typeof r!=='object'))throw Error('Use an array of records or a members/plans/payments array');const headers=[...new Set(rows.flatMap(r=>Object.keys(r)))];if(headers.length>50)throw Error('Max 50 columns');return[headers,...rows.map(r=>headers.map(k=>r[k]===null||r[k]===undefined?'':typeof r[k]==='object'?JSON.stringify(r[k]):String(r[k])))];}

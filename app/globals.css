@@ -99,3 +99,7 @@ fieldset{min-inline-size:0}.table-scroll,.class-calendar,.pass-print-area{min-wi
 
 
 .training-browser .training-tile{flex-shrink:0}
+
+.member-mobile-app{max-width:760px;margin:auto;padding:20px 16px 60px}.member-mobile-app .card{margin:18px 0}.member-mobile-app .attendance-card{max-width:100%;margin:20px auto}.member-mobile-app .tabs{overflow-x:auto;display:flex}.member-mobile-app input,.member-mobile-app select,.member-mobile-app textarea{max-width:100%}.member-profile .attendance-card{max-width:100%;margin:16px 0}
+
+.report-preview{width:min(1400px,96vw)!important;max-width:96vw!important;max-height:96vh!important;padding:20px!important}.report-preview iframe{width:100%;height:76vh;background:white;border:1px solid #ddd;border-radius:10px}.member-profile .tabs{display:flex;overflow-x:auto;flex-wrap:nowrap}.member-profile .tabs button{flex-shrink:0}

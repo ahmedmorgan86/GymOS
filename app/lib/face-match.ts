@@ -1,0 +1,4 @@
+export const FACE_MODEL='human-3.3.6-faceres-v1';
+export function validEmbedding(value:unknown):value is number[]{return Array.isArray(value)&&value.length>=128&&value.length<=2048&&value.every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<10000)&&value.some(v=>v!==0);}
+export function faceSimilarity(a:number[],b:number[]){if(!validEmbedding(a)||!validEmbedding(b)||a.length!==b.length)return-1;let dot=0,aa=0,bb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];aa+=a[i]*a[i];bb+=b[i]*b[i];}return dot/Math.sqrt(aa*bb);}
+export function matchFace(input:number[],rows:{member_id:string;embedding:number[]}[]){const ranked=rows.map(r=>({id:r.member_id,score:faceSimilarity(input,r.embedding)})).sort((a,b)=>b.score-a.score);if(!ranked[0]||ranked[0].score<0.9||ranked[1]&&ranked[0].score-ranked[1].score<0.05)return null;return ranked[0];}

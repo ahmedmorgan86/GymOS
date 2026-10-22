@@ -38,6 +38,10 @@ test('Commercial PostgreSQL: tenant isolation, quote, transfer, approval, duplic
    await as(a);assert.equal((await client.query('SELECT user_id FROM gymos.gym_states')).rowCount,0);await client.query("SELECT set_config('app.gym_owner',$1,true)",[storage]);assert.equal((await client.query('SELECT user_id FROM gymos.gym_states')).rowCount,1);await addStaff(c);
    await as(admin);await client.query("UPDATE gymos.tenant_licenses SET status='suspended' WHERE tenant_id=$1",[ca.id]);await as(a);await client.query("SELECT set_config('app.gym_owner',$1,true)",[storage]);await client.query('UPDATE gymos.gym_access SET revoked=1 WHERE owner_id=$1 AND user_id=$2',[storage,c.userId]);assert.equal((await client.query('SELECT revoked FROM gymos.tenant_memberships WHERE tenant_id=$1 AND user_id=$2',[ca.id,c.userId])).rows[0].revoked,true);await as(admin);await client.query("UPDATE gymos.tenant_licenses SET status='active' WHERE tenant_id=$1",[ca.id]);await as(a);await client.query("SELECT set_config('app.gym_owner',$1,true)",[storage]);
   }
+  // owner.add selects the tenant but does not select workspace storage scope.
+  // Prove the owner-protection trigger using a visible row, not a zero-row UPDATE.
+  await as(a);await client.query("SELECT set_config('app.tenant',$1,true),set_config('app.gym_owner',$2,true)",[ca.id,storage]);
+  assert.equal((await client.query('SELECT user_id FROM gymos.gym_access WHERE owner_id=$1 AND user_id=$2',[storage,b.userId])).rowCount,1);
   await rejected(()=>client.query('UPDATE gymos.gym_access SET revoked=1 WHERE owner_id=$1 AND user_id=$2',[storage,b.userId]),'42501');
   await call(b,{action:'owner.remove',tenant:ca.id,user:a.userId,confirm:'CHANGE_OWNERSHIP'});
   await rejected(()=>call(a,{action:'select',tenant:ca.id}),'forbidden');

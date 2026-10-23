@@ -1,14 +1,20 @@
-# تطبيق الأعضاء المرتبط / Connected member app
+# تطبيق العضو: دخول بالكود / Member app: private code sign-in
 
-رابط التطبيق الحقيقي: https://gymos-enterprise.vercel.app/member
+رابط التطبيق القابل للتثبيت: https://gymos-enterprise.vercel.app/member
 
-1. من حساب المالك أو المدير: الأعضاء ← ملف عضو حقيقي غير مؤرشف ← تطبيق الموبايل للعضو.
-2. «عرض تطبيق العضو ببياناته الحقيقية» يفتح عرضًا إداريًا محميًا للقراءة؛ لا يربط حساب الموظف بالعضو.
-3. أدخل بريد العضو الشخصي وأنشئ الدعوة. انسخ الرابط أو اعرض QR للعضو؛ لا يتم إرسال الرسالة تلقائيًا.
-4. العضو يفتح الدعوة، وينشئ حسابًا بنفس البريد، ويؤكد البريد، ثم يسجل الدخول. تعود الدعوة تلقائيًا في نفس التبويب؛ لو فتح التأكيد في تبويب جديد يرجع لرابط الدعوة الأصلي.
-5. الدعوة صالحة 72 ساعة وتستخدم مرة واحدة. حالة «مربوط» تعني أن الحساب قُبل. تجديد الدعوة يفصل الحساب السابق حتى يقبل الدعوة الجديدة؛ إلغاء الدخول يمنع القراءة عند التحديث التالي.
-6. Android: Chrome ← تثبيت التطبيق/إضافة للشاشة الرئيسية. iPhone: Safari ← مشاركة ← إضافة للشاشة الرئيسية.
-7. نفس قاعدة النادي للويب وWindows والموبايل: الصورة والكارت والاشتراك والقياسات والحضور والتدريب والحجوزات والمدفوعات. التحديث كل 5 ثوان أثناء فتح التطبيق. البيانات الخاصة لا تُخزن للعمل دون إنترنت.
-8. العضو يرى بياناته وحده وعدد الموجودين في فرعه دون أسمائهم. لا يرى إدارة النادي أو أعضاء آخرين. بيانات المعاينة العامة وهمية دائمًا.
+- كل عضو حقيقي غير مؤرشف يحصل تلقائيًا على كود دخول خاص وحساب معزول. تم ترحيل الأعضاء الحاليين؛ إنشاء عضو جديد أو استيراده أو استعادة نسخة يولد الربط في نفس معاملة حفظ البيانات. سجلات الديمو العامة لا تحصل على دخول.
+- لا يوجد بريد أو كلمة مرور أو تأكيد بريد لدخول العضو بالكود. كود الدخول سر عشوائي بقوة 128 بت، منفصل تمامًا عن سيريال كارت الحضور. لا تعتمد على رقم الهاتف أو كود مطبوع علنًا للتحقق من الهوية.
+- المالك/المدير: الأعضاء ← ملف العضو ← تطبيق الموبايل ← عرض كود دخول العضو. سلم الكود أو QR الخاص لصاحب العضوية فقط. لا يرسل النظام رسائل تلقائية.
+- العضو يفتح /member ويكتب الكود، أو يمسح QR الخاص بالدخول فيفتح #code محليًا، ويُحذف الرمز من عنوان الصفحة بعد قراءته. الجلسة محفوظة في Cookie آمنة HttpOnly/Secure/SameSite لمدة سبعة أيام، دون تخزين الكود في localStorage.
+- المالك/المدير يستطيع تغيير الكود أو وقف الدخول. التغيير يبطل الكود السابق والجلسات القديمة عند الطلب التالي. الأرشفة/حذف العضو/وقف ترخيص النادي يمنع قراءة الملف. إعادة إنشاء عضو جديد تولد كودًا جديدًا. وقف الدخول يدويًا لا يُلغى بمجرد تعديل بيانات العضو؛ تغيير الكود يعيد تفعيله صراحة.
+- كل عضو يرى ملفه وفرعه فقط، وقياساته وتدريبه وحجوزاته ومدفوعاته، وعدد الموجودين في فرعه دون أسمائهم. الموبايل يقرأ نفس قاعدة الويب وWindows كل خمس ثوانٍ أثناء فتح الشاشة. لا توجد صلاحيات تعديل إدارة النادي للعضو.
+- QR/Code128 داخل الكارت الرقمي يستخدمان سيريال الحضور فقط، وليس سر تسجيل الدخول. فتح الكارت لا يسجل حضورًا؛ يتطلب قارئ النادي أو الاستقبال.
+- Android: Chrome ← تثبيت التطبيق أو إضافة للشاشة الرئيسية. iPhone: Safari ← مشاركة ← إضافة للشاشة الرئيسية. التطبيق PWA يحتاج اتصالًا لعرض البيانات الخاصة، وليس APK/IPA منشورًا على المتاجر.
+- الأكواد مخزنة كقيم بحث مجزأة، والنص مشفر بمفتاح Vault منفصل لكل نادي. لا تنسخ مفاتيح Vault بين العملاء. ملفات نقل النادي المعتادة لا تحتوي أكواد الدخول؛ في الاستضافة المستقلة يُولَّد لكل عضو كود جديد.
+- حسابات إدارة النادي الحالية تظل محمية بنظام تسجيل دخولها. أكواد الأعضاء لا تمنح وصولًا للموظفين أو لإدارة المنصة. لم يتم تعطيل تأكيد البريد العام في Supabase.
 
-Real app: /member. Staff invite a real member from the member profile; the private 72-hour one-use invitation is bound to the invited email. Members confirm their email and sign in, then install the PWA through Chrome or Safari. Staff can view an authorized read-only member preview without assuming the member identity. Renewal disconnects the prior link; revocation denies subsequent refreshes. Personal records use the same club workspace, update every five seconds while visible, and require internet. No private data is placed in the public /member-preview fixture. This is an installable PWA, not a store APK/IPA.
+## English
+
+Real, non-archived members are automatically provisioned with a private 128-bit sign-in code in the same transaction as member creation/import/restore. Existing members are backfilled. There is no member email, password or confirmation step. The code is a secret, separate from the publicly presented attendance serial. Owners/managers reveal and hand it to the member in person, or provide the private sign-in QR. Codes are hashed for lookup and encrypted under a tenant-specific Vault key; private codes are not included in normal club transfer files.
+
+The app exchanges a valid code for a seven-day HttpOnly, Secure, SameSite session. Codes in QR fragments are cleared from the address bar after reading and are not saved in localStorage. Rotation invalidates old codes/sessions; revocation, archived/missing member records and closed club licenses fail closed. Public demo members are excluded. Member sessions never authenticate staff APIs. Rate limits and same-origin checks protect sign-in and management routes. The same backend serves the web app, Windows app and member PWA; records refresh every five seconds while visible. Only the member’s own records and anonymous own-branch occupancy are returned.

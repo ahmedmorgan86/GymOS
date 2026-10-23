@@ -1,6 +1,6 @@
 # GYM OS Enterprise
 
-Arabic/English Cairo interface for Windows and web. Windows release: 1.1.5. The portable WPF/WebView2 host uses the same Next.js interface as the website.
+Arabic/English Cairo interface for Windows and web. Windows release: 1.1.8. The portable WPF/WebView2 host uses the same Next.js interface as the website.
 
 Production service: https://gymos-enterprise.vercel.app/
 
@@ -28,7 +28,7 @@ Operational backups do not move Auth passwords, staff invitations/grants or devi
 
 Normalized entities/photos are stored separately in PostgreSQL, but current read/validation paths reconstruct complete club state and use a workspace revision. Entitlement limits are not load-test capacity promises.
 
-## Windows 1.1.5
+## Windows 1.1.8
 
 Windows 10/11 x64, self-contained .NET 10, requires official Microsoft Edge WebView2 Runtime. Portable executable; no code signing or automatic updater is provided.
 
@@ -69,5 +69,20 @@ The Windows music view previously denied every permission, including autoplay. I
 Spotify reference: https://developer.spotify.com/documentation/embeds/tutorials/troubleshooting
 Deezer widget reference: https://newsroom-deezer.com/2021/04/deezers-new-embeddable-widget-player-adds-instant-audio-to-any-website/
 
-### Legacy gym import
-Operations → Import legacy data (owner or full administrator). Export comma-separated CSV UTF-8 from Excel. Import members and membership dates first, then plans and historical payments. Each row needs a stable legacy `id`; payment `member` refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, decimal amounts use a dot, and card/phone columns must remain text. Maximum 500 records and 1 MB per file. Preview and map columns before approving. Any invalid row blocks the whole save; existing differing records are never overwritten. Imported memberships preserve dates but do not infer historical plan contracts, debts, invoices, visits, marketing consent or credentials. Proprietary backups and XLSX files need export/conversion first.
+## Release 1.1.8 — member services and operational reports
+
+Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. New features: member PWA and email-bound invitations, consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception remains read-only under the current policy. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
+
+Apply 20261022212137_member_portal_messaging_presence.sql and 20261022213838_messaging_vault_scheduler.sql after prior migrations on a fresh independent deployment. They add private RLS-protected member/face/messaging tables and narrow Vault-backed encryption/worker authentication. The scheduler migration deliberately installs disabled: change its production URL for independent hosting, verify the deployed /api/cron/whatsapp route, then enable the named job. The shared production scheduler was enabled and an empty authenticated worker returned 200 with zero sent messages on 23 October 2026. No provider connection or real WhatsApp delivery was tested.
+
+### Legacy gym import and backup entry
+
+Import & backups is a dedicated owner/full-administrator entry. Legacy tables accept CSV UTF-8, JSON arrays/keyed tables or bounded XLSX (sheet selection). Import members/membership dates first, then plans/historical payments. Each row needs a stable legacy id; payment member refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, amounts use a decimal dot and card/phone columns remain text. Maximum 500 records: 1 MiB CSV/JSON or 2 MiB XLSX, with bounded decompression and no spreadsheet formulas. Preview/map before approving. Invalid rows block the entire save; existing differing records are not overwritten. Historic invoices/debts/visits/passwords/consents are not inferred from member rows. Proprietary SQL/BAK/SQLite files need a supported table export; GYM OS JSON full restoration is separate and confirmed.
+
+### Public search publishing
+
+/about and /en/about are public product pages; /demo explains the trial. Sitemap lists these three pages only. Private pages/APIs are noindex and authenticated; preview builds block indexing. Set NEXT_PUBLIC_SITE_URL to the HTTPS origin for independent hosting. Optional GOOGLE_SITE_VERIFICATION, BING_SITE_VERIFICATION and YANDEX_SITE_VERIFICATION are public ownership meta codes, not credentials. See docs/SEARCH_PUBLISHING_AR_EN.md for account verification and sitemap submission. node scripts/submit-indexnow.mjs previews public URLs; --submit verifies the production key/pages before notifying IndexNow. Notification acceptance does not guarantee indexing/ranking.
+
+### Verification on 23 October 2026
+
+95 local tests passed, with 5 optional connected PostgreSQL tests run separately successfully. Five API-role integration tests passed. TypeScript, ESLint, local Next production build, GitHub quality workflow and production Vercel status passed. Production dependency audit reported zero advisories; development-only braces/ESLint and database advisory limitations remain documented. Native backup/local-timer/branding/navigation tests passed and fifteen installed Arabic/English voices produced audio bytes. Full visual/device testing, physical scanner/camera/speaker/printer, phone install, actual WhatsApp delivery and subscribed music playback remain unverified. No zero-defect commercial certification is implied.

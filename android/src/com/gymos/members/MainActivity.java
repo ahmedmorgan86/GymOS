@@ -43,7 +43,7 @@ public final class MainActivity extends Activity {
   CookieManager.getInstance().setAcceptCookie(true);CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
   web.setWebChromeClient(new WebChromeClient(){@Override public void onProgressChanged(WebView v,int value){progress.setProgress(value);progress.setVisibility(value<100?View.VISIBLE:View.GONE);}});
   web.setWebViewClient(new WebViewClient(){
-   @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest request){return !memberPage(request.getUrl());}
+   @Override public boolean shouldOverrideUrlLoading(WebView v,WebResourceRequest request){if(trusted(request.getUrl())&&request.getUrl().getPath()!=null&&request.getUrl().getPath().endsWith(".apk")){android.widget.Toast.makeText(MainActivity.this,"تطبيق Android مثبت بالفعل / Android app is already installed",android.widget.Toast.LENGTH_LONG).show();return true;}return !memberPage(request.getUrl());}
    @Override public WebResourceResponse shouldInterceptRequest(WebView v,WebResourceRequest request){String asset=request.getUrl().toString();if(trusted(request.getUrl())||(asset.length()<2000000&&(asset.startsWith("data:image/png;base64,")||asset.startsWith("data:image/jpeg;base64,")||asset.startsWith("data:image/webp;base64,"))))return null;return new WebResourceResponse("text/plain","UTF-8",403,"Blocked",java.util.Collections.emptyMap(),new ByteArrayInputStream(new byte[0]));}
    @Override public void onReceivedError(WebView v,WebResourceRequest request,WebResourceError e){if(request.isForMainFrame())showError();}
    @Override public void onReceivedHttpError(WebView v,WebResourceRequest request,WebResourceResponse response){if(request.isForMainFrame()&&response.getStatusCode()>=400)showError();}
@@ -58,7 +58,7 @@ public final class MainActivity extends Activity {
  private void showError(){runOnUiThread(new Runnable(){@Override public void run(){progress.setVisibility(View.GONE);web.setVisibility(View.GONE);error.setVisibility(View.VISIBLE);}});}
  private void handleBack(){if(web!=null&&web.canGoBack())web.goBack();else finish();}
  @Override public void onBackPressed(){handleBack();}
- @Override protected void onPause(){CookieManager.getInstance().flush();if(web!=null)web.onPause();super.onPause();}
- @Override protected void onResume(){super.onResume();if(web!=null)web.onResume();}
+ @Override protected void onPause(){CookieManager.getInstance().flush();if(web!=null){web.onPause();web.pauseTimers();}super.onPause();}
+ @Override protected void onResume(){super.onResume();if(web!=null){web.resumeTimers();web.onResume();}}
  @Override protected void onDestroy(){if(web!=null){web.stopLoading();((ViewGroup)web.getParent()).removeView(web);web.destroy();}super.onDestroy();}
 }

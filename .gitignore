@@ -90,3 +90,8 @@ next-env.d.ts
 /supabase/.branches/
 
 /.npm-cache-task/
+
+/android/build/
+*.jks
+*.keystore
+/public/downloads/*.idsig

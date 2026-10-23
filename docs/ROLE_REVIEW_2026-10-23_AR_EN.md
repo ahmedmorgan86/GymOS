@@ -42,7 +42,11 @@ Reception remains read-only under the current product policy, including attendan
 
 No interactive browser/Windows control was available. Full visual/device acceptance, camera/liveness calibration, physical USB reader, speaker voices, Android/iPhone installation and real WhatsApp delivery remain unverified. Provider acceptance is not delivery confirmation; no inbound reply webhook is claimed.
 
-Local production build is blocked by the environment's process-spawn restriction (EPERM). A remote build must pass before production publication. Do not label a build/deployment successful until its exact commit passes.
+Local Next.js 16.4.2 production build passed after explicitly resolving Human to its browser ESM bundle for SSR/client compilation. The original EPERM restriction was resolved using the authorized build environment. A remote build must also pass before publication.
+
+94 local unit tests passed (5 optional database tests skipped in that command and run separately). Five API role integration tests passed. Connected commercial, trial, backup/archive and member-feature isolation tests passed separately. TypeScript and ESLint passed; production dependency audit found zero advisories.
+
+Native Windows regression tests passed: encrypted tenant-scoped SQLite snapshots, command allowlist, immutable local 30-day timer/clock rollback, PNG/ICO/splash caching and provider URL/profile boundaries. Speech synthesis passed for all 15 installed Arabic/English voices, including Hoda ar-EG and Naayf ar-SA. This checks generated audio bytes, not audible speaker quality. NuGet advisory metadata lookup was unavailable (NU1900), so a clean NuGet vulnerability audit is not claimed.
 
 ## ملاحظات تشغيل / Operations
 

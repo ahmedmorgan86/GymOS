@@ -1,0 +1,26 @@
+name: Application quality
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - name: API role boundaries
+        run: node --import ./tests/role-api-loader.mjs --test --test-isolation=none tests/role-api.integration.mjs
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=low
+      - run: npm run build

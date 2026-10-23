@@ -1,0 +1,3 @@
+import {context,reply,readSpace} from '../../lib/server-workspace';
+import {presentVisits} from '../../lib/member-view';
+export async function GET(request:Request){try{const ctx=await context();if(!ctx)return reply({error:'auth'},401);const branch=new URL(request.url).searchParams.get('branch')??'';if(ctx.branches&&!ctx.branches.includes(branch))return reply({error:'forbidden'},403);const current=await readSpace(ctx.owner);if(!current.state.branches.some(b=>b.id===branch))return reply({error:'notFound'},404);return reply({revision:current.revision,owner:ctx.tenantId,present:presentVisits(current.state,branch,new Date().toISOString()).length});}catch{return reply({error:'unavailable'},503);}}

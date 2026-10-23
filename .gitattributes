@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Keep Android source checksums stable on Windows and Linux.
+android/**/*.java text eol=lf
+android/**/*.xml text eol=lf
+*.apk binary

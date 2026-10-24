@@ -6,7 +6,7 @@ Production service: https://gymos-enterprise.vercel.app/
 
 ## Product access
 
-Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is read-only by default. Owners may independently delegate online check-in/out and class bookings per employee and branch. These grants do not allow prices, collections, class administration or access management.
+Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is read-only by default. Owners may independently delegate online check-in/out, class bookings, fixed-plan membership sales and payment recording per employee and branch. Sales and collections are separate grants: sales alone cannot record payment, and collections alone cannot register or enroll a member. Grants do not allow price edits, current-term replacement, class administration or access management.
 
 Monthly, annual and perpetual licenses with annual maintenance are supported. Activation uses quotation/manual transfer review; no electronic payment gateway is included. Pending/expired/suspended clubs retain read/export access while operational writes/restore are blocked.
 
@@ -71,7 +71,7 @@ Deezer widget reference: https://newsroom-deezer.com/2021/04/deezers-new-embedda
 
 ## Release 1.1.8 — member services and operational reports
 
-Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. New features: member PWA and email-bound invitations, consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception remains read-only under the current policy. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
+Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. New features: member PWA and email-bound invitations, consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception is read-only unless the owner grants specific branch-scoped operations. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
 
 Apply 20261022212137_member_portal_messaging_presence.sql and 20261022213838_messaging_vault_scheduler.sql after prior migrations on a fresh independent deployment. They add private RLS-protected member/face/messaging tables and narrow Vault-backed encryption/worker authentication. The scheduler migration deliberately installs disabled: change its production URL for independent hosting, verify the deployed /api/cron/whatsapp route, then enable the named job. The shared production scheduler was enabled and an empty authenticated worker returned 200 with zero sent messages on 23 October 2026. No provider connection or real WhatsApp delivery was tested.
 

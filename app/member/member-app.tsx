@@ -1,6 +1,7 @@
 "use client";
 import {useEffect,useEffectEvent,useRef,useState} from 'react';
 import Image from 'next/image';
+import Copyright from '../copyright';
 import Link from 'next/link';
 import {UserRound,Activity,CalendarDays,Dumbbell,WalletCards,QrCode,ArrowUpRight,Globe,ShieldCheck,Users} from 'lucide-react';
 import type {memberView} from '../lib/member-view';
@@ -72,5 +73,6 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
    {!staffMode&&<button className="button secondary" disabled={preview||busy} onClick={()=>void signOut()}>{t('تسجيل الخروج','Sign out')}</button>}
   </>}
 
+  <footer className="member-ownership"><Copyright/></footer>
  </main>;
 }

@@ -1,0 +1,13 @@
+✔ A blocked batch in one club does not hold up another club (3.667618ms)
+✔ Batches for the same club stay serialized and use transaction-local scope (0.896758ms)
+✔ Batch failure rolls back before release and does not strand either lock (1.986286ms)
+✔ An unscoped legacy batch retains the original shared namespace (0.31897ms)
+✔ New scoped batches still coordinate with a legacy global-lock writer during rolling deployment (0.652673ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71.568137

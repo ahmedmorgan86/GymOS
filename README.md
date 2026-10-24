@@ -6,7 +6,7 @@ Production service: https://gymos-enterprise.vercel.app/
 
 ## Product access
 
-Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is currently read-only, including attendance. Do not grant broader permissions merely to bypass this product limitation.
+Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is read-only by default. Owners may independently delegate online check-in/out and class bookings per employee and branch. These grants do not allow prices, collections, class administration or access management.
 
 Monthly, annual and perpetual licenses with annual maintenance are supported. Activation uses quotation/manual transfer review; no electronic payment gateway is included. Pending/expired/suspended clubs retain read/export access while operational writes/restore are blocked.
 
@@ -91,4 +91,4 @@ Interactive member UI preview: /member-preview uses only a fictional, determinis
 
 ## Members Android app
 
-The signed direct-download APK and its checksum metadata are in `public/downloads/`. The member page, public Arabic/English site and administrative member panel link to it. Android source/build instructions are in `android/`; installation and verification limits are in `docs/ANDROID_MEMBER_APP_AR_EN.md`. Members sign in with their saved mobile and initial PIN 123456, then must change it before viewing records. First-claim risks of a shared default are documented in `docs/MEMBER_APP_CONNECTED_AR_EN.md`. Never publish the private signing keystore/password.
+The signed direct-download APK and its checksum metadata are in `public/downloads/`. The member page, public Arabic/English site and administrative member panel link to it. Android source/build instructions are in `android/`; installation and verification limits are in `docs/ANDROID_MEMBER_APP_AR_EN.md`. Members sign in with their saved mobile and a random temporary PIN issued by authorized club staff, then must change it before viewing records. The former shared PIN is rejected. See `docs/MEMBER_APP_CONNECTED_AR_EN.md` for activation and rollout requirements. Never publish the private signing keystore/password.

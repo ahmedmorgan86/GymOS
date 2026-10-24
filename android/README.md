@@ -6,6 +6,6 @@ Build: Android SDK platform 36/build-tools 36.0.0 and JDK 21, then `./android/bu
 
 Only INTERNET permission. No file/content access, JavaScript bridge, third-party cookies, HTTP, SSL overrides, device credentials, camera/microphone or contacts permission. Main navigation is limited to the production member path; subresources use the same trusted HTTPS host. No account data is embedded in the APK. Cloud/device backup of app storage is disabled. A network error offers an explicit retry.
 
-Download from the Members page or the public Arabic/English site. Android asks the user to authorize installing an APK from that browser; no setting is changed automatically. This is direct APK distribution, not Play Store certification. Certificate verification/compile checks do not substitute for installing and testing on an actual Android phone.
+Download from the main GYM OS dashboard or the public Arabic/English site. Android asks the user to authorize installing an APK from that browser; no setting is changed automatically. This is direct APK distribution, not Play Store certification. Certificate verification/compile checks do not substitute for installing and testing on an actual Android phone.
 
 References: https://developer.android.com/reference/android/webkit/WebSettings and https://developer.android.com/tools/apksigner .

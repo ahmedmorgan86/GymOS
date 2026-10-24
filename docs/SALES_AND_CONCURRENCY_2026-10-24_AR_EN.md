@@ -16,4 +16,10 @@ Read-only live PostgreSQL catalog inspection found 26 gymos tables with RLS enab
 
 ## Remaining acceptance gates
 
+### Subsequent isolated PostgreSQL verification
+
+GitHub Actions run `40122041923`, commit `f649b5ba001ae4fc71bb85214289981414e4ebe1`, job `120955520166`, passed four additional tests on disposable PostgreSQL 17.11 (no production connection). They execute the actual `database.ts` batch code and `db/entities.sql` policies: independent-club progress, same-club and mixed-version exclusion, rollback/scope cleanup, and entity RLS denial of cross-club reads/writes/reassignment. A test-only loader permits plain local container transport exclusively for `127.0.0.1/gymos_ci`; production TLS remains unchanged. The CI service is destroyed afterward. Extracted job output is in `verification/2026-10-24-sales/postgres-ci.log`. This brings automated evidence to 168 passes across local and CI suites. Seven older optional tests remain skipped.
+
+This checks repository entity policies on synthetic rows, not the entire Supabase migration history, deployed authorization policies, full financial/attendance concurrency, restore, throughput or load. Those wider gates below remain open.
+
 This is a tested development increment, not completion of the enterprise master prompt. Remaining work includes granular manager policies, cross-branch membership entitlements, narrower/paginated workspace persistence, MFA and replacement of legacy SQL PIN provisioning, support-access governance, isolated live SQL/RLS/concurrency/restore/load tests, signed Windows updates, Android/device acceptance, official competitor research, and legal/privacy/incident acceptance. No production merge or deployment is performed here.

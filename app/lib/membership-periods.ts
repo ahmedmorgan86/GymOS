@@ -1,5 +1,5 @@
 import type {Member} from './domain';
-export type MembershipPeriod={id:string;plan:string|null;start:string;end:string;visits:number|null;cancelled?:boolean;originalEnd?:string};
+export type MembershipPeriod={sale?:{name:string;minor:number;days:number;visits:number|null;at:string};id:string;plan:string|null;start:string;end:string;visits:number|null;cancelled?:boolean;originalEnd?:string};
 export function membershipPeriods(member:Member):MembershipPeriod[]{return member.membershipPeriods??(member.contract?[{...member.contract,end:member.expires}]:[]);}
 export function membershipPeriod(member:Member,on:string){return membershipPeriods(member).find(p=>!p.cancelled&&p.start<=on&&p.end>=on)??null;}
 export function syncMembership(member:Member,on:string){const periods=member.membershipPeriods;if(!periods?.length)return;const valid=periods.filter(p=>!p.cancelled);if(!valid.length)throw Error('membership has no valid term');member.expires=valid.reduce((end,p)=>p.end>end?p.end:end,valid[0].end);const current=membershipPeriod(member,on);if(current?.plan)member.contract={id:current.id,plan:current.plan,start:current.start,visits:current.visits};else delete member.contract;}

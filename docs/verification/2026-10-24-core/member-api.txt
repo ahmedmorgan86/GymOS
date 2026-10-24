@@ -1,0 +1,10 @@
+✔ Administrative member view requires verified staff, correct tenant ID and assigned branch (44.684717ms)
+✔ Changes in the club workspace appear in member app: card scan, renewal, payment and training (17.261063ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 352.662689

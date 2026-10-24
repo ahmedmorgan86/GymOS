@@ -8,4 +8,4 @@ export function normalizeMemberPhone(value:unknown){
  return /^\+[1-9][0-9]{7,14}$/.test(phone)?phone:null;
 }
 export function normalizeMemberPin(value:unknown){if(typeof value!=='string'||value.length>20)return null;const pin=latinDigits(value.trim());return /^[0-9]{6}$/.test(pin)?pin:null;}
-export const newMemberPin=()=>String(randomInt(1_000_000)).padStart(6,'0');
+export function newMemberPin(){const n=randomInt(999_999);return String(n>=123456?n+1:n).padStart(6,'0');}

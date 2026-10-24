@@ -1,0 +1,11 @@
+✔ Sales-only reception sees pending registration and fixed plans but no payment inputs (33.397855ms)
+✔ Collections-only reception sees a collection form without member activation or plan prices (1.217215ms)
+✔ Combined grants expose paid enrollment, while absent grants expose no forms and pending operations disable fields (5.350192ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 672.730204

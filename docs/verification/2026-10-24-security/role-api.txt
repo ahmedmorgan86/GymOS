@@ -1,0 +1,16 @@
+✔ Sensitive feature APIs reject anonymous users, reception and foreign branch managers before database access (232.389228ms)
+✔ Owner and full administrator can create members and manage global settings (8.099593ms)
+✔ Branch manager may edit assigned branch, cannot edit another or global settings (2.783467ms)
+✔ Reception without delegation cannot mutate attendance, prices, people, shifts or permissions (2.756163ms)
+✔ Anonymous, cross-origin, stale revisions, wrong tenants and duplicate request IDs are guarded (41.230474ms)
+✔ Owner delegates attendance by branch; reception cannot escalate, alter prices or use revoked grants (26.126646ms)
+✔ Concurrent check-ins from one revision commit at most once and retry is idempotent (6.007275ms)
+✔ Full-admin backup restore cannot grant reception new rights or resurrect revoked grants (30.881272ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 550.334929

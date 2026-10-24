@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import ReceptionSales from '../app/reception-sales.tsx';
+import {emptyState} from '../app/lib/domain.ts';
+function render(canSell,canCollect,busy=false){const state=emptyState();state.members=[{id:'member-a',name:'Allowed member',phone:'',branch:'main',archived:false,demo:false},{id:'member-b',name:'Foreign member secret',phone:'',branch:'other',archived:false,demo:false}];state.plans=[{id:'plan-a',name:'Approved plan',minor:10000,days:30,visits:5,branch:'main',archived:false},{id:'plan-b',name:'Foreign price secret',minor:987600,days:30,visits:null,branch:'other',archived:false}];return renderToStaticMarkup(createElement(ReceptionSales,{state,branch:'main',ar:false,busy,canSell,canCollect,mutate:()=>{throw Error('render must not write');}}));}
+test('Sales-only reception sees pending registration and fixed plans but no payment inputs',()=>{const html=render(true,false);assert.match(html,/Register a new member/);assert.match(html,/New membership or renewal/);assert.match(html,/Approved plan/);assert.doesNotMatch(html,/name="paid"|name="amount"|Foreign member secret|Foreign price secret/);assert.equal((html.match(/<form\b/g)??[]).length,2);});
+test('Collections-only reception sees a collection form without member activation or plan prices',()=>{const html=render(false,true);assert.match(html,/Record a collection/);assert.match(html,/name="amount"/);assert.doesNotMatch(html,/Register a new member|New membership or renewal|Approved plan|Foreign member secret/);assert.equal((html.match(/<form\b/g)??[]).length,1);});
+test('Combined grants expose paid enrollment, while absent grants expose no forms and pending operations disable fields',()=>{assert.match(render(true,true),/name="paid"/);assert.equal((render(true,true).match(/<form\b/g)??[]).length,3);assert.equal((render(false,false).match(/<form\b/g)??[]).length,0);assert.match(render(true,true,true),/<fieldset[^>]*disabled=""/);});

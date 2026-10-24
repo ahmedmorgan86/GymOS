@@ -3,7 +3,7 @@ import type {CommercialClub} from './commercial-types';
 import {randomUUID} from 'node:crypto';
 import type {PoolClient} from 'pg';
 import {getPool} from './database';
-import {CommercialError,licenseGrant,limits,priceMinor,type License} from './licensing';
+import {CommercialError,licenseGrant,limits,priceMinor,transferDay,type License} from './licensing';
 import type {ChatGPTUser} from '../chatgpt-auth';
 import {emptyState} from './domain';
 export const commercialEnabled=()=>process.env.GYMOS_COMMERCIAL==='1';
@@ -91,7 +91,7 @@ export async function commercialWork(client:PoolClient,platform:boolean,user:Cha
  }
  const order=(await client.query('SELECT * FROM gymos.activation_requests WHERE id=$1 AND tenant_id=$2 FOR UPDATE',[text(body.id),club.id])).rows[0];if(!order)throw new CommercialError('notFound',404);
  if(action==='cancel'){if(!['quote_requested','awaiting_payment','pending_review'].includes(order.status))throw new CommercialError('conflict',409);await client.query("UPDATE gymos.activation_requests SET status='cancelled' WHERE id=$1",[order.id]);}
- else if(action==='transfer'){if(order.status!=='awaiting_payment')throw new CommercialError('conflict',409);const day=text(body.day,10);if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!Number.isFinite(Date.parse(day))||day>new Date().toISOString().slice(0,10))throw new CommercialError('date');await client.query("UPDATE gymos.activation_requests SET transfer_ref=$1,transfer_day=$2,paid_minor=$3,note=$4,status='pending_review' WHERE id=$5",[text(body.reference,200).normalize('NFKC').replace(/\s+/g,'').toUpperCase(),day,priceMinor(body.amount),String(body.note??'').slice(0,1000),order.id]);}
+ else if(action==='transfer'){if(order.status!=='awaiting_payment')throw new CommercialError('conflict',409);const day=transferDay(body.day);await client.query("UPDATE gymos.activation_requests SET transfer_ref=$1,transfer_day=$2,paid_minor=$3,note=$4,status='pending_review' WHERE id=$5",[text(body.reference,200).normalize('NFKC').replace(/\s+/g,'').toUpperCase(),day,priceMinor(body.amount),String(body.note??'').slice(0,1000),order.id]);}
  else throw new CommercialError('invalid');
  await audit(client,user,club.id,'order.'+action,{id:order.id});return{ok:true};
  }

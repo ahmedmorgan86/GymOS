@@ -1,0 +1,211 @@
+{
+  "observed_date": "2026-10-24",
+  "scope": "Read-only metadata; no member/customer rows queried; no production modifications",
+  "table_count": 26,
+  "rls_enabled_count": 26,
+  "rls_forced_count": 26,
+  "tables": [
+    {
+      "schema_name": "gymos",
+      "table_name": "activation_requests",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "commercial_audit",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 2
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "commercial_plans",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 2
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_access",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_access_events",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_activity_archive",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 2
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_backup_transfers",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_entities",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_invites",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 2
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_photos",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_recovery",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "gym_states",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "member_code_access",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 3
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "member_code_attempts",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "member_code_sessions",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 3
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "member_faces",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "member_portal_access",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 3
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "platform_admins",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "platform_settings",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 2
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "tenant_licenses",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 3
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "tenant_memberships",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "tenants",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "trial_claims",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "whatsapp_connections",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "whatsapp_outbox",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    },
+    {
+      "schema_name": "gymos",
+      "table_name": "whatsapp_rules",
+      "rls_enabled": true,
+      "rls_forced": true,
+      "policy_count": 1
+    }
+  ],
+  "performance_advisors": [
+    {
+      "name": "auth_rls_initplan",
+      "level": "WARN",
+      "count": 38,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0003_auth_rls_initplan"
+    },
+    {
+      "name": "unused_index",
+      "level": "INFO",
+      "count": 4,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index"
+    },
+    {
+      "name": "multiple_permissive_policies",
+      "level": "WARN",
+      "count": 6,
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0006_multiple_permissive_policies"
+    }
+  ]
+}

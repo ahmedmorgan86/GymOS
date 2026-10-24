@@ -1,0 +1,15 @@
+✔ Mobile number alone, wrong PIN, legacy code and cross-origin do not grant a session (13.758879ms)
+✔ Correct phone and PIN issue protected opaque session for only the matched member (2.612088ms)
+✔ Multiple matching memberships require authenticated selection and reject a forged account (2.36078ms)
+✔ Persistent phone bucket blocks the sixth attempt and returns retry guidance (7.558931ms)
+✔ Temporary-PIN sessions cannot view member data until successful private PIN change (32.018847ms)
+✔ PIN change rejects the shared default, mismatched confirmation and incorrect current PIN (3.493958ms)
+✔ PIN-change attempts are rate limited and anonymous requests cannot change a PIN (4.866693ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 331.797648

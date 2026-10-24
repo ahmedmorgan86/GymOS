@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> gymos@0.1.0 typecheck
+> tsc --noEmit
+
+app/workspace.tsx(126,611): error TS2304: Cannot find name 'packet'.
+app/workspace.tsx(126,624): error TS2322: Type '{ ar: boolean; role: any; mutate: (operation: Omit<Operation, "branch"> & { type: string; }) => Promise<boolean>; busy: boolean; }' is not assignable to type 'IntrinsicAttributes & { ar: boolean; role?: Role | undefined; compact?: boolean | undefined; }'.
+  Property 'mutate' does not exist on type 'IntrinsicAttributes & { ar: boolean; role?: Role | undefined; compact?: boolean | undefined; }'.

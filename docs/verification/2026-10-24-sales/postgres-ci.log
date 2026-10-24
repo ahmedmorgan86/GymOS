@@ -1,0 +1,12 @@
+2026-10-24T18:44:34.2818472Z ✔ PostgreSQL: another club progresses while the first club is locked (69.917238ms)
+2026-10-24T18:44:34.3087849Z ✔ PostgreSQL: same club and old global writers exclude concurrent scoped writers (25.993585ms)
+2026-10-24T18:44:34.3144717Z ✔ PostgreSQL: failed batches release locks and transaction-local scope (5.472887ms)
+2026-10-24T18:44:34.3244429Z ✔ PostgreSQL: repository entity RLS rejects cross-club reads, writes and owner reassignment (9.856161ms)
+2026-10-24T18:44:34.3317038Z ℹ tests 4
+2026-10-24T18:44:34.3317802Z ℹ suites 0
+2026-10-24T18:44:34.3318196Z ℹ pass 4
+2026-10-24T18:44:34.3318583Z ℹ fail 0
+2026-10-24T18:44:34.3318940Z ℹ cancelled 0
+2026-10-24T18:44:34.3319354Z ℹ skipped 0
+2026-10-24T18:44:34.3319727Z ℹ todo 0
+2026-10-24T18:44:34.3320143Z ℹ duration_ms 209.690421

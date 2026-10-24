@@ -27,6 +27,10 @@ jobs:
         run: node --import ./tests/member-session-loader.mjs --test --test-isolation=none tests/member-session.integration.mjs
       - name: Member credential provisioning
         run: node --import ./tests/member-credentials-loader.mjs --test --test-isolation=none tests/member-credentials.integration.mjs
+      - name: Tenant batch serialization boundaries
+        run: node --import ./tests/database-batch-loader.mjs --test --test-isolation=none tests/database-batch.integration.mjs
+      - name: Reception sales visibility
+        run: node --import ./tests/reception-ui-loader.mjs --test --test-isolation=none tests/reception-ui.integration.mjs
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=low
       - run: npm run build

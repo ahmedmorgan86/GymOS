@@ -9,7 +9,7 @@ import {normalizeLicense} from '../../lib/commercial';
 import {memberView} from '../../lib/member-view';
 export async function GET(request:Request){try{const url=new URL(request.url);const member=url.searchParams.get('member');const codeToken=!member?memberSessionToken(request):null;const codeIdentity=codeToken?await codeMemberIdentity(request):null;if(codeToken&&!codeIdentity)return reply({error:'auth'},401);const user=codeIdentity?null:await getChatGPTUser();if(!codeIdentity&&!user)return reply({error:'auth'},401);
 if(member){const ctx=await context();if(!ctx||!['owner','manager'].includes(ctx.role)||url.searchParams.get('club')!==ctx.tenantId)return reply({error:'forbidden'},403);
-if(ctx.license&&!licenseState(ctx.license).writable)return reply({error:'licenseReadOnly'},403);
+if(!ctx.support&&ctx.license&&!licenseState(ctx.license).writable)return reply({error:'licenseReadOnly'},403);
 const {state}=await readSpace(ctx.owner);const m=state.members.find(m=>m.id===member&&!m.archived&&!m.demo);
 if(!m||ctx.branches&&!ctx.branches.includes(m.branch))return reply({error:'forbidden'},403);
 return reply({...memberView(state,m.id,m.branch,new Date().toISOString()),clubs:[{id:ctx.owner}],selected:ctx.owner,staffPreview:true});}

@@ -1,0 +1,1 @@
+export function supportWriteBlocked(method:string,path:string,active:boolean){return active&&!['GET','HEAD','OPTIONS'].includes(method.toUpperCase())&&path.startsWith('/api/')&&path!=='/api/commercial';}

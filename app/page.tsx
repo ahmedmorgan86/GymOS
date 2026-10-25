@@ -8,4 +8,4 @@ import PublicSite from "./public-site";
 import {publicMetadata,siteOrigin} from './lib/seo';
 export async function generateMetadata(){if(await getChatGPTUser())return{robots:{index:false,follow:false},other:{'gymos-offline-shell':'1'}};const meta=publicMetadata();return{...meta,alternates:{...meta.alternates,canonical:siteOrigin()+'/'}};}
 export const dynamic="force-dynamic";
-export default async function Home(){const user=await getChatGPTUser();if(!user)return <PublicSite en={false}/>;if(commercialEnabled()){try{await commercialContext(user,(await cookies()).get('gymos-space')?.value);}catch(error){if(error instanceof CommercialError&&error.code==='chooseClub')redirect('/clubs');throw error;}}return <Workspace/>;}
+export default async function Home(){const user=await getChatGPTUser();if(!user)return <PublicSite en={false}/>;if(commercialEnabled()){try{await commercialContext(user,(await cookies()).get('gymos-space')?.value,(await cookies()).get('gymos-support')?.value);}catch(error){if(error instanceof CommercialError&&['chooseClub','supportExpired'].includes(error.code))redirect('/clubs');throw error;}}return <Workspace/>;}

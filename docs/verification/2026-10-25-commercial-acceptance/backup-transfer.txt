@@ -1,0 +1,12 @@
+✔ Database transfer protocol verifies chunks, owner, actor and round-trip (4673.1388ms)
+✔ Chunked backup round-trips Arabic beyond platform request limits and rejects corruption (167.3809ms)
+✔ 50,000 historical activity entries no longer prevent subsequent operations (91.8764ms)
+✔ Archive and transfer RLS isolate actor and tenant and prohibit changing activity (903.5849ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6121.347

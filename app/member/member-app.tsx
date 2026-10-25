@@ -1,6 +1,8 @@
 "use client";
 import {useEffect,useEffectEvent,useRef,useState} from 'react';
 import Image from 'next/image';
+import {clubDesignStyle} from '../lib/club-design';
+import type {CSSProperties} from 'react';
 import Link from 'next/link';
 import {UserRound,Activity,CalendarDays,Dumbbell,WalletCards,QrCode,ArrowUpRight,Globe,ShieldCheck,Users,MessageCircle,RefreshCw} from 'lucide-react';
 import type {memberView} from '../lib/member-view';
@@ -48,7 +50,8 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
  function navigate(section:Section){setTab(section);setShowPass(false);requestAnimationFrame(()=>content.current?.scrollIntoView({block:'start',behavior:'instant'}));}
  const names={profile:t('بياناتي','My profile'),health:t('قياساتي','Measurements'),attendance:t('حضوري','Attendance'),training:t('تدريبي','Training'),payments:t('مدفوعاتي','Payments'),messages:t('رسائلي','Messages')};
  const navNames={profile:t('بياناتي','Profile'),training:t('تدريبي','Train'),attendance:t('حضوري','Visits'),health:t('قياساتي','Health'),payments:t('مدفوعاتي','Wallet'),messages:t('رسائلي','Chat')};
- return <main className="member-mobile-app feature-panel" dir={ar?'rtl':'ltr'}>
+ return <main className={"member-mobile-app feature-panel "+(data?.gym.design?"club-custom-design":"")} style={clubDesignStyle(data?.gym.design) as CSSProperties} data-club-motion={data?.gym.design?.motion===false?"off":undefined} dir={ar?'rtl':'ltr'}>
+  <div className="member-app-scroll" role="region" aria-label={t('محتوى حساب العضو','Member account content')}>
   <header className="member-topbar"><div className="member-brand"><span className="member-mark">{data?.gym.logo?<Image src={data.gym.logo} width={42} height={42} unoptimized alt=""/>:<Dumbbell size={24}/>}</span><div><small>{t('مساحة العضو','MEMBER EXPERIENCE')}</small><h1>{data?.gym.name??'GYM OS'}</h1></div></div><button aria-label={t('تغيير اللغة','Change language')} className="button secondary" onClick={()=>setAr(!ar)}><Globe size={16}/>{ar?'English':'العربية'}</button></header>
   {preview&&<section className="member-preview-notice" role="note"><b>{t('معاينة تطبيق العضو — بيانات وهمية','Member app preview — fictional data')}</b><p>{t('معاينة للشكل فقط. الكارت والأعداد للتوضيح ولا يسجلان حضورًا.','Visual preview only. The pass and counts are illustrative and cannot check in.')}</p><a href="/member">{t('الدخول ببياناتك الحقيقية','Sign in to your real records')}</a></section>}
   {staffMode&&<section className="member-preview-notice" role="note"><b>{t('عرض إداري لبيانات العضو الحقيقية — للقراءة فقط','Administrative view of real member records — read only')}</b><p>{t('هذا العرض يستخدم صلاحياتك الإدارية، ولا يربط حسابك بالعضو.','This view uses your staff permissions and does not link your account to the member.')}</p><Link href="/">{t('العودة لإدارة النادي','Back to club management')}</Link></section>}
@@ -67,7 +70,6 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
    <MemberDashboard data={data} ar={ar} onPass={()=>{setShowPass(true);requestAnimationFrame(()=>pass.current?.scrollIntoView({block:'start',behavior:'instant'}));}} onNavigate={navigate}/>
    {!preview&&<div className="member-sync-status"><small>{t('آخر تحديث','Last updated')}: {dateTime(data.occupancyAsOf)}</small><button className="text-button" disabled={busy} onClick={()=>void load(data.selected)}><RefreshCw size={15}/>{t('تحديث','Refresh')}</button></div>}
    {showPass&&<section ref={pass} className="card member-pass-panel"><h2>{t('كارت الدخول الخاص بك','Your entry pass')}</h2>{data.member.card?<MemberDigitalPass member={data.member} gym={data.gym.name} logo={data.gym.logo} branch={data.branch?.name??''} ar={ar}/>:<p>{t('اطلب إصدار كارت من إدارة النادي.','Ask the club to issue your pass.')}</p>}</section>}
-   <nav className="member-bottom-nav" aria-label={t('أقسام حساب العضو','Member sections')}>{sections.map(x=>{const Icon={profile:UserRound,health:Activity,attendance:CalendarDays,training:Dumbbell,payments:WalletCards,messages:MessageCircle}[x];return <button key={x} aria-label={names[x]} onClick={()=>navigate(x)} aria-current={tab===x?'page':undefined} className={tab===x?'selected':''}><Icon size={22} strokeWidth={1.8}/>{navNames[x]}</button>;})}</nav>
    <section ref={content} className="card member-content" key={tab}><div className="member-section-title"><small>{t('حسابك مع ناديك','MY GYM / MY PROGRESS')}</small><h2>{names[tab]}</h2></div>
     {tab==='profile'&&<><div className="member-profile-facts"><p><small>{t('رقم الموبايل','Mobile')}</small><bdi>{data.member.phone||'—'}</bdi></p><p>{t('الفرع','Branch')}: {trainingText(data.branch?.name??'',ar)}</p><p>{t('الشيفت','Shift')}: {data.shift?trainingText(data.shift.name,ar)+' · '+data.shift.start+' - '+data.shift.end:t('بدون شيفت','No shift')}</p><p>{t('بداية العضوية','Joined')}: {data.member.joined}</p><p>{t('الاشتراك حتى','Valid through')}: {data.member.awaitingSubscription?t('بانتظار باقة','Awaiting package'):data.member.expires}</p>{data.membership.plan&&<p>{t('الباقة','Plan')}: {trainingText(data.membership.plan,ar)}</p>}</div>{data.membership.periods.length>0&&<details className="member-terms"><summary>{t('فترات الاشتراك','Membership terms')}</summary><h3>{t('فترات الاشتراك','Membership terms')}</h3>{data.membership.periods.map(p=><p key={p.id}>{p.start} → {p.end} · {p.cancelled?t('مستبدل','Replaced'):p.start>data.occupancyAsOf.slice(0,10)?t('مجدول','Scheduled'):p.end<data.occupancyAsOf.slice(0,10)?t('سابق','Past'):t('ساري','Current')}</p>)}</details>}<h3>{t('حجوزاتي وحصصي','My bookings & classes')}</h3>{!data.classes.length&&<p>{t('لا توجد حجوزات مسجلة.','No recorded bookings.')}</p>}{data.classes.map(c=><article key={c.id}><b>{trainingText(c.title,ar)}</b><p>{dateTime(c.at)} · {c.cancelled?t('ملغاة','Cancelled'):c.waiting?t('قائمة الانتظار','Waitlist'):t('محجوزة','Booked')}</p><small>{c.coach}</small></article>)}{data.coaching.map((c,i)=><article key={i}><b>{trainingText(c.title,ar)}</b><p>{c.coach} · {dateTime(c.at)}</p></article>)}</>}
     {tab==='messages'&&<MemberCommunity data={data} ar={ar} readOnly={preview||staffMode} onRefresh={()=>load(data.selected)}/>}
@@ -81,5 +83,7 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
    {!staffMode&&<button className="button secondary" disabled={preview||busy} onClick={()=>void signOut()}>{t('تسجيل الخروج','Sign out')}</button>}
   </>}
 
+ </div>
+ {data&&(<nav className="member-bottom-nav" aria-label={t('أقسام حساب العضو','Member sections')}>{sections.map(x=>{const Icon={profile:UserRound,health:Activity,attendance:CalendarDays,training:Dumbbell,payments:WalletCards,messages:MessageCircle}[x];return <button key={x} aria-label={names[x]} onClick={()=>navigate(x)} aria-current={tab===x?'page':undefined} className={tab===x?'selected':''}><Icon size={22} strokeWidth={1.8}/>{navNames[x]}</button>;})}</nav>)}
  </main>;
 }

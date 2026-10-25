@@ -1,19 +1,19 @@
 {
-  "builtAt": "2026-10-23T22:32:46.9801314Z",
-  "minAndroid": "8.0",
-  "versionCode": 1,
+  "version": "1.0.1",
+  "builtAt": "2026-10-25T22:39:37.4805780Z",
+  "url": "/downloads/GymOS-Members-Android-1.0.1.apk",
+  "versionCode": 2,
+  "sha256": "18d48c6a2bfe5693529001fcf73d6f1d85ede1c292509d79f0b5f7e32851e90b",
+  "package": "com.gymos.members",
   "sourceHashes": {
-    "AndroidManifest.xml": "641c59d8ec8b91b683c1ac0b790a79f6ec9eb1bd936deed0d4b394c2373a5431",
-    "res/drawable/logo.png": "5b001507602fdc14d6c84704ca79f0b387f2ba71faf35a3072bf0f46c415c583",
+    "AndroidManifest.xml": "5ad911170b8114c8898201042906d92ab8f2f9a4154e464a03526b3e51a55358",
+    "res/drawable/logo.png": "7407275bada5794996d5d5d8d3e32d1b73fbb17b3393c757afd7ddad6797c7aa",
     "res/mipmap-anydpi-v26/ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
     "res/values/styles.xml": "518120ebd6daceedbbfe68c93a5a5c4565623db89b57f8ec6e8ec8115ea91e3b",
     "res/xml/data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
     "res/xml/network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
-    "src/com/gymos/members/MainActivity.java": "120c39fe7f777da7152504c120203670b85dba7c9d84ec4906ea211159f7f8c0"
+    "src/com/gymos/members/MainActivity.java": "a947c9c47eceb64ff4ab614c6f5e5a6204e081a18689b87bee72a434814474f3"
   },
-  "url": "/downloads/GymOS-Members-Android-1.0.0.apk",
-  "version": "1.0.0",
-  "package": "com.gymos.members",
-  "bytes": 37583,
-  "sha256": "5de2c54e9b879554dd1f42d5c22fee9d0ec8a177e95e2dbe918e0f997d56147b"
+  "bytes": 45776,
+  "minAndroid": "8.0"
 }

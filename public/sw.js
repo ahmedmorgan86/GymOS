@@ -1,4 +1,4 @@
-const CACHE='gymos-shell-v9';
+const CACHE='gymos-shell-v10';
 const local=['localhost','127.0.0.1'].includes(self.location.hostname);
 const asset=url=>url.pathname.startsWith('/voices/nabra/')||/\.(?:js|mjs|css|woff2|woff|ttf|svg|png)$/.test(url.pathname)||(local&&(/\.(?:ts|tsx)$/.test(url.pathname)||url.pathname.startsWith('/@')));
 self.addEventListener('install',()=>self.skipWaiting());

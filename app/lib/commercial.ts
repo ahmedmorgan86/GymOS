@@ -35,7 +35,7 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
  const settings=(await client.query('SELECT payload,revision FROM gymos.platform_settings WHERE id=1')).rows[0];
  const orders=platformView?(await client.query('SELECT r.*,t.name AS club_name FROM gymos.activation_requests r JOIN gymos.tenants t ON t.id=r.tenant_id ORDER BY r.created_at DESC LIMIT 200')).rows:[];
  const events=platformView?(await client.query('SELECT * FROM gymos.commercial_audit ORDER BY at DESC LIMIT 100')).rows:[];
- const trialUsed=(await client.query('SELECT owner_id FROM gymos.trial_claims WHERE owner_id=$1',[user.userId])).rowCount!==0;return{platform,clubs,plans,settings,orders,events,trialUsed};
+ const trialUsed=(await client.query('SELECT owner_id FROM gymos.trial_claims WHERE owner_id=$1',[user.userId])).rowCount!==0;return{account:{name:user.displayName,email:user.email},platform,clubs,plans,settings,orders,events,trialUsed};
  });}
 export async function commercialAction(user:ChatGPTUser,body:Record<string,unknown>){return commercialTransaction(user,(client,platform)=>commercialWork(client,platform,user,body));}
 export async function commercialWork(client:PoolClient,platform:boolean,user:ChatGPTUser,body:Record<string,unknown>){

@@ -5,3 +5,8 @@
 android/**/*.java text eol=lf
 android/**/*.xml text eol=lf
 *.apk binary
+
+android-management/**/*.java text eol=lf
+android-management/**/*.xml text eol=lf
+android-support/**/*.java text eol=lf
+android-support/**/*.xml text eol=lf

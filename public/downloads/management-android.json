@@ -1,0 +1,19 @@
+{
+  "sha256": "0c2c6081d88cfac0bf913c498109cfe38678fe08eac37b864a50ba3f61dbab56",
+  "versionCode": 1,
+  "minAndroid": "8.0",
+  "sourceHashes": {
+    "AndroidManifest.xml": "6b5eb5f80e7488e9d9e166e6c8181f330ac80ad9fb69b89b2e1204a8f5225e49",
+    "res/drawable/logo.png": "992d019d78fd27b8f96f3472ecbbd9768cba311a9c9f47ccf4dea951cad9524d",
+    "res/mipmap-anydpi-v26/ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
+    "res/values/styles.xml": "518120ebd6daceedbbfe68c93a5a5c4565623db89b57f8ec6e8ec8115ea91e3b",
+    "res/xml/data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
+    "res/xml/network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
+    "src/com/gymos/management/MainActivity.java": "f390e39aab984a5a3fdcca11c81ec9244ae155cabb6e2b082aabbd0453c9896b"
+  },
+  "bytes": 45775,
+  "version": "1.0.0",
+  "url": "/downloads/GymOS-Management-Android-1.0.0.apk",
+  "package": "com.gymos.management",
+  "builtAt": "2026-10-25T22:44:01.6505487Z"
+}

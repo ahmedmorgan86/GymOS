@@ -1,0 +1,13 @@
+# Mobile, brand and bundled music verification — 2026-10-26
+
+Implemented original violet/mint brand assets, a gym-reception hero image, responsive public light/dark styling, explicit management/member Android downloads and QR links, owner-account onboarding clarification, and protected platform support install/sign-in pages. Tenant-uploaded logos retain precedence.
+
+Android management/support 1.0.0 and members 1.0.1 are installable signed WebView applications using the hosted service. They require internet and are not native offline replacements. APK metadata includes file and source checksums. Signing material is excluded. Management camera access is runtime-gated to the trusted application origin; support has no camera permission. External navigation requires a user gesture and HTTPS; SSL errors are cancelled.
+
+Twenty full CC0 tracks are bundled with author/source/license/checksum records in public/music. No automatic 143 MB download or automatic playback. Explicit caching validates SHA-256 and bounded IndexedDB quotas. Hiding, restoration and cached files are scoped by tenant/branch/device. These are local preferences, not cloud backup content.
+
+Validation: 166 unit tests passed, 7 optional connected-database tests skipped; 33 mocked HTTP integration tests passed. TypeScript, lint and Next production build passed. Android compiled artifacts match their source hashes. Windows 1.1.10 publish succeeded.
+
+Local browser: public Arabic desktop and 390px responsive layout inspected; theme toggle inspected. Isolated temporary music harness successfully cached all 20 files, played a 216.888-second MP3, switched URL playback to cached Blob without resetting to the beginning, hid/restored a track and verified another branch retained its independent defaults with zero cached tracks. Harness removed before release. Playback was muted; this does not certify subjective audio quality or every full track end-to-end.
+
+Remaining acceptance: physical Android installation/update, file chooser and management camera permission on a device; physical iPhone install; Windows executable launch with new branding; external platform account playback/DRM; provider/hardware tests described in prior reports. No customer messages or payments were sent. No claim of defect-free commercial certification.

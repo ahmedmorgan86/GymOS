@@ -1,0 +1,19 @@
+{
+  "sha256": "9941576526e5907508ff97aafee6c6384fe0f673705ab8d0ee484e001a137359",
+  "versionCode": 1,
+  "minAndroid": "8.0",
+  "sourceHashes": {
+    "AndroidManifest.xml": "a7c8b1985dd04fddb5e6866c15d426a1134dcd4e2a35d59678b3cb363bfad9e7",
+    "res/drawable/logo.png": "155f75a13d5e544a32760c7a8f7c2471c4b95eb66ecbbc4ead1079245df07de2",
+    "res/mipmap-anydpi-v26/ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
+    "res/values/styles.xml": "518120ebd6daceedbbfe68c93a5a5c4565623db89b57f8ec6e8ec8115ea91e3b",
+    "res/xml/data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
+    "res/xml/network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
+    "src/com/gymos/support/MainActivity.java": "a5a47f88e993022a0139b0f66f751f91451cc0abba0a01582c02f4af94f89e5b"
+  },
+  "bytes": 45776,
+  "version": "1.0.0",
+  "url": "/downloads/GymOS-Support-Android-1.0.0.apk",
+  "package": "com.gymos.support",
+  "builtAt": "2026-10-25T22:44:06.1821771Z"
+}

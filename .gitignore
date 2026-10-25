@@ -97,3 +97,6 @@ next-env.d.ts
 /public/downloads/*.idsig
 
 /.demo-artifacts/
+
+/android-management/build/
+/android-support/build/

@@ -1,6 +1,6 @@
 # GYM OS Enterprise
 
-Arabic/English Cairo interface for Windows and web. Windows release: 1.1.8. The portable WPF/WebView2 host uses the same Next.js interface as the website.
+Arabic/English Cairo interface for Windows and web. Windows release: 1.1.9. The portable WPF/WebView2 host uses the same Next.js interface as the website.
 
 Production service: https://gymos-enterprise.vercel.app/
 
@@ -28,7 +28,7 @@ Operational backups do not move Auth passwords, staff invitations/grants or devi
 
 Normalized entities/photos are stored separately in PostgreSQL, but current read/validation paths reconstruct complete club state and use a workspace revision. Entitlement limits are not load-test capacity promises.
 
-## Windows 1.1.8
+## Windows 1.1.9
 
 Windows 10/11 x64, self-contained .NET 10, requires official Microsoft Edge WebView2 Runtime. Portable executable; no code signing or automatic updater is provided.
 
@@ -48,7 +48,7 @@ Copyright displays © Ahmed Morgan with the current year on web/Windows, includi
 - dotnet run --project tests/windows-backup/BackupSmoke.csproj -c Release
 - dotnet run --project tests/windows-branding/BrandingSmoke.csproj -c Release -- public/icons/icon-512.png
 
-Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_manuals.py. Generated files are under ignored outputs/manuals/output/pdf/. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
+Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_release119.py for all six current manuals. Set GYMOS_MANUAL_OUTPUT to override the delivery output folder. Use docs/manuals/requirements.txt and render every generated PDF page for visual review. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
 
 Current review records responsive/emulated coverage and physical-device limitations. Historical *_VERIFICATION.md / TEST_REPORT.md files describe their dated releases and are not blanket certification of current production.
 
@@ -60,18 +60,15 @@ The private start_public_trial function is the narrow, audited write boundary: i
 
 Windows 1.1.6 also saves a DPAPI-protected local first-trial receipt. It never extends the earlier deadline, counts elapsed calendar time while closed, rejects material clock rollback and checks local time against the server at activation. The server remains authoritative; this is not tamper-proof offline DRM against a machine administrator or a new identity. Local receipts are scoped to the Windows profile; reinstalling does not reset the existing account's server claim.
 
-## Provider preview playback — Windows 1.1.7
+## Provider music - Windows1.1.9 and web
 
-On Windows, opening/saving a provider link now defaults to that provider's canonical web player in the existing docked app panel, rather than its embed widget. Widget URLs normalize to provider content URLs. Sign in inside this isolated provider profile; account, DRM, region and provider support still determine full playback. The official embed remains an explicit fallback on web/Windows; GymOS does not turn previews into full tracks.
+External platforms open their actual canonical site in a separate small window. Windows uses a480x680 isolated provider window; web requests a popup with a direct-link fallback. No embedded preview-player fallback remains in the music UI. Local audio stays inside GymOS. Sign in with the provider account in its own window; region, subscription and DRM support determine full playback. No provider restriction is bypassed or full-track playback certified.
 
-The Windows music view previously denied every permission, including autoplay. It now prompts the user for autoplay only on the exact supported provider hosts; other permissions remain denied. This does not install a DRM component, bypass provider rules or certify playback with a paid subscription. Full-track provider playback still needs an acceptance check with the customer's actual account/device.
-
-Spotify reference: https://developer.spotify.com/documentation/embeds/tutorials/troubleshooting
-Deezer widget reference: https://newsroom-deezer.com/2021/04/deezers-new-embeddable-widget-player-adds-instant-audio-to-any-website/
+Autoplay prompts are limited to supported provider hosts. The web app cannot duck audio in another provider window; announcements and provider volume need actual device acceptance. Windows speech stops its provider window. Use Windows1.1.9 so the host matches the current UI contract.
 
 ## Release 1.1.8 — member services and operational reports
 
-Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. New features: member PWA and email-bound invitations, consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception remains read-only under the current policy. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
+Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. Historical features: member PWA and email-bound invitations (current phone/PIN login described below), consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception remains read-only under the current policy. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
 
 Apply 20261022212137_member_portal_messaging_presence.sql and 20261022213838_messaging_vault_scheduler.sql after prior migrations on a fresh independent deployment. They add private RLS-protected member/face/messaging tables and narrow Vault-backed encryption/worker authentication. The scheduler migration deliberately installs disabled: change its production URL for independent hosting, verify the deployed /api/cron/whatsapp route, then enable the named job. The shared production scheduler was enabled and an empty authenticated worker returned 200 with zero sent messages on 23 October 2026. No provider connection or real WhatsApp delivery was tested.
 
@@ -91,4 +88,13 @@ Interactive member UI preview: /member-preview uses only a fictional, determinis
 
 ## Members Android app
 
-The signed direct-download APK and its checksum metadata are in `public/downloads/`. The member page, public Arabic/English site and administrative member panel link to it. Android source/build instructions are in `android/`; installation and verification limits are in `docs/ANDROID_MEMBER_APP_AR_EN.md`. Members sign in with their saved mobile and initial PIN 123456, then must change it before viewing records. First-claim risks of a shared default are documented in `docs/MEMBER_APP_CONNECTED_AR_EN.md`. Never publish the private signing keystore/password.
+The signed direct-download APK and its checksum metadata are in `public/downloads/`. The main staff app and public Arabic/English site link to the APK and download QR; the member space intentionally contains no installation/download instructions. Android source/build instructions are in `android/`; installation and verification limits are in `docs/ANDROID_MEMBER_APP_AR_EN.md`. Members sign in with their saved mobile and initial PIN 123456, then must change it before viewing records. First-claim risks of a shared default are documented in `docs/MEMBER_APP_CONNECTED_AR_EN.md`. Never publish the private signing keystore/password.
+
+
+## Release1.1.9 - current operations and member experience
+
+See docs/GYMAWY_FEATURE_GAP_2026-10-25_AR_EN.md for the evidence matrix and remaining gaps. Current additions include branch cash shifts/expenses/supplier purchasing, HR duty/leave/payroll, day passes, competitions, manual WhatsApp templates, private member conversations, editable membership/class prices, confirmed-attendance profile popups, required PIN changes and private product images/commercial details. New fields are optional tenant metadata; no new SQL migration is needed for this release. Keep the existing base/commercial/auth migrations correctly installed.
+
+The member mobile UI adds a daily dashboard, current-term days, weekly attendance, next confirmed class, private balance and direct pass/program/chat actions, with six accessible navigation destinations and expandable workout days. Offline labels identify stale last-refresh information; phone/PIN authentication is unchanged. Android remains the signed1.0.0 WebView shell loading the hosted UI, not a new store release.
+
+Latest validation:153 unit cases and31 mocked API integration cases passed;7 optional connected-database cases skipped. Typecheck, lint, Next build, production dependency audit and Windows build/branding/music-policy tests passed. Six bilingual manuals total87pages. Logs and acceptance limits: docs/verification/2026-10-25-release119. Real provider/device, customer database/load/restore, fresh physical APK install and independent security acceptance remain outstanding. Internal tickets are not a central staffed helpdesk; statutory payroll, staff sales commissions and advanced cross-branch entitlement policies are not certified complete.

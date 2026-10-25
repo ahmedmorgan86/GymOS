@@ -1,0 +1,14 @@
+✔ New data is hidden from reception and foreign branches; mutations reject foreign scopes and tenants (50.3871ms)
+✔ SMS claims persist before transport and concurrent/repeated requests cannot send twice (3.7442ms)
+✔ SMS uncertainty is recorded without retry; no provider calls when disabled, revoked or wrong origin (6.4483ms)
+✔ Device gateway rejects bad signatures, accepts signed events and rejects payload scope injection (4.8241ms)
+✔ Daily branch cap rejects before transport, including uncertain prior attempts (2.6795ms)
+✔ Two simultaneous SMS requests from one revision produce at most one external request (3.0805ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 676.7991

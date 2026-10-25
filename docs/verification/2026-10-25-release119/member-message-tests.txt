@@ -1,0 +1,11 @@
+✔ Member messages bind tenant/member/branch to server identity, are idempotent and cannot impersonate another member (47.5219ms)
+✔ Anonymous, temporary PIN and foreign branch member sessions are denied; member daily cap persists (11.62ms)
+✔ Scheduled posts are visible only in their branch and publication window; staff cannot post into another member thread (3.109ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 305.5066

@@ -1,0 +1,23 @@
+✔ Reception cannot mutate or read HR, supplier accounts, cash shifts, manual templates or competitions (51.2011ms)
+✔ Branch managers cannot cross branch data or refer to foreign employee/payroll records (2.844ms)
+✔ Payroll payout replay is idempotent at the actual workspace handler and creates exactly one expense (3.6439ms)
+✔ Failed compound visitor operation does not partially persist a member, invoice or cash movement (2.4623ms)
+✔ New data is hidden from reception and foreign branches; mutations reject foreign scopes and tenants (8.827ms)
+✔ SMS claims persist before transport and concurrent/repeated requests cannot send twice (3.2914ms)
+✔ SMS uncertainty is recorded without retry; no provider calls when disabled, revoked or wrong origin (5.8548ms)
+✔ Device gateway rejects bad signatures, accepts signed events and rejects payload scope injection (4.5453ms)
+✔ Daily branch cap rejects before transport, including uncertain prior attempts (1.9838ms)
+✔ Two simultaneous SMS requests from one revision produce at most one external request (3.2735ms)
+✔ Sensitive feature APIs reject anonymous users, reception and foreign branch managers before database access (90.7032ms)
+✔ Owner and full administrator can create members and manage global settings (2.1021ms)
+✔ Branch manager may edit assigned branch, cannot edit another or global settings (1.1967ms)
+✔ Reception is read-only and cannot mutate attendance, prices, people, shifts or permissions (1.1702ms)
+✔ Anonymous, cross-origin, stale revisions, wrong tenants and duplicate request IDs are guarded (4.8336ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 461.9007

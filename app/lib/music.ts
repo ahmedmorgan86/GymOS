@@ -45,4 +45,4 @@ export const MUSIC_MAX_BYTES=250*1024*1024,MUSIC_FILE_BYTES=25*1024*1024;
 export function validMusicFile(file:{name:string;size:number;type:string}){return file.size>0&&file.size<=MUSIC_FILE_BYTES&&/\.(mp3|wav|ogg|m4a|aac|flac|webm)$/i.test(file.name)&&(!file.type||file.type.startsWith('audio/')||file.type==='video/webm');}
 export function nextMusicIndex(index:number,count:number,shuffle:boolean,random=Math.random()){if(count<1)return -1;if(count===1)return 0;if(!shuffle)return (index+1)%count;const slot=Math.min(count-2,Math.max(0,Math.floor(random*(count-1))));return slot>=index?slot+1:slot;}
 
-export function musicPlaybackTarget(link:MusicLink,nativeReady:boolean){return nativeReady?{mode:'native' as const,url:link.url}:{mode:'embed' as const,url:link.embed};}
+export function musicPlaybackTarget(link:MusicLink,nativeReady:boolean){return{mode:nativeReady?'native' as const:'popup' as const,url:link.url};}

@@ -6,7 +6,7 @@ Type checking, ESLint and production Next build passed. Production dependency au
 
 Browser with synthetic local data: expense entry and totals, WhatsApp template date/preview/URL (not sent), employee attendance/in-out, one payroll payment, internal staff reply, product fields/image compression/save/render. Store checked at390px Arabic and320px English with scrollWidth=clientWidth; desktop screenshot also saved. Initial Connect layout checks covered1280/390/320. These are sampled flows, not every device or every product screen.
 
-Six updated bilingual manuals,81 pages total, rendered to images and visually reviewed. Source and generated manifests are in the handover bundle. PDFs document trial timing, current Windows music windows, manual WhatsApp, pricing, role boundaries and external acceptance limits.
+Six updated bilingual manuals,87 pages total, rendered to images and visually reviewed. Source and generated manifests are in the handover bundle. PDFs document trial timing, current Windows music windows, manual WhatsApp, pricing, role boundaries and external acceptance limits.
 
 Unverified: physical camera/scanner/fingerprint vendor SDK, real SMS transport/delivery callbacks, provider account/full-track music playback, fresh physical Android installation, actual30-day elapsed trial, live database restore/load/tenant-RLS acceptance. Prior user-confirmed Arabic/English speaker and mobile-preview checks are historical and were not repeated audibly here. Internal support is not a staffed central helpdesk. Initial123456 is explicitly retained by owner choice.
 

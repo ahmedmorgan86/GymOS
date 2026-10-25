@@ -1,2 +1,2 @@
 import {NextResponse} from 'next/server';
-export function GET(){return NextResponse.redirect('https://github.com/ahmedmorgan86/GymOS/releases/download/windows-1.1.9/GymOS-Windows-x64-1.1.9.exe',307);}
+export function GET(){return NextResponse.redirect('https://github.com/ahmedmorgan86/GymOS/releases/download/windows-1.1.10/GymOS-Windows-x64-1.1.10.exe',307);}

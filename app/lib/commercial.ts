@@ -1,3 +1,4 @@
+import {resolveSupport} from './platform-support';
 import 'server-only';
 import type {CommercialClub} from './commercial-types';
 import {randomUUID} from 'node:crypto';
@@ -22,7 +23,7 @@ export async function selectClub(client:PoolClient,actor:string,id?:string):Prom
  for(const membership of rows){await client.query("SELECT set_config('app.tenant',$1,true)",[membership.tenant_id]);const row=(await client.query('SELECT id,storage_key,name FROM gymos.tenants WHERE id=$1',[membership.tenant_id])).rows[0];if(row&&(!id||id===row.id||id===row.storage_key))return{...row,role:membership.role,branches:membership.branches};}
  return null;
 }
-export async function commercialContext(user:ChatGPTUser,id?:string){return commercialTransaction(user,async client=>{const club=await selectClub(client,user.userId,id);if(!club)throw new CommercialError('chooseClub',409);const license=normalizeLicense((await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0] as License);return{...club,license};});}
+export async function commercialContext(user:ChatGPTUser,id?:string,supportToken?:string){return commercialTransaction(user,async(client,platform)=>{if(supportToken){const result=await resolveSupport(client,platform,user.userId,id,supportToken);result.license=normalizeLicense(result.license);return result;}const club=await selectClub(client,user.userId,id);if(!club)throw new CommercialError('chooseClub',409);const license=normalizeLicense((await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0] as License);return{...club,license,support:undefined};});}
 async function audit(client:PoolClient,user:ChatGPTUser,tenant:string|null,action:string,details:unknown={}){await client.query('INSERT INTO gymos.commercial_audit(id,actor,tenant_id,action,details) VALUES($1,$2,$3,$4,$5)',[randomUUID(),user.userId,tenant,action,JSON.stringify(details)]);}
 function text(value:unknown,max=120){if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new CommercialError('invalid');return value.trim();}
 export async function commercialDirectory(user:ChatGPTUser,platformView=false){return commercialTransaction(user,async(client,platform)=>{

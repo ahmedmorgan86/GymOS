@@ -38,7 +38,7 @@ def header(c,role,page):
  c.setFillColor(MUTED);c.setFont('CairoBold',9);c.drawString(38,H-39,'GYM OS / OPERATIONS HANDBOOK')
  c.setFont('Cairo',8);c.drawRightString(W-38,H-39,ar(role))
  c.setStrokeColor(HexColor('#dedfea'));c.line(38,37,W-38,37)
- c.drawString(38,23,'© Ahmed Morgan 2026 | 20 Oct 2026 | Windows 1.1.5');c.drawRightString(W-38,23,str(page))
+ c.drawString(38,23,'© Ahmed Morgan 2026 | 25 Oct 2026 | Windows 1.1.9');c.drawRightString(W-38,23,str(page))
 def manual(name,role_ar,role_en,topics,audience):
  target=PDF/name;c=canvas.Canvas(str(target),pagesize=A4)
  c.setTitle('GYM OS | '+role_en+' | Arabic & English');c.setAuthor('Ahmed Morgan')
@@ -49,7 +49,7 @@ def manual(name,role_ar,role_en,topics,audience):
  c.setFont('Cairo',14);c.drawRightString(W-44,H-330,ar('دليل الاستخدام بالعربية والإنجليزية'));c.drawString(44,H-367,'Arabic & English operating guide')
  c.setFillColor(HexColor('#ddd7f5'));c.setFont('Cairo',11)
  for i,line in enumerate(wrap(audience,W-88,'Cairo',11,True)):c.drawRightString(W-44,300-i*22,ar(line))
- c.setFont('Cairo',10);c.drawString(44,140,'Web source / Windows 1.1.5 - 20 October 2026');c.drawString(44,113,'https://gymos-enterprise.vercel.app/');c.drawString(44,86,'© Ahmed Morgan 2026');c.showPage()
+ c.setFont('Cairo',10);c.drawString(44,140,'Web source / Windows 1.1.9 - 25 October 2026');c.drawString(44,113,'https://gymos-enterprise.vercel.app/');c.drawString(44,86,'© Ahmed Morgan 2026');c.showPage()
  chunks=(len(topics)+14)//15;first=2+chunks
  for chunk in range(chunks):
   header(c,role_ar,2+chunk);c.setFillColor(INK);c.setFont('CairoBold',23);c.drawRightString(W-40,H-85,ar('المحتويات'));c.drawString(40,H-120,'Contents');y=H-165

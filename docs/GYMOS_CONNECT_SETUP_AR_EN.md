@@ -37,3 +37,9 @@
 القراءات لا تزال تحمل مساحة النادي كاملة خادميًا؛ ليست هذه ترقية pagination أو إثبات سعة. قبل التوسع التجاري: حدود واحتفاظ للسجلات، فهارس/جداول خاصة، اختبارات استعادة وحمل ومراقبة، وتنظيم الوصول الفني والخصوصية. احصل على قبول النشر قبل تفعيل أي مزود أو جهاز.
 
 English: SMS is approval-based, opt-in and provider-disabled by default, with durable send claims, per-branch request caps and no automatic retries after uncertainty. Provider acceptance is not delivery. Device ingestion is a signed normalized-event contract, not a tested vendor SDK or physical door controller. Tickets are tenant/branch-isolated internal threads, not a staffed central helpdesk. All external/hardware acceptance remains outstanding. Do not deploy or enable without approval.
+
+
+## Version 1.1.9 operations
+Manual WhatsApp templates are now the default WhatsApp screen. They open encoded wa.me chats for a human to send; automatic transport is separate and optional. Templates, HR, cashbook, competitions and member conversations use optional tenant metadata with server-side branch/role checks. No new SQL migration is required for these fields. Member messages require a changed phone/PIN session; legacy email-only members should sign in with their phone/PIN for this write action. Product image reads require authenticated owner/manager access and the selected tenant/branch; image bytes are omitted from workspace packets.
+
+User authorization for merge/deployment was subsequently provided. SMS and device connectors must remain disabled until a real provider/device acceptance run; pushing source does not enable them.

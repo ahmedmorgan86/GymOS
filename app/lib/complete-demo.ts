@@ -1,4 +1,5 @@
-import {addDays,dayAt,type GymState,type Member} from './domain.ts';
+import {demoProductImages} from './demo-product-images.ts';
+import {applyOperation,addDays,dayAt,type GymState,type Member} from './domain.ts';
 import {normalize,membershipIssue} from './extensions.ts';
 import {validateBackup} from './backup.ts';
 import {presets} from './training.ts';
@@ -39,5 +40,26 @@ export function completeDemo(source:GymState,count:number,now:string){
   const lines=[['ar','أهلًا بكم في النادي التجريبي. نتمنى لكم تمرينًا موفقًا.'],['ar','تبدأ حصة اللياقة الجماعية بعد عشر دقائق. يرجى التوجه إلى القاعة.'],['ar','نرجو من الكابتن كريم التوجه إلى الاستقبال.'],['ar','يرجى إعادة الأوزان إلى أماكنها بعد الاستخدام.'],['ar','يتبقى نصف ساعة على إغلاق النادي. شكرًا لتعاونكم.'],['en','Welcome to the demo gym. Have a great workout.'],['en','The group fitness class starts in ten minutes.'],['en','Please return the weights after use. Thank you.']];for(const [index,[lang,text]]of lines.entries()){const id=prefix+'announcement-'+index;if(!s.announcements!.some(a=>a.id===id))s.announcements!.push({id,branch:branch.id,text,lang:lang as 'ar'|'en',voice:'',rate:0.95,at:stamp(addDays(today,1),7+index),enabled:index===0||index===5,repeat:'daily',timezone:s.settings.timezone,priority:1,quiet:{start:22,end:7}});}
  }
  if(!s.events.some(e=>e.id===DEMO_PREFIX+'seed-event'))s.events.push({id:DEMO_PREFIX+'seed-event',branch:branches[0].id,at:now,kind:'demo.complete',subject:'workspace',actor:'إضافة بيانات اصطناعية بطلب المالك',detail:'Fictional reserved phone numbers; no messaging connections created.'});
+ for(const p of s.products??[]){const match=/^sample-full-.+-product-([0-3])$/.exec(p.id);if(match){const i=Number(match[1]);p.brand='GYM OS Demo';p.unit=i===3?'قطعة':'عبوة';p.size=['1 كجم','300 جم','60 قرص','60 جم'][i];p.flavor=i===0||i===3?'شوكولاتة':'';p.description='منتج وعبوة اصطناعيان للتدريب على البيع والمخزون؛ ليس منتجًا حقيقيًا أو توصية غذائية.';p.photo=demoProductImages[i];}}
+ // Upgrade only our synthetic members; retain the explicit label and reserved fictional phones.
+ for(const m of s.members){const match=/^sample-full-member-(\d+)$/.exec(m.id);if(!match)continue;const i=Number(match[1])-1;m.name=first[i%first.length]+' '+last[Math.floor(i/first.length)%last.length]+' '+last[Math.floor(i/(first.length*last.length))%last.length]+' — تجريبي';}
+ for(const branch of branches){const prefix=DEMO_PREFIX+branch.id+'-business-',marker=prefix+'seed';if(s.events.some(e=>e.id===marker))continue;let seq=0;const run=(type:string,data:Record<string,unknown>={})=>{const next=applyOperation(s,{type,branch:branch.id,...data},now,'Synthetic demo setup',()=>prefix+String(++seq));Object.assign(s,next);};
+  run('book.shift.open',{opening:2000000});
+  run('book.expense.add',{title:'إيجار مقر النادي - بيانات اصطناعية',category:'rent',minor:1200000,method:'transfer',day:today});
+  run('book.expense.add',{title:'كهرباء ومياه الشهر - بيانات اصطناعية',category:'utilities',minor:185000,method:'cash',day:today});
+  run('book.expense.add',{title:'صيانة أجهزة الكارديو - بيانات اصطناعية',category:'maintenance',minor:75000,method:'cash',day:today});
+  const product=s.products!.find(p=>p.branch===branch.id&&!p.archived)!,supplier=s.suppliers!.find(p=>p.branch===branch.id&&!p.archived)!;
+  run('book.purchase.add',{supplier:supplier.id,reference:'SYNTHETIC-OPENING-001',due:addDays(today,14),paid:300000,method:'transfer',lines:[{product:product.id,quantity:12,cost:140000,batch:'SYNTHETIC-NEW-BATCH',expires:addDays(today,240)}]});
+  for(const [i,person]of [{name:'محمد عادل حسن',job:'مدرب لياقة',base:650000,allowance:50000},{name:'سارة محمود علي',job:'استقبال',base:500000,allowance:30000}].entries()){
+   run('hr.employee.save',{...person,phone:'',contractStart:today.slice(0,4)+'-01-01',annualLeave:21});const employee=s.hr!.employees.at(-1)!.id;
+   run('hr.adjustment.add',{employee,month:today.slice(0,7),kind:i?'deduction':'bonus',minor:i?10000:25000,reason:i?'خصم معتمد تجريبي':'مكافأة أداء تجريبية'});
+   run('hr.payroll.generate',{employee,month:today.slice(0,7)});if(!i)run('hr.payroll.pay',{id:s.hr!.payroll.at(-1)!.id,method:'cash'});
+   run('hr.leave.request',{employee,from:addDays(today,7+i*3),to:addDays(today,8+i*3),kind:'annual',reason:'إجازة سنوية - مثال اصطناعي'});if(!i)run('hr.leave.decide',{id:s.hr!.leaves.at(-1)!.id,approved:true});
+  }
+  for(const kind of ['welcome','policy','renewal','expired','absence','birthday']as const)run('whatsapp.manual.save',{name:'قالب '+kind,kind,body:'أهلًا {name}، معك فريق {gym} - {branch}. تاريخ عضويتك {expires}. يسعدنا مساعدتك.',offset:7,enabled:true});
+  run('community.post',{title:'مواعيد العمل وسياسة استخدام الأجهزة',body:'يرجى إعادة الأوزان إلى أماكنها والحفاظ على نظافة الأجهزة. هذه بيانات اصطناعية للتدريب على النظام.',publishAt:now,enabled:true});
+  const member=s.members.find(m=>m.branch===branch.id&&m.id.startsWith(DEMO_PREFIX)&&!m.archived&&!m.demo);if(member)run('community.reply',{member:member.id,text:'مرحبًا بك، يمكنك متابعة الاشتراك والكارت والقياسات من حسابك. رسالة تدريب اصطناعية فقط.'});
+  s.events.push({id:marker,branch:branch.id,at:now,kind:'demo.business',subject:'workspace',actor:'Synthetic demo setup'});
+ }
  return validateBackup(s);
 }

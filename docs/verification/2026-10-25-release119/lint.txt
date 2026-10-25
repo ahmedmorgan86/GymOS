@@ -1,0 +1,2 @@
+npm notice run gymos@0.1.0 lint
+npm notice run eslint app components hooks lib

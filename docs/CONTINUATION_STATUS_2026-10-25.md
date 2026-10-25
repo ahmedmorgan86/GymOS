@@ -7,3 +7,5 @@ Six bilingual PDF manuals were updated and visually reviewed. Windows 1.1.9 buil
 See verification logs for exact tests/build results and the comparison report for remaining gaps. Mocked API tests are not live database/hardware/provider tests. Seven optional connected database cases remain skipped; real fingerprint SDK/device, SMS delivery, full provider music tracks, camera/scanner and fresh physical APK install require acceptance testing. Internal support is not a central staffed helpdesk. The initial PIN remains123456 by explicit owner choice.
 
 Deployment approval was explicitly granted. Final commit, CI, merge and production evidence are recorded in the delivery package after verification.
+
+Member mobile UI is also refined: immediate dashboard/actions, six accessible navigation destinations, expandable workout days and membership history, balance/next booking, loading skeleton, last-refresh and offline labels. Layout checked at390px Arabic and320px English; navigation touch areas exceed44px. No member auth policy or Android host URL changes.

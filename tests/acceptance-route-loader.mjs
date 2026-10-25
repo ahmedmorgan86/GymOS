@@ -1,0 +1,2 @@
+import {registerHooks} from 'node:module';import './commercial-loader.mjs';
+registerHooks({resolve(specifier,context,next){if(specifier==='next/headers')return{url:'data:text/javascript,export const cookies=async()=>({get:()=>globalThis.__acceptanceClub?{value:globalThis.__acceptanceClub}:undefined});',shortCircuit:true};return next(specifier,context);},load(url,context,next){if(url.endsWith('/app/chatgpt-auth.ts'))return{format:'module',shortCircuit:true,source:'export const getChatGPTUser=async()=>globalThis.__acceptanceUser;'};return next(url,context);}});

@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';import {getPool} from '../app/lib/database.ts';
+// Real SQL, real RLS, one outer transaction. Application transactions become savepoints.
+// Each connection boundary restores session settings; no customer partition is selected.
+export async function rollbackDatabase(work){const pool=getPool(),c=await pool.connect(),connect=pool.connect,keys=['app.actor','app.platform','app.tenant','app.gym_owner','app.gym_actor','app.member_session','app.member_phone','app.member_code','app.member_attempt','app.member_invite'],stack=[];let seq=0;
+ await c.query('BEGIN');const role=(await c.query('SELECT rolname,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user')).rows[0];assert.equal(role.rolname,'gymos_app');assert.equal(role.rolsuper,false);assert.equal(role.rolbypassrls,false);
+ const wrapped={release(){},async query(sql,...args){const command=typeof sql==='string'?sql.trim().toUpperCase():'';if(command==='BEGIN'){const snapshot=(await c.query('SELECT name,current_setting(name,true) AS value FROM unnest($1::text[]) AS name',[keys])).rows;const id='acceptance_'+ ++seq;await c.query('SAVEPOINT '+id);stack.push({id,snapshot});return{rows:[],rowCount:0};}if(command==='COMMIT'||command==='ROLLBACK'){const item=stack.pop();assert.ok(item,'Unbalanced transaction');if(command==='ROLLBACK')await c.query('ROLLBACK TO SAVEPOINT '+item.id);await c.query('RELEASE SAVEPOINT '+item.id);if(command==='COMMIT')await c.query('SELECT set_config(x.name,x.value,true) FROM unnest($1::text[],$2::text[]) AS x(name,value)',[item.snapshot.map(x=>x.name),item.snapshot.map(x=>x.value??'')]);return{rows:[],rowCount:0};}return c.query(sql,...args);}};
+ pool.connect=async()=>wrapped;
+ try{return await work(c);}finally{pool.connect=connect;await c.query('ROLLBACK');c.release();}
+}

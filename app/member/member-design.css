@@ -22,3 +22,9 @@
 .member-offline-state{background:#fff5db;color:#70551e;border:1px solid #eeddb4;border-radius:15px;padding:14px;font-size:14px;font-weight:700}
 
 .member-bottom-nav button{overflow:hidden;white-space:nowrap}.member-bottom-nav button svg{flex-shrink:0}
+
+/* Reserve a real footer row: no member content is painted behind navigation. */
+.member-mobile-app{height:100dvh;min-height:0;display:flex;flex-direction:column;padding:0;overflow:hidden;box-sizing:border-box}.member-app-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior-y:contain;padding:30px 28px 28px;scroll-padding-block:16px;box-sizing:border-box}.member-mobile-app .member-bottom-nav{position:static;inset:auto;flex-shrink:0;width:calc(100% - 28px);max-width:630px;margin:0 auto;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom));border-radius:23px 23px 0 0;box-sizing:border-box;z-index:auto}.member-mobile-app .member-bottom-nav button{min-height:56px}.member-mobile-app .member-content{scroll-margin-block:16px}
+@media(max-width:520px){.member-app-scroll{padding:20px 17px 24px}.member-mobile-app .member-bottom-nav{width:calc(100% - 12px);gap:0;padding-inline:5px}}
+
+.member-mobile-app.club-custom-design{font-size:var(--club-font-size);font-weight:var(--club-font-weight);color:var(--text)}.member-mobile-app.club-custom-design .member-intro h2,.member-mobile-app.club-custom-design .member-section-title,.member-mobile-app.club-custom-design .member-topbar h1{color:var(--text)}.member-mobile-app.club-custom-design .member-intro p{color:var(--muted)}.member-mobile-app.club-custom-design .digital-member-pass{background-image:linear-gradient(#10192ac9,#10192af0),var(--club-member-image);background-size:cover;background-position:center}.member-mobile-app.club-custom-design .member-bottom-nav{background:var(--surface);border-color:var(--line)}

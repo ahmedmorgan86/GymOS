@@ -5,6 +5,7 @@ import {applyOperation,RuleError,type Operation} from '../../lib/domain';
 import {permitted} from '../../lib/access';
 import {administrator,context,readSpace,packet,reply,sameOrigin,hash} from '../../lib/server-workspace';
 export const dynamic='force-dynamic';
+export const maxDuration=300;
 export async function GET(request:Request){try{const ctx=await context();if(!ctx)return reply({error:'auth'},401);if(request.headers.has('x-gymos-tenant'))assertRequestTenant(request,ctx.tenantId,Boolean(ctx.license));return reply(packet(await readSpace(ctx.owner),ctx));}catch(e){if(e instanceof CommercialError)return reply({error:e.code},e.status);return reply({error:e instanceof Error&&e.message==='forbidden'?'forbidden':'unavailable'},e instanceof Error&&e.message==='forbidden'?403:503);}}
 export async function POST(request:Request){try{
  if(!sameOrigin(request))return reply({error:'origin'},403);if(request.headers.get('content-type')?.split(';')[0]!=='application/json')return reply({error:'invalid'},415);

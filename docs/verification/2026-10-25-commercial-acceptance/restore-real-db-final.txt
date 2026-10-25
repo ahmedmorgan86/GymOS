@@ -1,0 +1,13 @@
+{"phase":"1000-member persistence","milliseconds":77207}
+PASS: real restore preserved member PIN and product snapshot
+{"fixtureMembers":1000,"branches":2,"images":8,"seedAndLoadMs":77207,"backupBytes":2802917,"recoverySnapshots":2,"chosenPinPreserved":true}
+PASS: outer rollback left no test workspace
+✔ Real SQL acceptance:1000-member entity storage, backup/restore, PIN preservation, stale/foreign/role rejection and complete rollback (179934.3627ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180259.2867

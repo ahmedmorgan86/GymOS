@@ -1,0 +1,10 @@
+✔ Trial lasts exactly 30 days and closes at the boundary; paid licenses are unaffected (4.0687ms)
+✔ Public trial: owner-only, once across clubs, exact server duration, immutable claim (3725.8195ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3782.2735

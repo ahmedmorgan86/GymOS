@@ -6,7 +6,7 @@ Production service: https://gymos-enterprise.vercel.app/
 
 ## Product access
 
-Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is currently read-only, including attendance. Do not grant broader permissions merely to bypass this product limitation.
+Independent clubs contain their own branches. Commercial platform administration is separate from club ownership. Club owners have full control; administrators operate assigned branches and require all current branches for global/team administration. Reception is read-only by default. The unified console supports explicit owner-issued grants for registration, permitted profile changes, attendance and collection; restore requires an owner or explicitly authorized manager. Server checks remain authoritative.
 
 Monthly, annual and perpetual licenses with annual maintenance are supported. Activation uses quotation/manual transfer review; no electronic payment gateway is included. Pending/expired/suspended clubs retain read/export access while operational writes/restore are blocked.
 
@@ -72,7 +72,7 @@ Autoplay prompts are limited to supported provider hosts. The web app cannot duc
 
 ## Release 1.1.8 — member services and operational reports
 
-Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. Historical features: member PWA and email-bound invitations (current phone/PIN login described below), consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception remains read-only under the current policy. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
+Read docs/ROLE_REVIEW_2026-10-23_AR_EN.md for exact tested/untested boundaries. Historical features: member PWA and email-bound invitations (current phone/PIN login described below), consented health/vitals, optional automatic camera attendance, check-out and same-day re-entry, shifts, coach pricing/commission/settlements, scoped WhatsApp rules and full HTML/Excel reports. Reception has no write permissions without explicit owner grants in the unified console. Camera matching is optional and requires device/lighting validation; no biometric accuracy certification is claimed.
 
 Apply 20261022212137_member_portal_messaging_presence.sql and 20261022213838_messaging_vault_scheduler.sql after prior migrations on a fresh independent deployment. They add private RLS-protected member/face/messaging tables and narrow Vault-backed encryption/worker authentication. The scheduler migration deliberately installs disabled: change its production URL for independent hosting, verify the deployed /api/cron/whatsapp route, then enable the named job. The shared production scheduler was enabled and an empty authenticated worker returned 200 with zero sent messages on 23 October 2026. No provider connection or real WhatsApp delivery was tested.
 
@@ -102,3 +102,7 @@ See docs/GYMAWY_FEATURE_GAP_2026-10-25_AR_EN.md for the evidence matrix and rema
 The member mobile UI adds a daily dashboard, current-term days, weekly attendance, next confirmed class, private balance and direct pass/program/chat actions, with six accessible navigation destinations and expandable workout days. Offline labels identify stale last-refresh information; phone/PIN authentication is unchanged. Android remains the signed1.0.0 WebView shell loading the hosted UI, not a new store release.
 
 Latest validation:153 unit cases and31 mocked API integration cases passed;7 optional connected-database cases skipped. Typecheck, lint, Next build, production dependency audit and Windows build/branding/music-policy tests passed. Six bilingual manuals total87pages. Logs and acceptance limits: docs/verification/2026-10-25-release119. Real provider/device, customer database/load/restore, fresh physical APK install and independent security acceptance remain outstanding. Internal tickets are not a central staffed helpdesk; statutory payroll, staff sales commissions and advanced cross-branch entitlement policies are not certified complete.
+
+## Unified member console
+
+The unified Arabic member and attendance console, global confirmed-attendance profile dialogs, historical card registry, discounts/partial payments and server-scheduled administrative checkout are documented in [docs/UNIFIED_MEMBER_CONSOLE_AR.md](docs/UNIFIED_MEMBER_CONSOLE_AR.md). Apply the matching reviewed migration before deployment. The scheduler is installed disabled and must be enabled only after the matching release is verified. Native hardware acceptance remains separate from code tests.

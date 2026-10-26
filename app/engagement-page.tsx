@@ -5,7 +5,7 @@ import type {GymState,Operation} from './lib/domain';
 import {renewalCandidates,emptyEngagement} from './lib/engagement';
 type Props={state:GymState;branch:string;ar:boolean;busy:boolean;onMember?:(id:string)=>void;onDispatch?:(id:string)=>Promise<void>;mutate:(op:Omit<Operation,'branch'>&{type:string})=>Promise<boolean>};
 export default function EngagementPage({state,branch,ar,busy,mutate,onMember,onDispatch}:Props){
- const [tab,setTab]=useState<'all'|'renewal'|'support'|'device'>('all'),[query,setQuery]=useState(''),[notice,setNotice]=useState('');
+ const [tab,setTab]=useState<'all'|'renewal'|'support'|'device'>('renewal'),[query,setQuery]=useState(''),[notice,setNotice]=useState('');
  const t=(a:string,b:string)=>ar?a:b,e=state.engagement??emptyEngagement(),candidates=renewalCandidates(state,branch,new Date().toISOString());
  async function submit(event:FormEvent<HTMLFormElement>,operation:(f:FormData)=>Omit<Operation,'branch'>&{type:string}){event.preventDefault();const form=event.currentTarget;try{if(await mutate(operation(new FormData(form))))form.reset();}catch{setNotice(t('راجع الحقول المطلوبة.','Check required fields.'));}}
  const membersById=new Map(state.members.map(m=>[m.id,m]));

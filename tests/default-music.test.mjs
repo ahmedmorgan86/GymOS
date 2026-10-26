@@ -1,27 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
-import {createHash} from 'node:crypto';
+import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {hiddenMusicIds,visibleDefaultMusic} from '../app/lib/default-music.ts';
 const catalog=JSON.parse(readFileSync(new URL('../public/music/default-catalog.json',import.meta.url)));
-test('Bundled music consists of complete, licensed files matching their published checksums',()=>{
- assert.equal(catalog.tracks.length,20);
- assert.equal(new Set(catalog.tracks.map(t=>t.id)).size,20);
- for(const t of catalog.tracks){
-  assert.equal(t.license,'CC0-1.0');
-  assert.match(t.source,/^https:\/\/opengameart\.org\/content\//);
-  assert.ok(t.durationSeconds>=90);
-  assert.match(t.url,/^\/music\/defaults\/[^/]+\.mp3$/);
-  const bytes=readFileSync(new URL('../public'+t.url,import.meta.url));
-  assert.equal(bytes.length,t.bytes);
-  assert.equal(createHash('sha256').update(bytes).digest('hex'),t.sha256);
- }
-});
-test('Default track hiding is bounded, validates known IDs and restores without altering the catalog',()=>{
- const id=catalog.tracks[0].id;
- assert.deepEqual(hiddenMusicIds(JSON.stringify([id,id,'unknown',null,{}])),[id]);
- assert.equal(visibleDefaultMusic(JSON.stringify([id])).length,19);
- assert.equal(visibleDefaultMusic('[]').length,20);
- assert.deepEqual(hiddenMusicIds('{invalid'),[]);
- assert.deepEqual(hiddenMusicIds('{}'),[]);
-});
+test('Retired bundled music catalog is empty and no shipped audio files remain',()=>{assert.deepEqual(catalog.tracks,[]);const folder=new URL('../public/music/defaults/',import.meta.url);assert.deepEqual(existsSync(folder)?readdirSync(folder).filter(x=>/\.mp3$/i.test(x)):[],[]);});
+test('Stale device references cannot restore retired bundled tracks',()=>{assert.deepEqual(hiddenMusicIds('["gymos-default-silver-bullet"]'),[]);assert.deepEqual(visibleDefaultMusic('[]'),[]);assert.deepEqual(hiddenMusicIds('{invalid'),[]);});

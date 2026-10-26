@@ -1,4 +1,5 @@
 "use client";
+import ReportHeader from './report-header';
 import TaskPanels from './task-panels';
 import WorkoutLog from './workout-log';
 import {useState} from 'react';
@@ -23,7 +24,7 @@ export default function TrainingPage({state:s,branch,ar,role,busy,mutate}:{state
 
 
 
-{printed&&printProgram&&<section className="card training-print"><div className="head-actions"><button className="button primary" onClick={()=>window.print()}>{t('طباعة البرنامج / حفظ PDF','Print program / save PDF')}</button><button className="button secondary" onClick={()=>setPrintId('')}>{t('إغلاق المعاينة','Close printout')}</button></div><div className="pass-print-area"><article className="training-sheet"><h2>{s.settings.name}</h2><h3>{title(s.members.find(m=>m.id===printed.member)?.name??'',ar)}</h3><h2>{title(printProgram.name,ar)}</h2><p>{printed.start} {printed.end?'→ '+printed.end:''}</p><p>{printed.notes}</p><p>{title(printProgram.notes,ar)}</p><Schedule program={printProgram} ar={ar}/></article></div></section>}</section>;
+{printed&&printProgram&&<section className="card training-print"><div className="head-actions"><button className="button primary" onClick={()=>window.print()}>{t('طباعة البرنامج / حفظ PDF','Print program / save PDF')}</button><button className="button secondary" onClick={()=>setPrintId('')}>{t('إغلاق المعاينة','Close printout')}</button></div><div className="pass-print-area"><article className="training-sheet"><ReportHeader settings={s.settings} title={t('برنامج تدريب العضو','Member training program')} ar={ar}/><h3>{title(s.members.find(m=>m.id===printed.member)?.name??'',ar)}</h3><h2>{title(printProgram.name,ar)}</h2><p>{printed.start} {printed.end?'→ '+printed.end:''}</p><p>{printed.notes}</p><p>{title(printProgram.notes,ar)}</p><Schedule program={printProgram} ar={ar}/></article></div></section>}</section>;
 }
 function Schedule({program,ar}:{program:TrainingProgram;ar:boolean}){const t=(a:string,e:string)=>ar?a:e;return <div className="training-schedule">{program.days.map((d,index)=><section className="training-day" key={index}><h3>{title(d.name,ar)}{d.rest?' · '+t('راحة','Rest'):''}</h3>{!d.rest&&<div className="table-scroll"><table><thead><tr>{[t('التمرين','Exercise'),t('الوزن / كجم','Weight / kg'),t('المجموعات','Sets'),t('التكرارات','Reps'),t('الدقائق','Minutes'),t('الراحة / ثانية','Rest / sec'),t('ملاحظات','Notes')].map(x=><th key={x}>{x}</th>)}</tr></thead><tbody>{d.exercises.map((x,i)=><tr key={i}><td>{title(x.name,ar)}</td><td>{x.weight??'—'}</td><td>{x.sets??'—'}</td><td>{x.reps||'—'}</td><td>{x.minutes??'—'}</td><td>{x.rest??'—'}</td><td>{x.notes||'—'}</td></tr>)}</tbody></table></div>}</section>)}</div>;}
 function ProgramEditor({initial,ar,busy,onSave,onCancel}:{initial:TrainingProgram;ar:boolean;busy:boolean;onSave:(p:TrainingProgram)=>Promise<boolean>;onCancel:()=>void}){

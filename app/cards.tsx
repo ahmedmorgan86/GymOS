@@ -1,6 +1,7 @@
 "use client";
 import {useDeviceScope} from './device-scope';
 import useManagedCamera from './use-managed-camera';
+import {validBrandLogo} from './lib/branding';
 import Image from "next/image";
 import {useCallback,useEffect,useEffectEvent,useRef,useState} from "react";
 import QRCode from "qrcode";
@@ -10,7 +11,7 @@ import type {GymState,Member,Operation} from "./lib/domain";
 export function Card({member,gym,logo,ar}:{member:Member;gym:string;logo:string|null;ar:boolean}){
  const barcode=useRef<SVGSVGElement>(null);const [qrImage,setQr]=useState<{code:string;url:string}|null>(null);const qr=qrImage?.code===member.card?qrImage!.url:"";
  useEffect(()=>{let live=true;if(member.card){QRCode.toDataURL(member.card,{errorCorrectionLevel:"M",margin:2,width:240}).then(url=>{if(live)setQr({code:member.card!,url});});if(barcode.current)JsBarcode(barcode.current,member.card,{format:"CODE128",displayValue:false,margin:8,height:46,width:2});}return()=>{live=false;};},[member.card]);
- return <article className="attendance-card" dir={ar?"rtl":"ltr"}><header>{logo&&<Image src={logo} alt=""unoptimized width={256} height={256} loading="eager"/>}<b>{gym}</b><span>MEMBER PASS</span></header><div className="pass-body">{member.photo&&<Image className="pass-photo" src={member.photo} alt={ar?"صورة العضو":"Member photo"} width={64} height={64}unoptimized loading="eager"/>}<div><small>{member.demo?(ar?"كارت تجريبي":"DEMO PASS"):"GYM OS"}</small><h3>{member.name.split(" / ")[ar?0:member.name.split(" / ").length-1]}</h3><p>{ar?"صالح حتى":"Valid through"} <bdi>{member.expires}</bdi></p></div>{qr&&<Image className="pass-qr" src={qr} alt="QR code"unoptimized width={256} height={256} loading="eager"/>}</div><svg ref={barcode} className="pass-barcode" role="img" aria-label="Code 128"/><small className="pass-code" dir="ltr">{member.card}</small></article>;
+ return <article className="attendance-card" dir={ar?"rtl":"ltr"}><header>{<Image src={validBrandLogo(logo)?logo:'/icons/icon-192.png'} alt=""unoptimized width={256} height={256} loading="eager"/>}<b>{gym}</b><span>MEMBER PASS</span></header><div className="pass-body">{member.photo&&<Image className="pass-photo" src={member.photo} alt={ar?"صورة العضو":"Member photo"} width={64} height={64}unoptimized loading="eager"/>}<div><small>{member.demo?(ar?"كارت تجريبي":"DEMO PASS"):"GYM OS"}</small><h3>{member.name.split(" / ")[ar?0:member.name.split(" / ").length-1]}</h3><p>{ar?"صالح حتى":"Valid through"} <bdi>{member.expires}</bdi></p></div>{qr&&<Image className="pass-qr" src={qr} alt="QR code"unoptimized width={256} height={256} loading="eager"/>}</div><svg ref={barcode} className="pass-barcode" role="img" aria-label="Code 128"/><small className="pass-code" dir="ltr">{member.card}</small></article>;
 }
 export default function Cards({state,branch,ar,busy,mutate,canEdit,onReception}:{canEdit:boolean;onReception:()=>void;state:GymState;branch:string;ar:boolean;busy:boolean;mutate:(op:Omit<Operation,"branch">&{type:string})=>Promise<boolean>}){
  const deviceScope=useDeviceScope();

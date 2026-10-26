@@ -40,15 +40,19 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
 export async function commercialAction(user:ChatGPTUser,body:Record<string,unknown>){return commercialTransaction(user,(client,platform)=>commercialWork(client,platform,user,body));}
 export async function commercialWork(client:PoolClient,platform:boolean,user:ChatGPTUser,body:Record<string,unknown>){
  const action=body.action;
- if(action==='create'){
+ if(action==='create'||action==='setup'){
+  if(action==='setup'&&(typeof body.requestId!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(body.requestId)||typeof body.startTrial!=='boolean'))throw new CommercialError('invalid');
   // Limit repeated self-service registrations, including pending clubs.
   await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[user.userId]);
+  if(action==='setup'){const existing=await selectClub(client,user.userId,String(body.requestId));if(existing){if(existing.role!=='owner'||existing.name!==text(body.name))throw new CommercialError('conflict',409);return{id:existing.id};}}
   const count=Number((await client.query("SELECT count(*) FROM gymos.tenant_memberships WHERE user_id=$1 AND role='owner' AND NOT revoked",[user.userId])).rows[0].count);if(count>=20)throw new CommercialError('clubLimit',403);
-  const id=randomUUID(),name=text(body.name),key='tenant:'+id;await client.query("SELECT set_config('app.tenant',$1,true)",[id]);
+  const id=action==='setup'?String(body.requestId):randomUUID(),name=text(body.name),key='tenant:'+id;await client.query("SELECT set_config('app.tenant',$1,true)",[id]);
   await client.query('INSERT INTO gymos.tenants(id,storage_key,name,created_by) VALUES($1,$2,$3,$4)',[id,key,name,user.userId]);
   await client.query("INSERT INTO gymos.tenant_memberships(tenant_id,user_id,role,name) VALUES($1,$2,'owner',$3)",[id,user.userId,user.displayName]);
   await client.query("INSERT INTO gymos.tenant_licenses(tenant_id,plan_id,mode,status,limits) SELECT $1,id,'monthly','pending',limits FROM gymos.commercial_plans WHERE id='custom' AND published",[id]);
-  await client.query("SELECT set_config('app.gym_owner',$1,true)",[key]);const state=emptyState();state.settings.name=name;await client.query('INSERT INTO gymos.gym_states(user_id,payload,revision,updated_at) VALUES($1,$2,0,$3)',[key,JSON.stringify(state),new Date().toISOString()]);await audit(client,user,id,'club.created');return{id};
+  await client.query("SELECT set_config('app.gym_owner',$1,true)",[key]);const state=emptyState();state.settings.name=name;await client.query('INSERT INTO gymos.gym_states(user_id,payload,revision,updated_at) VALUES($1,$2,0,$3)',[key,JSON.stringify(state),new Date().toISOString()]);await audit(client,user,id,'club.created');
+  if(action==='setup'&&body.startTrial)await commercialWork(client,platform,user,{action:'trial.start',tenant:id});
+  return{id};
  }
  if(['settings','plan','quote','approve','reject','suspend','resume'].includes(String(action))){
   if(!platform)throw new CommercialError('forbidden',403);
@@ -75,7 +79,7 @@ export async function commercialWork(client:PoolClient,platform:boolean,user:Cha
  const club=await selectClub(client,user.userId,text(body.tenant));if(!club)throw new CommercialError('forbidden',403);
  if(action==='select')return{id:club.id};
  if(club.role!=='owner')throw new CommercialError('forbidden',403);
- if(action==='trial.start'){try{const result=await client.query('SELECT gymos.start_public_trial($1) AS trial',[club.id]);return{ok:true,...result.rows[0].trial};}catch(e){const message=e instanceof Error?e.message:'';if(message.includes('trial_used'))throw new CommercialError('trialUsed',409);if(message.includes('trial_unavailable'))throw new CommercialError('trialUnavailable',409);throw e;}}
+ if(action==='trial.start'){try{const result=await client.query('SELECT gymos.start_public_trial($1) AS trial',[club.id]);return{ok:true,...result.rows[0].trial,id:club.id};}catch(e){const message=e instanceof Error?e.message:'';if(message.includes('trial_used'))throw new CommercialError('trialUsed',409);if(message.includes('trial_unavailable'))throw new CommercialError('trialUnavailable',409);throw e;}}
  if(action==='owner.add'||action==='owner.remove'){
   if(body.confirm!=='CHANGE_OWNERSHIP')throw new CommercialError('confirmation');
   await client.query('SELECT id FROM gymos.tenants WHERE id=$1 FOR UPDATE',[club.id]);

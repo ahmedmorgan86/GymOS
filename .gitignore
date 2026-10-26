@@ -100,3 +100,6 @@ next-env.d.ts
 
 /android-management/build/
 /android-support/build/
+
+/tests/windows-devices/bin/
+/tests/windows-devices/obj/

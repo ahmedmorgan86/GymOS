@@ -10,6 +10,10 @@ Independent clubs contain their own branches. Commercial platform administration
 
 Monthly, annual and perpetual licenses with annual maintenance are supported. Activation uses quotation/manual transfer review; no electronic payment gateway is included. Pending/expired/suspended clubs retain read/export access while operational writes/restore are blocked.
 
+## Platform owner complimentary use
+
+The designated platform-owner account receives permanently free personal clubs after the new rule is approved and deployed. Server-side platform-admin membership and a fixed account identity are both required; browser email/flags cannot grant it. The existing Morgan Club has already been activated separately. Customer trials, quotation/transfer approval and fitness memberships remain separate. Financial exemption retains technical data caps. See docs/PLATFORM_OWNER_FREE_AR.md for exact scope and status.
+
 ## Safe setup on new hosting
 
 1. Use Node 24 and the committed package lock. Install with npm ci. Build using npm run build (Next.js webpack), never the historical Vinext/Sites scripts.
@@ -48,7 +52,7 @@ Copyright displays © Ahmed Morgan with the current year on web/Windows, includi
 - dotnet run --project tests/windows-backup/BackupSmoke.csproj -c Release
 - dotnet run --project tests/windows-branding/BrandingSmoke.csproj -c Release -- public/icons/icon-512.png
 
-Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_release119.py for all six current manuals. Set GYMOS_MANUAL_OUTPUT to override the delivery output folder. Use docs/manuals/requirements.txt and render every generated PDF page for visual review. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
+Bilingual handbook sources and renderer: docs/manuals/. Install reportlab, arabic-reshaper and python-bidi, then run python docs/manuals/build_release_current.py for all seven current manuals. Set GYMOS_MANUAL_OUTPUT to override the delivery output folder. Use docs/manuals/requirements.txt and render every generated PDF page for visual review. Render with Poppler and visually inspect Arabic glyphs, page breaks and every page before distribution. Customer delivery includes manager/employee manuals; keep the platform-owner manual separate.
 
 Current review records responsive/emulated coverage and physical-device limitations. Historical *_VERIFICATION.md / TEST_REPORT.md files describe their dated releases and are not blanket certification of current production.
 

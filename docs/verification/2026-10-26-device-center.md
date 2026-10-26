@@ -24,3 +24,9 @@ Detection does not install drivers, grant OS permission, discover every network 
 
 Sources: [Microsoft SetupDiGetClassDevs](https://learn.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetclassdevsw), [WM_DEVICECHANGE](https://learn.microsoft.com/en-us/windows/win32/devio/wm-devicechange), [Media enumeration](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices).
 - Re-run validation for this change: TypeScript, ESLint, production Next build and Windows Release build passed. All 33 mocked HTTP-handler integration cases passed. These are isolated handler checks, not external-provider or physical hardware certification.
+
+## Released artifacts and search notification
+- Device implementation merged in PR38, production merge e6c6f9367adc86835592ea72cf8c8e765532e50d; Vercel deployment dpl_EKVnQVEUrCb6m4r2gdtdNxWZuXqd was READY on the production alias.
+- Windows1.1.11 executable:169537073 bytes; SHA256 `864b26f0d925f76ef2123b3216f82e23ec43c77d77fa026a2cd6e1ad84ad34fb`. ProductVersion records source b6e3c166fd4f7fac1ed0321fce14fbe26505a59c. Publisher remains unsigned.
+- Six bilingual PDFs regenerated (133 pages); changed pages rendered and reviewed. Download routing updated only after the GitHub release asset was uploaded and published.
+- IndexNow accepted the three public-page notifications with HTTP200 after public preflight. This does not confirm indexing/ranking or ownership verification in Google/Bing/Yandex consoles.

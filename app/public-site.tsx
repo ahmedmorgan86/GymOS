@@ -7,7 +7,7 @@ import {usePreference} from './use-preference';
 import ProductGallery from './product-gallery';
 import management from '../public/downloads/management-android.json';
 import members from '../public/downloads/member-android.json';
-import {siteOrigin} from './lib/seo';
+import {siteOrigin,publicContentUpdated} from './lib/seo';
 import styles from './public-site.module.css';
 const modules=[
  {icon:Users,ar:'إدارة الأعضاء',en:'Member management',arabic:'ملف لكل عضو يشمل صورته، بياناته، قياساته، اشتراكه وكارت الحضور.',english:'A member profile with photo, contact details, measurements, membership and entry pass.'},
@@ -24,7 +24,7 @@ export default function PublicSite({en}:{en:boolean}){
  const [motion,setMotion]=usePreference<'on'|'off'>('gymos.public-motion','on');
  const root=useRef<HTMLElement>(null);const t=(ar:string,english:string)=>en?english:ar;
  useEffect(()=>{const element=root.current;if(!element||motion==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window))return;const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add(styles.revealed);observer.unobserve(entry.target);}},{threshold:.08});element.classList.add(styles.motionReady);for(const node of element.querySelectorAll('[data-reveal]'))observer.observe(node);return()=>{observer.disconnect();element.classList.remove(styles.motionReady);};},[motion]);
- const schema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'GYM OS',applicationCategory:'BusinessApplication',operatingSystem:'Web, Windows, Android',url:siteOrigin()+(en?'/en/about':'/'),inLanguage:en?'en':'ar',description:t('برنامج إدارة الجيم: الأعضاء والاشتراكات والحضور والحسابات والفروع.','Gym management software for members, memberships, attendance, collections and branches.'),image:siteOrigin()+'/icons/icon-512.png'};
+ const schema={'@context':'https://schema.org','@type':'SoftwareApplication',name:'GYM OS',applicationCategory:'BusinessApplication',operatingSystem:'Web, Windows, Android, iOS (installable web app)',url:siteOrigin()+(en?'/en/about':'/'),inLanguage:en?'en':'ar',description:t('برنامج إدارة الجيم: الأعضاء والاشتراكات والحضور والحسابات والفروع.','Gym management software for members, memberships, attendance, collections and branches.'),image:siteOrigin()+'/images/gymos-product-social.png',screenshot:siteOrigin()+'/images/app-overview-private.webp',dateModified:publicContentUpdated,featureList:modules.map(m=>en?m.en:m.ar)};
  return <main ref={root} className={styles.site} data-public-theme={theme} data-motion={motion} lang={en?'en':'ar'} dir={en?'ltr':'rtl'}>
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replaceAll('<','\\u003c')}}/>
   <div className={styles.readingProgress} aria-hidden="true"/>

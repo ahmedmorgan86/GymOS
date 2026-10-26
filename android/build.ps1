@@ -26,13 +26,13 @@ $sources=@(Get-ChildItem "$androidRoot/src","$build/generated" -Filter '*.java' 
 & "$tools/zipalign.exe" -f -p 4 "$build/unsigned.apk" "$build/aligned.apk";Check
 $downloads=Join-Path $repo 'public/downloads'
 New-Item -ItemType Directory -Path $downloads -Force | Out-Null
-$apk=Join-Path $downloads 'GymOS-Members-Android-1.0.0.apk'
+$apk=Join-Path $downloads 'GymOS-Members-Android-1.0.1.apk'
 & "$tools/apksigner.bat" sign --ks $SigningKey --ks-key-alias $KeyAlias --ks-pass "env:$PasswordEnv" --out $apk "$build/aligned.apk";Check
 & "$tools/apksigner.bat" verify --verbose --print-certs $apk;Check
 $hash=(Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
 $sourceHashes=[ordered]@{}
 $sourceFiles=@(Get-ChildItem "$androidRoot/src","$androidRoot/res" -File -Recurse)+@(Get-Item "$androidRoot/AndroidManifest.xml")
 foreach($sourceFile in ($sourceFiles | Sort-Object FullName)){$relative=[System.IO.Path]::GetRelativePath($androidRoot,$sourceFile.FullName).Replace('\','/');$sourceHashes[$relative]=(Get-FileHash -LiteralPath $sourceFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
-$release=@{sourceHashes=$sourceHashes;version='1.0.0';versionCode=1;url='/downloads/GymOS-Members-Android-1.0.0.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.members';builtAt=[DateTime]::UtcNow.ToString('o')}
+$release=@{sourceHashes=$sourceHashes;version='1.0.1';versionCode=2;url='/downloads/GymOS-Members-Android-1.0.1.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.members';builtAt=[DateTime]::UtcNow.ToString('o')}
 $release | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $downloads 'member-android.json') -Encoding utf8NoBOM
 Write-Output ($release | ConvertTo-Json -Compress)

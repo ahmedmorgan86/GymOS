@@ -38,3 +38,15 @@ jobs:
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=low
       - run: npm run build
+  windows-devices:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Native inventory classification and bridge boundaries
+        run: dotnet run --project tests/windows-devices/DevicesSmoke.csproj -c Release
+      - name: Windows desktop build
+        run: dotnet build windows/GymOS.Windows.csproj -c Release

@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=Path(os.environ.get('GYMOS_MANUAL_OUTPUT',str(ROOT.parent/'GymOS_Delivery_2026-10-26')))
 base=(Path(__file__).parent/'build_manuals.py').read_text(encoding='utf-8').split('content=[')[0]
 namespace={'__file__':str(Path(__file__).parent/'build_manuals.py')}
-base=base.replace('25 Oct 2026','26 Oct 2026').replace('25 October 2026','26 October 2026').replace('Windows 1.1.9','Windows 1.1.10')
+base=base.replace('25 Oct 2026','26 Oct 2026').replace('25 October 2026','26 October 2026').replace('Windows 1.1.9','Windows 1.1.11')
 exec(base,namespace)
 namespace['PDF']=OUT/'output/pdf';namespace['PDF'].mkdir(parents=True,exist_ok=True)
 manual,read=namespace['manual'],namespace['read_topics']

@@ -1,0 +1,23 @@
+## الدخول إلى حساب العضو|Sign in as a member
+افتح تطبيق أعضاء النادي أو رابط /member على الموقع. أدخل رقم الموبايل المسجل والرقم السري؛ لا تستخدم حساب إدارة النادي.|Open the Members app or the site's /member page. Enter your registered mobile and PIN; do not use a club-management account.
+الحساب الجديد يطلب تغيير الرقم المؤقت قبل عرض البيانات. إذا تعذر الدخول اطلب من إدارة ناديك مراجعة رقم الهاتف وإعداد دخولك.|New access requires changing the temporary PIN before showing records. If sign-in fails, ask club management to check your phone and access setup.
+## الملخص والكارت|Home summary and entry pass
+الملخص يعرض العضوية والحضور الأسبوعي والرصيد والحجز القادم بحسب بيانات ناديك. افتح الكارت أو البرنامج أو التواصل مباشرة من الأزرار المتاحة.|Home shows membership, weekly attendance, balance and the next booking from club records. Open your pass, program or conversation using the available direct buttons.
+افتح كارت الدخول عند القارئ وفق تعليمات النادي. عرض الكارت وحده لا يثبت تسجيل الحضور؛ انتظر تأكيد النظام أو الموظف المخول.|Show the entry pass at the scanner under club instructions. Displaying it alone does not prove a check-in; wait for system or authorized-staff confirmation.
+## البرنامج والحصص والتواصل|Program, classes and contact
+افتح التدريب واختَر اليوم ثم التمارين. راجع تعليمات المدرب ولا تعتبر البرنامج تشخيصًا أو علاجًا.|Open Training, select the day and then exercises. Follow your coach's guidance; the program is not a diagnosis or treatment.
+راجع حالة الحجز والانتظار قبل الذهاب للحصة. استخدم التواصل الخاص مع النادي عند وجود خطأ في البيانات أو الرصيد.|Check booking and waitlist status before attending a class. Use private club contact for record or balance errors.
+## حدود واجهة العضو|Member-interface limits
+واجهة العضو لا تعرض لوحة الإدارة أو كشوف كل المتواجدين أو بيانات الأعضاء الآخرين. التبسيط الإداري يظهر للمالك والموظف المصرح فقط.|The member interface does not expose management, the full current-presence roster or other members' records. Administrative simplification is for authorized owners/staff.
+البيانات المعروضة دون اتصال قد تكون من آخر تحديث؛ اتصل وحدث قبل الاعتماد على حالة العضوية أو الحجز الحالية.|Offline information may reflect the last refresh. Connect and refresh before relying on current membership or booking status.
+## الويب وWindows والموبايل|Web, Windows and mobile
+الواجهة المنشورة مشتركة مع Windows وتطبيقات Android التي تفتح الموقع. أغلق التطبيق وافتحه وأنت متصل لتحميل الواجهة الحالية؛ التثبيت وحده لا يمنح صلاحية.|The hosted interface is shared by Windows and Android shells. Close and reopen online to load the current interface; installation alone grants no access rights.
+الحزمة تحتوي Windows 1.1.11 وAndroid الإدارة 1.0.0 والدعم 1.0.0 والأعضاء 1.0.1 كما نُشرت رسميًا؛ لم يُنتج بناء تثبيت جديد ضمن هذه الحزمة.|This bundle contains the officially published Windows 1.1.11 and Android Management 1.0.0, Support 1.0.0 and Members 1.0.1. No new installer build was produced for this bundle.
+على iPhone افتح رابط الخدمة المناسب في Safari ثم أضف إلى الشاشة الرئيسية. هذه واجهة ويب قابلة للتثبيت، ولا تحتوي الحزمة ملف IPA أو إصدار App Store.|On iPhone open the appropriate service link in Safari and Add to Home Screen. This is an installable web interface; the bundle contains no IPA or App Store release.
+## التحقق وحدود التسليم|Verification and delivery limits
+مرجع المصدر هو دمج طلب التعديلات رقم 41 بتاريخ 26 أكتوبر 2026. شجرة ملفات المصدر مطابقة لآخر تعديلات التبسيط، مع تحديث أدلة هذه الحزمة محليًا.|The source baseline is the merge of pull request 41 on 26 October 2026. Its file tree matches the final simplification changes; this bundle updates the manuals locally.
+نجح محليًا 187 اختبارًا و9 اختبارات مسارات استخدام، وتجاوزت 7 اختبارات اتصال قاعدة بيانات اختيارية. نجحت فحوص GitHub والبناء للمرجع المختبر ونشر Vercel للدمج.|Locally, 187 tests and 9 usability tests passed; 7 optional connected-database tests were skipped. GitHub checks/build passed for the tested baseline and Vercel deployment succeeded for the merge.
+لا تمثل هذه النتائج اختبارًا فعليًا لكل شاشة أو قارئ أو كاميرا أو طابعة على أجهزة العملاء. المعاينة البصرية لتقارير التطبيق الفعلية والتشغيل المالي الحقيقي غير مؤكدة.|These results do not certify every screen, scanner, camera or printer on customer devices. Visual acceptance of actual application exports and real financial operation remains unverified.
+
+## اشتراكك الرياضي مستقل|Your fitness membership is separate
+عضويتك الرياضية وأسعارها ومدتها يحددها النادي. اشتراك إدارة التطبيق أو إعفاء صاحب المنصة منه لا يغيّر رصيدك أو فاتورتك أو مدة عضويتك.|Your club sets fitness membership price and duration. The management app's subscription or the platform owner's exemption does not change your balance, invoice or membership term.

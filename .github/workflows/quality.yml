@@ -19,6 +19,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
+      - name: Public homepage and explicit management entry
+        run: node --import ./tests/homepage-loader.mjs --test --test-isolation=none tests/homepage.integration.mjs
       - name: API role boundaries
         run: node --import ./tests/role-api-loader.mjs --test --test-isolation=none tests/role-api.integration.mjs
       - name: Member app integration boundaries

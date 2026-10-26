@@ -14,7 +14,7 @@ export function ingestDeviceEvent(source:GymState,branch:string,deviceId:string,
  const mapping=d.mappings.find(m=>m.person===data.personId);if(!mapping)throw Error('unknownPerson');
  const key=deviceId+':'+data.eventId,digest=createHash('sha256').update(JSON.stringify(data)).digest('hex'),old=source.engagement!.deviceEvents.find(x=>x.id===key);
  if(old){if(old.digest!==digest)throw Error('eventConflict');return{state:source,duplicate:true};}
- const state=applyOperation(source,{type:data.direction==='in'?'visit.add':'visit.exit',id:mapping.member,branch},now,'Device '+deviceId,newId);
- state.engagement??=emptyEngagement();state.engagement.deviceEvents=state.engagement.deviceEvents.filter(x=>Date.parse(x.at)>Date.parse(now)-3600000);
+ const visit=source.visits.find(v=>v.member===mapping.member&&v.branch===branch&&!v.leftAt);if(data.direction==='out'&&!visit)throw Error('notPresent');const state=applyOperation(source,{type:data.direction==='in'?'visit.add':'visit.exit',id:data.direction==='in'?mapping.member:visit!.id,branch},now,'Device '+deviceId,newId);
+ if(data.direction==='out'){const closed=state.visits.find(v=>v.id===visit!.id);if(closed)closed.exitType='device';}state.engagement??=emptyEngagement();state.engagement.deviceEvents=state.engagement.deviceEvents.filter(x=>Date.parse(x.at)>Date.parse(now)-3600000);
  if(state.engagement.deviceEvents.length>=10000)throw Error('limit');state.engagement.deviceEvents.push({id:key,device:deviceId,branch,digest,at:now});return{state,duplicate:false};
 }

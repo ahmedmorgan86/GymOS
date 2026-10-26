@@ -1,4 +1,5 @@
 import {resolveSupport} from './platform-support';
+import {ownerComplimentary,OWNER_FREE_LIMITS,OWNER_FREE_PLAN} from './platform-owner-license';
 import 'server-only';
 import type {CommercialClub} from './commercial-types';
 import {randomUUID} from 'node:crypto';
@@ -35,7 +36,7 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
  const settings=(await client.query('SELECT payload,revision FROM gymos.platform_settings WHERE id=1')).rows[0];
  const orders=platformView?(await client.query('SELECT r.*,t.name AS club_name FROM gymos.activation_requests r JOIN gymos.tenants t ON t.id=r.tenant_id ORDER BY r.created_at DESC LIMIT 200')).rows:[];
  const events=platformView?(await client.query('SELECT * FROM gymos.commercial_audit ORDER BY at DESC LIMIT 100')).rows:[];
- const trialUsed=(await client.query('SELECT owner_id FROM gymos.trial_claims WHERE owner_id=$1',[user.userId])).rowCount!==0;return{account:{name:user.displayName,email:user.email},platform,clubs,plans,settings,orders,events,trialUsed};
+ const trialUsed=(await client.query('SELECT owner_id FROM gymos.trial_claims WHERE owner_id=$1',[user.userId])).rowCount!==0;return{account:{name:user.displayName,email:user.email},platform,ownerComplimentary:ownerComplimentary(platform,user.userId),clubs,plans,settings,orders,events,trialUsed};
  });}
 export async function commercialAction(user:ChatGPTUser,body:Record<string,unknown>){return commercialTransaction(user,(client,platform)=>commercialWork(client,platform,user,body));}
 export async function commercialWork(client:PoolClient,platform:boolean,user:ChatGPTUser,body:Record<string,unknown>){
@@ -45,13 +46,18 @@ export async function commercialWork(client:PoolClient,platform:boolean,user:Cha
   // Limit repeated self-service registrations, including pending clubs.
   await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))',[user.userId]);
   if(action==='setup'){const existing=await selectClub(client,user.userId,String(body.requestId));if(existing){if(existing.role!=='owner'||existing.name!==text(body.name))throw new CommercialError('conflict',409);return{id:existing.id};}}
-  const count=Number((await client.query("SELECT count(*) FROM gymos.tenant_memberships WHERE user_id=$1 AND role='owner' AND NOT revoked",[user.userId])).rows[0].count);if(count>=20)throw new CommercialError('clubLimit',403);
+  const complimentary=ownerComplimentary(platform,user.userId);
+  const count=Number((await client.query("SELECT count(*) FROM gymos.tenant_memberships WHERE user_id=$1 AND role='owner' AND NOT revoked",[user.userId])).rows[0].count);if(count>=20&&!complimentary)throw new CommercialError('clubLimit',403);
   const id=action==='setup'?String(body.requestId):randomUUID(),name=text(body.name),key='tenant:'+id;await client.query("SELECT set_config('app.tenant',$1,true)",[id]);
   await client.query('INSERT INTO gymos.tenants(id,storage_key,name,created_by) VALUES($1,$2,$3,$4)',[id,key,name,user.userId]);
   await client.query("INSERT INTO gymos.tenant_memberships(tenant_id,user_id,role,name) VALUES($1,$2,'owner',$3)",[id,user.userId,user.displayName]);
   await client.query("INSERT INTO gymos.tenant_licenses(tenant_id,plan_id,mode,status,limits) SELECT $1,id,'monthly','pending',limits FROM gymos.commercial_plans WHERE id='custom' AND published",[id]);
   await client.query("SELECT set_config('app.gym_owner',$1,true)",[key]);const state=emptyState();state.settings.name=name;await client.query('INSERT INTO gymos.gym_states(user_id,payload,revision,updated_at) VALUES($1,$2,0,$3)',[key,JSON.stringify(state),new Date().toISOString()]);await audit(client,user,id,'club.created');
-  if(action==='setup'&&body.startTrial)await commercialWork(client,platform,user,{action:'trial.start',tenant:id});
+  if(complimentary){
+   await client.query("INSERT INTO gymos.commercial_plans(id,name,currency,monthly_minor,annual_minor,perpetual_minor,maintenance_minor,limits,published) VALUES($1,'استخدام صاحب المنصة - مجاني','EGP',0,0,0,0,$2,false) ON CONFLICT(id) DO NOTHING",[OWNER_FREE_PLAN,JSON.stringify(OWNER_FREE_LIMITS)]);
+   await client.query("UPDATE gymos.tenant_licenses SET plan_id=$1,mode='perpetual',status='active',starts_at=now(),ends_at=NULL,maintenance_until=NULL,limits=$2,revision=revision+1,updated_at=now() WHERE tenant_id=$3",[OWNER_FREE_PLAN,JSON.stringify(OWNER_FREE_LIMITS),id]);
+   await audit(client,user,id,'license.owner_complimentary',{reason:'Verified platform owner personal club; no charge or renewal'});
+  }else if(action==='setup'&&body.startTrial)await commercialWork(client,platform,user,{action:'trial.start',tenant:id});
   return{id};
  }
  if(['settings','plan','quote','approve','reject','suspend','resume'].includes(String(action))){

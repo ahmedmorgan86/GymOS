@@ -16,7 +16,7 @@ import {supplierDue,shiftExpected} from './lib/finance-book';
 import {manualWhatsAppDue,memberWhatsAppLink} from './lib/manual-whatsapp';
 import EngagementPage from './engagement-page';
 import {membershipPeriod,membershipPeriods} from './lib/membership-periods';
-import androidRelease from '../public/downloads/member-android.json';
+import androidRelease from '../public/downloads/pushtorq-members-android.json';
 import ActivityLog from './activity-log';
 import Copyright from './copyright';
 import {licenseState} from './lib/licensing';

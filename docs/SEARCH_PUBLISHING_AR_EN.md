@@ -1,6 +1,6 @@
-# نشر GYM OS في البحث / Search publishing
+# نشر PUSHTORQ في البحث / Search publishing
 
-الإعداد الحالي مخصص للرابط https://gymos-enterprise.vercel.app. صفحات الأندية والأعضاء ولوحة الإدارة ليست للنشر. الفهرسة والترتيب قرار محرك البحث؛ إرسال رابط لا يضمن الظهور.
+الإعداد الحالي مخصص للرابط https://pushtorq.vercel.app. صفحات الأندية والأعضاء ولوحة الإدارة ليست للنشر. الفهرسة والترتيب قرار محرك البحث؛ إرسال رابط لا يضمن الظهور.
 
 The public site is separate from the authenticated application. No tenant names, member records or private API URLs are included in discovery files.
 
@@ -17,9 +17,9 @@ The public site is separate from the authenticated application. No tenant names,
 ## Google
 
 1. افتح https://search.google.com/search-console وسجّل بحسابك.
-2. أضف خاصية URL-prefix بالرابط الكامل `https://gymos-enterprise.vercel.app/`. استخدام نطاق خاص لاحقًا يسمح بخاصية Domain وإثبات DNS.
+2. أضف خاصية URL-prefix بالرابط الكامل `https://pushtorq.vercel.app/`. استخدام نطاق خاص لاحقًا يسمح بخاصية Domain وإثبات DNS.
 3. اختر HTML tag وانسخ قيمة `content` فقط إلى إعداد Vercel باسم `GOOGLE_SITE_VERIFICATION`، ثم أعد النشر واضغط Verify. التطبيق يدعم هذا الوسم بالفعل، لكن لا توجد قيمة ملكية مولدة من حسابك في المصدر.
-4. من Sitemaps أرسل `https://gymos-enterprise.vercel.app/sitemap.xml`.
+4. من Sitemaps أرسل `https://pushtorq.vercel.app/sitemap.xml`.
 5. افحص `/` و`/en/about` في URL Inspection واطلب الفهرسة إن لزم. تابع Page indexing والأخطاء؛ لا ترسل بيانات الأعضاء.
 
 Submission is a hint, not an indexing guarantee: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
@@ -56,4 +56,4 @@ Keep claims in public content accurate. Add useful real product guides as public
 ## تحديث 26 أكتوبر 2026 / 26 October 2026 update
 العنوان والوصف يعكسان إدارة الأعضاء والاشتراكات والحضور والتحصيل والفروع، مع صورة مشاركة 1200×630 من واجهات عرض فعلية مخفية المعلومات. sitemap يستخدم تاريخ آخر تعديل مهم 2026-10-26، وليس وقت فتحه في كل مرة. مسارات الخريطة هي / و/en/about و/demo فقط.
 Metadata now reflects members, memberships, attendance, collections and branches. The1200×630 sharing image uses redacted synthetic interface captures. Sitemap lastmod records the significant content update,2026-10-26, rather than changing on every request. Only /, /en/about and /demo are submitted.
-SoftwareApplication structured data is descriptive. GYM OS does not fabricate an Offer price or review/rating to qualify for Google's software rich result. Prices remain by agreement. See https://developers.google.com/search/docs/appearance/structured-data/software-app . IndexNow200/202 is only notification acceptance; it is not proof of indexing. See https://www.indexnow.org/documentation .
+SoftwareApplication structured data is descriptive. PUSHTORQ does not fabricate an Offer price or review/rating to qualify for Google's software rich result. Prices remain by agreement. See https://developers.google.com/search/docs/appearance/structured-data/software-app . IndexNow200/202 is only notification acceptance; it is not proof of indexing. See https://www.indexnow.org/documentation .

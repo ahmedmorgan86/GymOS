@@ -103,3 +103,6 @@ next-env.d.ts
 
 /tests/windows-devices/bin/
 /tests/windows-devices/obj/
+
+/mobile-android/build/
+*.p12

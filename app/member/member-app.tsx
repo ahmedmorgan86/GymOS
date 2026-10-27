@@ -7,7 +7,7 @@ import Link from 'next/link';
 import {UserRound,Activity,CalendarDays,Dumbbell,WalletCards,QrCode,ArrowUpRight,Globe,ShieldCheck,Users,MessageCircle,RefreshCw} from 'lucide-react';
 import type {memberView} from '../lib/member-view';
 import {trainingText} from '../lib/training';
-import {useNetworkStatus} from '../use-preference';
+import {useNetworkStatus,usePreference} from '../use-preference';
 import MemberDashboard from './member-dashboard';
 import MemberCommunity from './member-community';
 import MemberPinForm from './member-pin-form';
@@ -18,6 +18,8 @@ type View=ReturnType<typeof memberView>&{selected:string;clubs:{id:string}[];sta
 const sections=['profile','training','attendance','health','payments','messages'] as const;
 type Section=typeof sections[number];
 export default function MemberApp({previewData,staffRequest}:{previewData?:View;staffRequest?:{member:string;club:string}}){
+ const [savedTheme,setMemberTheme]=usePreference<'light'|'dark'>('gymos.member-theme','dark');
+ const memberTheme=savedTheme==='light'?'light':'dark';
  const preview=Boolean(previewData),staffMode=Boolean(staffRequest),online=useNetworkStatus();
  const [ar,setAr]=useState(true),[data,setData]=useState<View|null>(previewData??null),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[loading,setLoading]=useState(!preview),[tab,setTab]=useState<Section>('profile'),[showPass,setShowPass]=useState(false);
  const [phone,setPhone]=useState(''),[choices,setChoices]=useState<{id:string;name:string}[]>([]);
@@ -50,9 +52,9 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
  function navigate(section:Section){setTab(section);setShowPass(false);requestAnimationFrame(()=>content.current?.scrollIntoView({block:'start',behavior:'instant'}));}
  const names={profile:t('بياناتي','My profile'),health:t('قياساتي','Measurements'),attendance:t('حضوري','Attendance'),training:t('تدريبي','Training'),payments:t('مدفوعاتي','Payments'),messages:t('رسائلي','Messages')};
  const navNames={profile:t('بياناتي','Profile'),training:t('تدريبي','Train'),attendance:t('حضوري','Visits'),health:t('قياساتي','Health'),payments:t('مدفوعاتي','Wallet'),messages:t('رسائلي','Chat')};
- return <main className={"member-mobile-app feature-panel "+(data?.gym.design?"club-custom-design":"")} style={clubDesignStyle(data?.gym.design) as CSSProperties} data-club-motion={data?.gym.design?.motion===false?"off":undefined} dir={ar?'rtl':'ltr'}>
+ return <main className={"member-mobile-app feature-panel "+(data?.gym.design?"club-custom-design":"")} data-color-mode={memberTheme} style={{...clubDesignStyle(data?.gym.design),'--ink':'var(--pt-text)','--text':'var(--pt-text)','--sub':'var(--pt-muted)','--muted':'var(--pt-muted)','--bg':'var(--pt-background)','--background':'var(--pt-background)','--surface':'var(--pt-panel)','--surface-soft':'var(--pt-panel-raised)','--line':'var(--pt-line)'} as CSSProperties & Record<`--${string}`,string|number>} data-club-motion={data?.gym.design?.motion===false?"off":undefined} dir={ar?'rtl':'ltr'}>
   <div className="member-app-scroll" role="region" aria-label={t('محتوى حساب العضو','Member account content')}>
-  <header className="member-topbar"><div className="member-brand"><span className="member-mark">{data?.gym.logo?<Image src={data.gym.logo} width={42} height={42} unoptimized alt=""/>:<Image src="/icons/brand-members.svg?v=20261027" width={42} height={42} alt=""/>}</span><div><small>{t('مساحة العضو','MEMBER EXPERIENCE')}</small><h1>{data?.gym.name??'PUSHTORQ'}</h1></div></div><button aria-label={t('تغيير اللغة','Change language')} className="button secondary" onClick={()=>setAr(!ar)}><Globe size={16}/>{ar?'English':'العربية'}</button></header>
+  <header className="member-topbar"><div className="member-brand"><span className="member-mark">{data?.gym.logo?<Image src={data.gym.logo} width={42} height={42} unoptimized alt=""/>:<Image src="/icons/brand-members.svg?v=20261027" width={42} height={42} alt=""/>}</span><div><small>{t('مساحة العضو','MEMBER EXPERIENCE')}</small><h1>{data?.gym.name??'PUSHTORQ'}</h1></div></div><div className="member-display-controls"><button type="button" className="button secondary" aria-label={t(memberTheme==='dark'?'تفعيل الوضع النهاري':'تفعيل الوضع الليلي',memberTheme==='dark'?'Switch to day mode':'Switch to night mode')} aria-pressed={memberTheme==='dark'} onClick={()=>setMemberTheme(memberTheme==='dark'?'light':'dark')}>{memberTheme==='dark'?'☀':'☾'} {t(memberTheme==='dark'?'نهاري':'ليلي',memberTheme==='dark'?'Day':'Night')}</button><button aria-label={t('تغيير اللغة','Change language')} className="button secondary" onClick={()=>setAr(!ar)}><Globe size={16}/>{ar?'English':'العربية'}</button></div></header>
   {preview&&<section className="member-preview-notice" role="note"><b>{t('معاينة تطبيق العضو — بيانات وهمية','Member app preview — fictional data')}</b><p>{t('معاينة للشكل فقط. الكارت والأعداد للتوضيح ولا يسجلان حضورًا.','Visual preview only. The pass and counts are illustrative and cannot check in.')}</p><a href="/member">{t('الدخول ببياناتك الحقيقية','Sign in to your real records')}</a></section>}
   {staffMode&&<section className="member-preview-notice" role="note"><b>{t('عرض إداري لبيانات العضو الحقيقية — للقراءة فقط','Administrative view of real member records — read only')}</b><p>{t('هذا العرض يستخدم صلاحياتك الإدارية، ولا يربط حسابك بالعضو.','This view uses your staff permissions and does not link your account to the member.')}</p><Link href="/?workspace=1">{t('العودة لإدارة النادي','Back to club management')}</Link></section>}
   {!preview&&!online&&<p className="member-offline-state" role="status">{t('الاتصال غير متاح. البيانات المعروضة من آخر تحديث؛ الأعداد والحالة قد تكون تغيرت.','You are offline. Showing the last refresh; counts and status may have changed.')}</p>}

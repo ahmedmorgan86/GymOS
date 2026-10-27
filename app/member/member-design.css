@@ -28,3 +28,16 @@
 @media(max-width:520px){.member-app-scroll{padding:20px 17px 24px}.member-mobile-app .member-bottom-nav{width:calc(100% - 12px);gap:0;padding-inline:5px}}
 
 .member-mobile-app.club-custom-design{font-size:var(--club-font-size);font-weight:var(--club-font-weight);color:var(--text)}.member-mobile-app.club-custom-design .member-intro h2,.member-mobile-app.club-custom-design .member-section-title,.member-mobile-app.club-custom-design .member-topbar h1{color:var(--text)}.member-mobile-app.club-custom-design .member-intro p{color:var(--muted)}.member-mobile-app.club-custom-design .digital-member-pass{background-image:linear-gradient(#10192ac9,#10192af0),var(--club-member-image);background-size:cover;background-position:center}.member-mobile-app.club-custom-design .member-bottom-nav{background:var(--surface);border-color:var(--line)}
+
+/* All member sections share the member's saved day/night preference. */
+.member-display-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.member-mobile-app[data-color-mode]{background:var(--bg);color:var(--text)}
+.member-mobile-app[data-color-mode] .member-topbar .button,.member-mobile-app[data-color-mode] .card,.member-mobile-app[data-color-mode] .member-overview>div,.member-mobile-app[data-color-mode] .member-term-card,.member-mobile-app[data-color-mode] .member-focus-card,.member-mobile-app[data-color-mode] .member-quick-actions button{background:var(--surface);color:var(--text);border-color:var(--line)}
+.member-mobile-app[data-color-mode] .member-bottom-nav{background:var(--surface);border-color:var(--line)}
+.member-mobile-app[data-color-mode] .member-bottom-nav button{color:var(--muted)}
+.member-mobile-app[data-color-mode] .member-bottom-nav button.selected{color:var(--pt-electric);background:var(--purple-soft)}
+.member-mobile-app[data-color-mode] .member-bottom-nav button.selected svg{color:var(--pt-electric)}
+.member-mobile-app[data-color-mode] .member-quick-actions button:first-child,.member-mobile-app[data-color-mode] .member-login form .button{background:var(--purple,var(--pt-primary));color:var(--club-accent-text,#fff)}
+.member-mobile-app[data-color-mode] .member-term-card p,.member-mobile-app[data-color-mode] .member-term-card small,.member-mobile-app[data-color-mode] .member-focus-card small,.member-mobile-app[data-color-mode] .member-focus-card>span,.member-mobile-app[data-color-mode] .member-intro p,.member-mobile-app[data-color-mode] .member-login>p,.member-mobile-app[data-color-mode] .member-preview-notice{color:var(--muted)}
+.member-mobile-app[data-color-mode] input,.member-mobile-app[data-color-mode] select,.member-mobile-app[data-color-mode] textarea{background:var(--surface-soft);color:var(--text);border-color:var(--line);border-radius:var(--club-button-radius,12px);font-family:inherit;min-height:48px}
+@media(max-width:520px){.member-mobile-app .member-topbar{align-items:flex-start;flex-wrap:wrap}.member-display-controls{margin-inline-start:auto}.member-display-controls .button{padding:7px 9px}}

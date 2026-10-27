@@ -11,3 +11,5 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):
 :where([data-color-mode=light],.app-shell:not(.theme-dark)){--pt-background:#F5F3FF;--pt-panel:#FFFFFF;--pt-panel-raised:#F0ECFA;--pt-text:#21172F;--pt-muted:#675B77;--pt-line:#7C3AED20;--pt-success-text:#15803D;--pt-danger-text:#B91C1C;--pt-warning-text:#C2410C;color-scheme:light}
 :where([data-color-mode=dark],.theme-dark){--pt-success-text:#22C55E;--pt-danger-text:#EF4444;--pt-warning-text:#F97316;color-scheme:dark}
 .badge.active,.badge.completed,.badge.approved{color:var(--pt-success-text,#22C55E)}.badge.soon,.badge.proposed{color:var(--pt-warning-text,#F97316)}.badge.expired,.badge.rejected{color:var(--pt-danger-text,#EF4444)}
+
+[data-color-mode]{--bg:var(--pt-background);--surface:var(--pt-panel);--surface-soft:var(--pt-panel-raised);--text:var(--pt-text);--muted:var(--pt-muted);--line:var(--pt-line)}

@@ -1,9 +1,11 @@
 diff --git a/android-management/AndroidManifest.xml b/android-management/AndroidManifest.xml
-index d017d80..d5c02ad 100644
+index d017d80..1a0a138 100644
 --- a/android-management/AndroidManifest.xml
 +++ b/android-management/AndroidManifest.xml
-@@ -2,7 +2,7 @@
- <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.management" android:versionCode="1" android:versionName="1.0.0">
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.management" android:versionCode="1" android:versionName="1.0.0">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.management" android:versionCode="2" android:versionName="1.0.1">
   <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="36"/>
   <uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.CAMERA"/><uses-feature android:name="android.hardware.camera.any" android:required="false"/>
 - <application android:label="GYM OS Manager" android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:usesCleartextTraffic="false" android:networkSecurityConfig="@xml/network_security_config" android:supportsRtl="true" android:enableOnBackInvokedCallback="true">
@@ -11,6 +13,26 @@ index d017d80..d5c02ad 100644
    <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
   </application>
  </manifest>
+diff --git a/android-management/build.ps1 b/android-management/build.ps1
+index cd3b4d7..dfa19b5 100644
+--- a/android-management/build.ps1
++++ b/android-management/build.ps1
+@@ -26,13 +26,13 @@ $sources=@(Get-ChildItem "$androidRoot/src","$build/generated" -Filter '*.java'
+ & "$tools/zipalign.exe" -f -p 4 "$build/unsigned.apk" "$build/aligned.apk";Check
+ $downloads=Join-Path $repo 'public/downloads'
+ New-Item -ItemType Directory -Path $downloads -Force | Out-Null
+-$apk=Join-Path $downloads 'GymOS-Management-Android-1.0.0.apk'
++$apk=Join-Path $downloads 'PUSHTORQ-Management-Android-1.0.1.apk'
+ & "$tools/apksigner.bat" sign --ks $SigningKey --ks-key-alias $KeyAlias --ks-pass "env:$PasswordEnv" --out $apk "$build/aligned.apk";Check
+ & "$tools/apksigner.bat" verify --verbose --print-certs $apk;Check
+ $hash=(Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+ $sourceHashes=[ordered]@{}
+ $sourceFiles=@(Get-ChildItem "$androidRoot/src","$androidRoot/res" -File -Recurse)+@(Get-Item "$androidRoot/AndroidManifest.xml")
+ foreach($sourceFile in ($sourceFiles | Sort-Object FullName)){$relative=[System.IO.Path]::GetRelativePath($androidRoot,$sourceFile.FullName).Replace('\','/');$sourceHashes[$relative]=(Get-FileHash -LiteralPath $sourceFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
+-$release=@{sourceHashes=$sourceHashes;version='1.0.0';versionCode=1;url='/downloads/GymOS-Management-Android-1.0.0.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.management';builtAt=[DateTime]::UtcNow.ToString('o')}
++$release=@{sourceHashes=$sourceHashes;version='1.0.1';versionCode=2;url='/downloads/PUSHTORQ-Management-Android-1.0.1.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.management';builtAt=[DateTime]::UtcNow.ToString('o')}
+ $release | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $downloads 'management-android.json') -Encoding utf8NoBOM
+ Write-Output ($release | ConvertTo-Json -Compress)
 diff --git a/android-management/res/drawable/logo.png b/android-management/res/drawable/logo.png
 index 808e3086f0cc1832b91082a161ffda3ea58ae8ba..92f7f12051193f13195a6b19e9fc1f046112a785 100644
 GIT binary patch
@@ -1160,12 +1182,27 @@ index 531fa67..72a090e 100644
 \ No newline at end of file
 +<resources><style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar"><item name="android:fontFamily">sans</item><item name="android:windowLightStatusBar">true</item><item name="android:statusBarColor">#F5F6FC</item><item name="android:navigationBarColor">#F5F6FC</item><item name="android:windowLightNavigationBar">true</item><item name="android:colorAccent">#7C3AED</item><item name="android:windowBackground">#12101C</item></style><color name="launcher_background">#142034</color></resources>
 \ No newline at end of file
+diff --git a/android-management/src/com/gymos/management/MainActivity.java b/android-management/src/com/gymos/management/MainActivity.java
+index 0ff2671..69118d8 100644
+--- a/android-management/src/com/gymos/management/MainActivity.java
++++ b/android-management/src/com/gymos/management/MainActivity.java
+@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
+ 
+ /** Authenticated management HTTPS shell. No JavaScript bridge or broad file access. Camera is granted only after runtime consent for the trusted application origin. */
+ public final class MainActivity extends Activity {
+- private static final String HOST="gymos-enterprise.vercel.app";
++ private static final String HOST="pushtorq.vercel.app";
+  private static final String HOME="https://"+HOST+"/clubs";
+  private android.widget.ImageView splash;private android.webkit.ValueCallback<Uri[]> fileCallback;private android.webkit.PermissionRequest cameraRequest;private static final int PICK_FILE=7001,CAMERA_PERMISSION=7002;
+  private WebView web; private ProgressBar progress; private LinearLayout error;
 diff --git a/android-support/AndroidManifest.xml b/android-support/AndroidManifest.xml
-index e6899c8..72c7c89 100644
+index e6899c8..1c9b9ee 100644
 --- a/android-support/AndroidManifest.xml
 +++ b/android-support/AndroidManifest.xml
-@@ -2,7 +2,7 @@
- <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.support" android:versionCode="1" android:versionName="1.0.0">
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.support" android:versionCode="1" android:versionName="1.0.0">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.support" android:versionCode="2" android:versionName="1.0.1">
   <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="36"/>
   <uses-permission android:name="android.permission.INTERNET"/>
 - <application android:label="GYM OS Support" android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:usesCleartextTraffic="false" android:networkSecurityConfig="@xml/network_security_config" android:supportsRtl="true" android:enableOnBackInvokedCallback="true">
@@ -1173,6 +1210,26 @@ index e6899c8..72c7c89 100644
    <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
   </application>
  </manifest>
+diff --git a/android-support/build.ps1 b/android-support/build.ps1
+index 820ab59..783af31 100644
+--- a/android-support/build.ps1
++++ b/android-support/build.ps1
+@@ -26,13 +26,13 @@ $sources=@(Get-ChildItem "$androidRoot/src","$build/generated" -Filter '*.java'
+ & "$tools/zipalign.exe" -f -p 4 "$build/unsigned.apk" "$build/aligned.apk";Check
+ $downloads=Join-Path $repo 'public/downloads'
+ New-Item -ItemType Directory -Path $downloads -Force | Out-Null
+-$apk=Join-Path $downloads 'GymOS-Support-Android-1.0.0.apk'
++$apk=Join-Path $downloads 'PUSHTORQ-Support-Android-1.0.1.apk'
+ & "$tools/apksigner.bat" sign --ks $SigningKey --ks-key-alias $KeyAlias --ks-pass "env:$PasswordEnv" --out $apk "$build/aligned.apk";Check
+ & "$tools/apksigner.bat" verify --verbose --print-certs $apk;Check
+ $hash=(Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+ $sourceHashes=[ordered]@{}
+ $sourceFiles=@(Get-ChildItem "$androidRoot/src","$androidRoot/res" -File -Recurse)+@(Get-Item "$androidRoot/AndroidManifest.xml")
+ foreach($sourceFile in ($sourceFiles | Sort-Object FullName)){$relative=[System.IO.Path]::GetRelativePath($androidRoot,$sourceFile.FullName).Replace('\','/');$sourceHashes[$relative]=(Get-FileHash -LiteralPath $sourceFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
+-$release=@{sourceHashes=$sourceHashes;version='1.0.0';versionCode=1;url='/downloads/GymOS-Support-Android-1.0.0.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.support';builtAt=[DateTime]::UtcNow.ToString('o')}
++$release=@{sourceHashes=$sourceHashes;version='1.0.1';versionCode=2;url='/downloads/PUSHTORQ-Support-Android-1.0.1.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.support';builtAt=[DateTime]::UtcNow.ToString('o')}
+ $release | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $downloads 'support-android.json') -Encoding utf8NoBOM
+ Write-Output ($release | ConvertTo-Json -Compress)
 diff --git a/android-support/res/drawable/logo.png b/android-support/res/drawable/logo.png
 index 7a24c77cbcf4fe49aa6ae36b2a96e91b62a56585..92f7f12051193f13195a6b19e9fc1f046112a785 100644
 GIT binary patch
@@ -2360,12 +2417,27 @@ index 531fa67..72a090e 100644
 \ No newline at end of file
 +<resources><style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar"><item name="android:fontFamily">sans</item><item name="android:windowLightStatusBar">true</item><item name="android:statusBarColor">#F5F6FC</item><item name="android:navigationBarColor">#F5F6FC</item><item name="android:windowLightNavigationBar">true</item><item name="android:colorAccent">#7C3AED</item><item name="android:windowBackground">#12101C</item></style><color name="launcher_background">#142034</color></resources>
 \ No newline at end of file
+diff --git a/android-support/src/com/gymos/support/MainActivity.java b/android-support/src/com/gymos/support/MainActivity.java
+index 14423c0..52a350f 100644
+--- a/android-support/src/com/gymos/support/MainActivity.java
++++ b/android-support/src/com/gymos/support/MainActivity.java
+@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
+ 
+ /** Authenticated management HTTPS shell. No JavaScript bridge, file access, or device permissions. */
+ public final class MainActivity extends Activity {
+- private static final String HOST="gymos-enterprise.vercel.app";
++ private static final String HOST="pushtorq.vercel.app";
+  private static final String HOME="https://"+HOST+"/platform";
+  private android.widget.ImageView splash;private android.webkit.ValueCallback<Uri[]> fileCallback;private android.webkit.PermissionRequest cameraRequest;private static final int PICK_FILE=7001,CAMERA_PERMISSION=7002;
+  private WebView web; private ProgressBar progress; private LinearLayout error;
 diff --git a/android/AndroidManifest.xml b/android/AndroidManifest.xml
-index 075a298..4937443 100644
+index 075a298..ffdbbf1 100644
 --- a/android/AndroidManifest.xml
 +++ b/android/AndroidManifest.xml
-@@ -2,7 +2,7 @@
- <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.members" android:versionCode="2" android:versionName="1.0.1">
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.members" android:versionCode="2" android:versionName="1.0.1">
++<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gymos.members" android:versionCode="3" android:versionName="1.0.2">
   <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="36"/>
   <uses-permission android:name="android.permission.INTERNET"/>
 - <application android:label="GYM OS Members" android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:usesCleartextTraffic="false" android:networkSecurityConfig="@xml/network_security_config" android:supportsRtl="true" android:enableOnBackInvokedCallback="true">
@@ -2373,18 +2445,26 @@ index 075a298..4937443 100644
    <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
   </application>
  </manifest>
-diff --git a/android/README.md b/android/README.md
-index db1405a..53c8fb0 100644
---- a/android/README.md
-+++ b/android/README.md
-@@ -1,6 +1,6 @@
- # GYM OS Members for Android
- 
--Member-only native Android APK containing a restricted WebView of https://gymos-enterprise.vercel.app/member. Uses the same live member account, branch isolation, profile, training and digital attendance pass. Requires Android 8+ and current Android System WebView, with internet. Not a fully offline native data client and not published to Google Play.
-+Member-only native Android APK containing a restricted WebView of https://pushtorq.vercel.app/member. Uses the same live member account, branch isolation, profile, training and digital attendance pass. Requires Android 8+ and current Android System WebView, with internet. Not a fully offline native data client and not published to Google Play.
- 
- Build: Android SDK platform 36/build-tools 36.0.0 and JDK 21, then `./android/build.ps1 -SigningKey <private-path>`. Supply GYMOS_ANDROID_STORE_PASSWORD only through the process environment. Reuse the SAME private signing key and increment versionCode for every update. Never publish the key/password or include it in club packages. The checked-in APK is signed with the platform-owned release certificate; verify it using Android SDK apksigner before distributing.
- 
+diff --git a/android/build.ps1 b/android/build.ps1
+index fd8f5e9..e92cbbb 100644
+--- a/android/build.ps1
++++ b/android/build.ps1
+@@ -26,13 +26,13 @@ $sources=@(Get-ChildItem "$androidRoot/src","$build/generated" -Filter '*.java'
+ & "$tools/zipalign.exe" -f -p 4 "$build/unsigned.apk" "$build/aligned.apk";Check
+ $downloads=Join-Path $repo 'public/downloads'
+ New-Item -ItemType Directory -Path $downloads -Force | Out-Null
+-$apk=Join-Path $downloads 'GymOS-Members-Android-1.0.1.apk'
++$apk=Join-Path $downloads 'PUSHTORQ-Members-Android-1.0.2.apk'
+ & "$tools/apksigner.bat" sign --ks $SigningKey --ks-key-alias $KeyAlias --ks-pass "env:$PasswordEnv" --out $apk "$build/aligned.apk";Check
+ & "$tools/apksigner.bat" verify --verbose --print-certs $apk;Check
+ $hash=(Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+ $sourceHashes=[ordered]@{}
+ $sourceFiles=@(Get-ChildItem "$androidRoot/src","$androidRoot/res" -File -Recurse)+@(Get-Item "$androidRoot/AndroidManifest.xml")
+ foreach($sourceFile in ($sourceFiles | Sort-Object FullName)){$relative=[System.IO.Path]::GetRelativePath($androidRoot,$sourceFile.FullName).Replace('\','/');$sourceHashes[$relative]=(Get-FileHash -LiteralPath $sourceFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
+-$release=@{sourceHashes=$sourceHashes;version='1.0.1';versionCode=2;url='/downloads/GymOS-Members-Android-1.0.1.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.members';builtAt=[DateTime]::UtcNow.ToString('o')}
++$release=@{sourceHashes=$sourceHashes;version='1.0.2';versionCode=3;url='/downloads/PUSHTORQ-Members-Android-1.0.2.apk';sha256=$hash;bytes=(Get-Item -LiteralPath $apk).Length;minAndroid='8.0';package='com.gymos.members';builtAt=[DateTime]::UtcNow.ToString('o')}
+ $release | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $downloads 'member-android.json') -Encoding utf8NoBOM
+ Write-Output ($release | ConvertTo-Json -Compress)
 diff --git a/android/res/drawable/logo.png b/android/res/drawable/logo.png
 index 6bf934183011c75caabb45b26c62e0f7c6aa680c..92f7f12051193f13195a6b19e9fc1f046112a785 100644
 GIT binary patch
@@ -3566,3 +3646,16 @@ index 531fa67..72a090e 100644
 \ No newline at end of file
 +<resources><style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar"><item name="android:fontFamily">sans</item><item name="android:windowLightStatusBar">true</item><item name="android:statusBarColor">#F5F6FC</item><item name="android:navigationBarColor">#F5F6FC</item><item name="android:windowLightNavigationBar">true</item><item name="android:colorAccent">#7C3AED</item><item name="android:windowBackground">#12101C</item></style><color name="launcher_background">#142034</color></resources>
 \ No newline at end of file
+diff --git a/android/src/com/gymos/members/MainActivity.java b/android/src/com/gymos/members/MainActivity.java
+index 0bcdbe4..130a24b 100644
+--- a/android/src/com/gymos/members/MainActivity.java
++++ b/android/src/com/gymos/members/MainActivity.java
+@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
+ 
+ /** Member-only HTTPS shell. No JavaScript bridge, file access, or device permissions. */
+ public final class MainActivity extends Activity {
+- private static final String HOST="gymos-enterprise.vercel.app";
++ private static final String HOST="pushtorq.vercel.app";
+  private static final String HOME="https://"+HOST+"/member";
+  private WebView web; private ProgressBar progress; private LinearLayout error;
+  private static boolean trusted(Uri uri){return uri!=null&&"https".equals(uri.getScheme())&&HOST.equalsIgnoreCase(uri.getHost())&&(uri.getPort()==-1||uri.getPort()==443)&&uri.getUserInfo()==null;}

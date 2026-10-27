@@ -56,3 +56,11 @@ jobs:
         run: dotnet run --project tests/windows-devices/DevicesSmoke.csproj -c Release
       - name: Windows desktop build
         run: dotnet build windows/GymOS.Windows.csproj -c Release
+
+      - name: Publish PUSHTORQ Windows package
+        run: dotnet publish windows/GymOS.Windows.csproj -c Release -r win-x64 --self-contained true -p:EnableCompressionInSingleFile=true -o windows/pushtorq-release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PUSHTORQ-Windows-x64
+          path: windows/pushtorq-release/
+          retention-days: 30

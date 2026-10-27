@@ -1,0 +1,12 @@
+{
+  "members": {
+    "file": "public/downloads/GymOS-Members-Android-1.0.1.apk",
+    "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
+    "apkSha256": "18d48c6a2bfe5693529001fcf73d6f1d85ede1c292509d79f0b5f7e32851e90b"
+  },
+  "management": {
+    "file": "public/downloads/GymOS-Management-Android-1.0.0.apk",
+    "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
+    "apkSha256": "0c2c6081d88cfac0bf913c498109cfe38678fe08eac37b864a50ba3f61dbab56"
+  }
+}

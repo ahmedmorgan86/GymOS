@@ -43,6 +43,14 @@ jobs:
         run: node --import ./tests/member-console-ui-loader.mjs --test --test-isolation=none tests/member-console-ui.integration.mjs
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=low
+      - name: Verify Android release signatures and original publisher
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk_signer="$(rg --files "$ANDROID_HOME/build-tools" | rg '/apksigner$' | sort -V | tail -n 1)"
+          test -x "$apk_signer"
+          export ANDROID_APK_SIGNER="$apk_signer"
+          node scripts/verify-android-signatures.mjs
       - run: npm run build
   windows-devices:
     runs-on: windows-latest

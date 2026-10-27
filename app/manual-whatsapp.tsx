@@ -2,7 +2,7 @@
 import {useState,type FormEvent} from 'react';
 import type {GymState,Operation} from './lib/domain';
 import {defaultWhatsApp,manualWhatsAppDue,memberWhatsAppLink,whatsAppText,type ManualWhatsAppTemplate} from './lib/manual-whatsapp';
-const labels={welcome:['ترحيب','Welcome'],policy:['سياسات النادي','Club policies'],birthday:['عيد ميلاد','Birthday'],occasion:['مناسبة','Occasion'],absence:['غياب','Absence'],renewal:['قرب الانتهاء','Renewal'],expired:['اشتراك منتهي','Expired']} as const;
+const labels={welcome:['ترحيب','Welcome'],policy:['سياسات النادي','Club policies'],birthday:['عيد ميلاد','Birthday'],occasion:['مناسبة','Occasion'],absence:['غياب','Absence'],renewal:['قرب الانتهاء','Renewal'],expired:['انتهى الاشتراك','Expired']} as const;
 type Props={state:GymState;branch:string;ar:boolean;mutate:(op:Omit<Operation,'branch'>&{type:string})=>Promise<boolean>};
 export default function ManualWhatsApp({state,branch,ar,mutate}:Props){
  const [search,setSearch]=useState(''),[kind,setKind]=useState<ManualWhatsAppTemplate['kind']>('renewal'),[templateKind,setTemplateKind]=useState<ManualWhatsAppTemplate['kind']>('renewal'),[templateId,setTemplateId]=useState(''),[edit,setEdit]=useState<ManualWhatsAppTemplate|null>(null),[busy,setBusy]=useState(false),[notice,setNotice]=useState('');

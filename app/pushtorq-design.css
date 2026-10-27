@@ -18,3 +18,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):
 input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]):hover,select:hover,textarea:hover{border-color:color-mix(in srgb,var(--pt-electric) 45%,var(--line))}
 input:-webkit-autofill{-webkit-text-fill-color:var(--text);box-shadow:0 0 0 1000px var(--surface-soft) inset!important;caret-color:var(--text)}
 select option{background:var(--surface);color:var(--text)}
+
+body:has(.member-mobile-app[data-color-mode=light]){background:#F5F3FF;color-scheme:light}
+body:has(.member-mobile-app[data-color-mode=dark]){background:#12101C;color-scheme:dark}

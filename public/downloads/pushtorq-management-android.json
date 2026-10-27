@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "versionCode": 1,
+  "url": "/downloads/PUSHTORQ-Manager-Android-1.0.0.apk",
+  "package": "com.pushtorq.management",
+  "origin": "https://pushtorq.vercel.app",
+  "home": "/clubs",
+  "minAndroid": "8.0",
+  "sha256": "f4d6802f15107d0bdc555475cf301659cbf08592d6d7c251cf25adfa0989f438",
+  "bytes": 62153,
+  "certificateSha256": "dc1c7062e23a3ca732a06392eeba1a434250e95f2fca63c19533b59e79f7d9f2",
+  "builtAt": "2026-10-27T16:38:15.994960+00:00",
+  "independentApplication": true,
+  "physicalDeviceTested": false,
+  "sourceHashes": {
+    "AndroidManifest.xml": "41c400a0074417face145bea863d81dcdab19695c19d2d8b664a65c628624b2f",
+    "res/drawable/logo.png": "cbecb48d612a5eeaa53b84cbbe3c4da9c11ab5be6d57dc77cec92d6e775de379",
+    "res/mipmap-anydpi-v26/ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
+    "res/values/styles.xml": "2e3ee9323828d302dcabb65bf8847ada74693d4779f4c17d726914e7a9ac0ffc",
+    "res/xml/data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
+    "res/xml/network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
+    "src/com/pushtorq/management/MainActivity.java": "00c4c3b18a729102097ea9bc824cff01ac871231e6984c845b22e20e0df74068"
+  }
+}

@@ -8,5 +8,15 @@
     "file": "public/downloads/GymOS-Management-Android-1.0.0.apk",
     "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
     "apkSha256": "0c2c6081d88cfac0bf913c498109cfe38678fe08eac37b864a50ba3f61dbab56"
+  },
+  "pushtorq-members": {
+    "file": "public/downloads/PUSHTORQ-Members-Android-1.0.0.apk",
+    "certificateSha256": "dc1c7062e23a3ca732a06392eeba1a434250e95f2fca63c19533b59e79f7d9f2",
+    "apkSha256": "b9bf01f84c503f6b663e9d3d5125c0d02381195303d275d6e4c5da871f83f307"
+  },
+  "pushtorq-management": {
+    "file": "public/downloads/PUSHTORQ-Manager-Android-1.0.0.apk",
+    "certificateSha256": "dc1c7062e23a3ca732a06392eeba1a434250e95f2fca63c19533b59e79f7d9f2",
+    "apkSha256": "f4d6802f15107d0bdc555475cf301659cbf08592d6d7c251cf25adfa0989f438"
   }
 }

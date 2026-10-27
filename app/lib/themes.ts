@@ -13,7 +13,8 @@ export const themes = [
  {id:'ember',ar:'جمر',en:'Ember',accent:'#ffb185',bg:'#241914',surface:'#35251e',text:'#fff1e7',dark:true},
  {id:'plum',ar:'برقوق',en:'Plum',accent:'#e4a0e9',bg:'#211426',surface:'#322039',text:'#f9ecfa',dark:true},
  {id:'graphite',ar:'جرافيت',en:'Graphite',accent:'#b6c9e2',bg:'#171b20',surface:'#262c34',text:'#f0f3f8',dark:true},
- {id:'neon',ar:'نيون',en:'Neon',accent:'#bfdf66',bg:'#161c13',surface:'#252e20',text:'#eff8e5',dark:true}
+ {id:'neon',ar:'نيون',en:'Neon',accent:'#bfdf66',bg:'#161c13',surface:'#252e20',text:'#eff8e5',dark:true},
+ {id:'black-yellow',ar:'أسود وأصفر',en:'Black & Yellow',accent:'#FACC15',bg:'#090909',surface:'#171717',text:'#FAFAFA',dark:true}
 ] as const;
 export type ThemeId=typeof themes[number]['id'];
 export function validTheme(value:unknown):value is ThemeId{return themes.some(t=>t.id===value);}

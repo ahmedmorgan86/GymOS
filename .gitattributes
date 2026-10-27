@@ -10,3 +10,5 @@ android-management/**/*.java text eol=lf
 android-management/**/*.xml text eol=lf
 android-support/**/*.java text eol=lf
 android-support/**/*.xml text eol=lf
+mobile-android/**/*.java text eol=lf
+mobile-android/**/*.xml text eol=lf

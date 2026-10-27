@@ -13,3 +13,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):
 .badge.active,.badge.completed,.badge.approved{color:var(--pt-success-text,#22C55E)}.badge.soon,.badge.proposed{color:var(--pt-warning-text,#F97316)}.badge.expired,.badge.rejected{color:var(--pt-danger-text,#EF4444)}
 
 [data-color-mode]{--bg:var(--pt-background);--surface:var(--pt-panel);--surface-soft:var(--pt-panel-raised);--text:var(--pt-text);--muted:var(--pt-muted);--line:var(--pt-line)}
+
+input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]),select,textarea{font-family:inherit;line-height:1.6;transition:border-color .12s,box-shadow .12s}
+input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]):hover,select:hover,textarea:hover{border-color:color-mix(in srgb,var(--pt-electric) 45%,var(--line))}
+input:-webkit-autofill{-webkit-text-fill-color:var(--text);box-shadow:0 0 0 1000px var(--surface-soft) inset!important;caret-color:var(--text)}
+select option{background:var(--surface);color:var(--text)}

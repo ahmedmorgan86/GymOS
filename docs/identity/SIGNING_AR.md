@@ -9,3 +9,6 @@ Android: ملفات APK الحالية لها بيانات توقيع ضمن MET
 المراجع الرسمية:
 - https://learn.microsoft.com/windows/win32/seccrypto/signtool
 - https://developer.android.com/tools/apksigner
+
+## تحقق فعلي في 27 أكتوبر 2026
+نجح Android SDK apksigner في CI رقم 40500370304 لملفي الإدارة والأعضاء: v2 وv3 صالحان، وبصمة الشهادة الأصلية لكليهما 6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801. تحقق SHA256 من ملفي APK قبل فحص التوقيع. هذه نتيجة تشفيرية للملفات الحالية وليست إعادة توقيع أو فحص تثبيت على هاتف. التوقيع الموثوق لـWindows لا يزال غير منفذ؛ جدول شهادة Authenticode في ملف التنفيذ فارغ.

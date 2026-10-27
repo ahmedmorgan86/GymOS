@@ -9,8 +9,7 @@ export function addDemoScenarios(s:GymState,now:string){
   const members=s.members.filter(m=>m.branch===branch.id&&/^sample-full-member-\d+$/.test(m.id));
   if(!members.length)continue;
   for(let c=0;c<3;c++)if(!s.classes.some(x=>x.id===prefix+'future-class-'+c))s.classes.push({id:prefix+'future-class-'+c,branch:branch.id,title:['حديد وقوة — تجربة الحجز','كارديو — تجربة الحجز','مرونة — تجربة الحجز'][c],at:addDays(today,c+1)+'T16:00:00.000Z',capacity:[4,8,12][c],members:[],waitlist:[],coach:'كابتن تجريبي',demo:false,cancelled:false});
-  for(const m of members)if(!m.measurements?.length&&m.vitals?.length)m.measurements=m.vitals.flatMap(v=>v.weight===undefined?[]:[{day:v.day,weight:v.weight,waist:v.waist??null,note:'قياس اصطناعي للتجربة فقط'}]);
-  if(s.events.some(e=>e.id===marker))continue;
+  if(s.events.some(e=>e.id===marker)){for(const m of members)if(!m.measurements?.length&&m.vitals?.length)m.measurements=m.vitals.flatMap(v=>v.weight===undefined?[]:[{day:v.day,weight:v.weight,waist:v.waist??null,note:'قياس اصطناعي للتجربة فقط'}]);continue;}
   let seq=0;const run=(type:string,data:Record<string,unknown>={},at=now)=>Object.assign(s,applyOperation(s,{type,branch:branch.id,...data},at,'بيانات تجريبية فقط',()=>prefix+(++seq)));
   s.shifts??=[];
   for(const [key,name,start,end,weekdays] of [
@@ -23,7 +22,7 @@ export function addDemoScenarios(s:GymState,now:string){
    m.notes??='سجل اصطناعي للتدريب على النظام؛ لا يمثل شخصًا حقيقيًا.';
    if(!m.cards&&m.card)m.cards=[{code:m.card+'-OLD',status:'lost',issuedAt:addDays(today,-90)+'T08:00:00.000Z',cancelledAt:addDays(today,-20)+'T08:00:00.000Z',reason:'كارت مفقود — سيناريو تجريبي',actor:'تجربة النظام',history:[]},{code:m.card,status:'active',issuedAt:addDays(today,-20)+'T08:00:00.000Z',reason:'كارت بديل — سيناريو تجريبي',actor:'تجربة النظام',history:[]}];
    const initial=m.vitals?.[0];if(initial&&!m.vitals?.some(v=>v.id===m.id+'-trend-1'))for(let n=1;n<=2;n++)m.vitals!.push({...initial,id:m.id+'-trend-'+n,day:addDays(today,-n*14),weight:(initial.weight??75)+n,waist:(initial.waist??80)+n,note:'قياس تاريخي اصطناعي لإظهار اتجاه التقدم'});
-   if(m.vitals?.length)m.measurements=m.vitals.flatMap(v=>v.weight===undefined?[]:[{day:v.day,weight:v.weight,waist:v.waist??null,note:'قياس اصطناعي للتجربة فقط'}]);
+   if(!m.measurements?.length&&m.vitals?.length)m.measurements=m.vitals.flatMap(v=>v.weight===undefined?[]:[{day:v.day,weight:v.weight,waist:v.waist??null,note:'قياس اصطناعي للتجربة فقط'}]);
   }
   const eligible=members.filter(m=>!m.archived),member=eligible[0];
   if(member){

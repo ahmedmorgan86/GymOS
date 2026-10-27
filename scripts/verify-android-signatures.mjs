@@ -11,6 +11,7 @@ if(!signer)throw Error('ANDROID_APK_SIGNER must point to the official Android SD
 for(const [name,pin] of Object.entries(pins)){
  if(createHash('sha256').update(readFileSync(pin.file)).digest('hex')!==pin.apkSha256)throw Error(name+' APK hash differs from reviewed release');
  const output=execFileSync(signer,['verify','--verbose','--print-certs',pin.file],{encoding:'utf8'});
+ console.log(output);
  const digest=output.match(/Signer #1 certificate SHA-256 digest:\s*([a-f0-9]+)/i)?.[1].toLowerCase();
  if(digest!==pin.certificateSha256)throw Error(name+' signing certificate differs from original reviewed APK');
  console.log(name+': signature verified; original certificate '+digest);console.log(output);

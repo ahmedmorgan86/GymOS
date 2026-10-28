@@ -1,2 +1,1 @@
-import {NextResponse} from 'next/server';
-export function GET(){return NextResponse.redirect('https://github.com/ahmedmorgan86/pushtorq/releases/download/gymeg-windows-1.1.13/GYMEG-Desktop-Windows-x64-1.1.13.exe',307);}
+export function GET(){return new Response('نسخة Windows الجديدة غير متاحة للتنزيل حالياً. يمكنك استخدام GYMEG من المتصفح عبر https://gymeg.vercel.app/clubs', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}});}

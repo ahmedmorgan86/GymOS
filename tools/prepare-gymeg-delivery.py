@@ -14,7 +14,7 @@ for name in sorted(set(names)):
  if not name:continue
  p=Path(name)
  if p.parts[0] not in allowed and len(p.parts)>1:continue
- if any(part in blocked or part.startswith('release-') or 'PRIVATE' in part.upper() for part in p.parts):continue
+ if any(part in blocked or part.startswith('release-') or 'PRIVATE' in part.upper() for part in p.parts[:-1]):continue
  if p.suffix.lower() in secret_ext or (p.name.startswith('.env') and p.name!='.env.example'):continue
  if p.name.endswith('.tsbuildinfo') or p.name in {'source-files.json'}:continue
  full=ROOT/p
@@ -29,13 +29,13 @@ with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED) as z:
  for name,full,data in files:z.writestr('GymEG/'+name,data)
 manifest={'sourceFiles':len(files),'files':[],'productionDeployed':False,'physicalDeviceAcceptanceComplete':False}
 manuals=ROOT.parent/'GymEG_Manuals_2026-10-29'/'output/pdf'
-apps=[(p.name,p) for p in (ROOT/'public/downloads').glob('GymEG-*.apk')]
+apps=[(p.name,p) for p in (ROOT/'public/downloads').glob('*.apk') if p.name.startswith('GymEG-')]
 win=ROOT.parent/'GymEG_Windows_1.1.14_LogoFix'/'GymOS.exe'
 if win.exists():apps.append(('GymEG-Windows-x64-1.1.14.exe',win))
 for owner in [False,True]:
  path=OUT/('GymEG_Owner_Complete_2026-10-29.zip' if owner else 'GymEG_Club_Package_2026-10-29.zip')
  with zipfile.ZipFile(path,'w',zipfile.ZIP_DEFLATED) as z:
-  for name,p in apps:z.write(p,'Apps/'+name)
+  for name,p in apps:z.write(p,('Apps/Windows/' if name.endswith('.exe') else 'Apps/Android/Legacy/' if 'Legacy' in name else 'Apps/Android/Current/')+name)
   for p in manuals.glob('*.pdf'):
    if not owner and any(v in p.name for v in ['Platform_Owner','Competitive_Review','Updates_And_Search']):continue
    z.write(p,'Guides/'+p.name)

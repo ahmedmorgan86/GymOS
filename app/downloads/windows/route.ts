@@ -1,2 +1,2 @@
-import {NextResponse} from 'next/server';
-export function GET(){return NextResponse.redirect('https://github.com/ahmedmorgan86/gymeg/releases/download/gymeg-windows-1.1.13/GymEG-Desktop-Windows-x64-1.1.13.exe',307);}
+const windowsRelease='https://github.com/ahmedmorgan86/gymeg/releases/download/windows-1.1.14/GymEG-Windows-x64-1.1.14.exe';
+export function GET(){return Response.redirect(windowsRelease,307);}

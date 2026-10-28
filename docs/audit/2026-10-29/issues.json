@@ -74,8 +74,8 @@
     "severity": "P1",
     "status": "ACCEPTED_CONSTRAINT",
     "title": "PIN افتراضي مشترك 123456 بطلب المالك",
-    "file": "app/lib/member-pin.ts",
-    "line": 1,
+    "file": "app/api/member-code/route.ts",
+    "line": 15,
     "detail": "لم يتغير طلب المستخدم؛ الخطر قائم للحساب غير المفعل. لا يُعتبر مانعًا برمجيًا مصححًا.",
     "confidence": "bounded"
   },

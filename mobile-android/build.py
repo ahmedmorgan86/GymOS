@@ -52,4 +52,3 @@ if __name__=='__main__':
         build(role,REPO/folder,meta,name)
     else:
         for role in ([target] if target else ['members','management']):build(role)
-

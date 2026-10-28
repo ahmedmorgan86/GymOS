@@ -35,22 +35,22 @@ def paragraph(c,s,y,rtl,size=11.7,leading=20):
  return y
 def header(c,role,page):
  c.setFillColor(ACCENT);c.rect(0,H-12,W,12,fill=1,stroke=0)
- c.setFillColor(MUTED);c.setFont('CairoBold',9);c.drawString(38,H-39,'PUSHTORQ / OPERATIONS HANDBOOK')
+ c.setFillColor(MUTED);c.setFont('CairoBold',9);c.drawString(38,H-39,'GYMEG / OPERATIONS HANDBOOK')
  c.setFont('Cairo',8);c.drawRightString(W-38,H-39,ar(role))
  c.setStrokeColor(HexColor('#dedfea'));c.line(38,37,W-38,37)
- c.drawString(38,23,'© Ahmed Morgan 2026 | 27 Oct 2026 | Windows 1.1.12');c.drawRightString(W-38,23,str(page))
+ c.drawString(38,23,'© Ahmed Morgan 2026 | 28 Oct 2026 | Windows 1.1.13');c.drawRightString(W-38,23,str(page))
 def manual(name,role_ar,role_en,topics,audience):
  target=PDF/name;c=canvas.Canvas(str(target),pagesize=A4)
- c.setTitle('PUSHTORQ | '+role_en+' | Arabic & English');c.setAuthor('Ahmed Morgan')
+ c.setTitle('GYMEG | '+role_en+' | Arabic & English');c.setAuthor('Ahmed Morgan')
  c.setFillColor(HexColor('#12101C'));c.rect(0,0,W,H,fill=1,stroke=0)
  c.setFillColor(ACCENT);c.circle(W-18,H-80,175,fill=1,stroke=0)
- c.setFillColor(white);c.setFont('CairoBold',40);c.drawString(44,H-125,'PUSHTORQ')
+ c.setFillColor(white);c.setFont('CairoBold',40);c.drawString(44,H-125,'GYMEG')
  c.drawImage(str(ROOT/'public/icons/icon-192.png'),44,H-220,64,64,mask='auto')
  c.setFont('CairoBold',25);c.drawRightString(W-44,H-215,ar(role_ar));c.setFont('CairoBold',23);c.drawString(44,H-270,role_en)
  c.setFont('Cairo',14);c.drawRightString(W-44,H-330,ar('دليل الاستخدام بالعربية والإنجليزية'));c.drawString(44,H-367,'Arabic & English operating guide')
  c.setFillColor(HexColor('#ddd7f5'));c.setFont('Cairo',11)
  for i,line in enumerate(wrap(audience,W-88,'Cairo',11,True)):c.drawRightString(W-44,300-i*22,ar(line))
- c.setFont('Cairo',10);c.drawString(44,140,'Web source / Windows 1.1.12 - 27 October 2026');c.drawString(44,113,'https://pushtorq.vercel.app/');c.drawString(44,86,'© Ahmed Morgan 2026');c.showPage()
+ c.setFont('Cairo',10);c.drawString(44,140,'Web source / Windows 1.1.13 - 28 October 2026');c.drawString(44,113,'https://gymeg.vercel.app/');c.drawString(44,86,'© Ahmed Morgan 2026');c.showPage()
  chunks=(len(topics)+14)//15;first=2+chunks
  for chunk in range(chunks):
   header(c,role_ar,2+chunk);c.setFillColor(INK);c.setFont('CairoBold',23);c.drawRightString(W-40,H-85,ar('المحتويات'));c.drawString(40,H-120,'Contents');y=H-165
@@ -75,9 +75,9 @@ def read_topics(name):
    a,e=line.split('|',1);topics[-1][2].append([a,e])
  return topics
 content=[
- dict(file='PUSHTORQ_Platform_Owner_AR_EN.pdf',ar='صاحب التطبيق والمنصة',en='Platform Owner',audience='دليل داخلي لإدارة التراخيص والتفعيل وتسليم العملاء. لا يدرج في حزمة النادي.',topics=read_topics('owner.txt')),
- dict(file='PUSHTORQ_Club_Manager_AR_EN.pdf',ar='مدير ومالك النادي',en='Club Manager',audience='دليل التشغيل والإعداد والأعضاء والحضور والتدريب والمتجر والصوت والموسيقى والنسخ.',topics=read_topics('manager.txt')),
- dict(file='PUSHTORQ_Employees_AR_EN.pdf',ar='الموظفون ومستخدمو النظام',en='Employees',audience='دليل فريق العمل، يفرق بين الاستقبال للقراءة والأدمن المخول ويشرح المهام والتصعيد.',topics=read_topics('employees.txt'))]
+ dict(file='GYMEG_Platform_Owner_AR_EN.pdf',ar='صاحب التطبيق والمنصة',en='Platform Owner',audience='دليل داخلي لإدارة التراخيص والتفعيل وتسليم العملاء. لا يدرج في حزمة النادي.',topics=read_topics('owner.txt')),
+ dict(file='GYMEG_Club_Manager_AR_EN.pdf',ar='مدير ومالك النادي',en='Club Manager',audience='دليل التشغيل والإعداد والأعضاء والحضور والتدريب والمتجر والصوت والموسيقى والنسخ.',topics=read_topics('manager.txt')),
+ dict(file='GYMEG_Employees_AR_EN.pdf',ar='الموظفون ومستخدمو النظام',en='Employees',audience='دليل فريق العمل، يفرق بين الاستقبال للقراءة والأدمن المخول ويشرح المهام والتصعيد.',topics=read_topics('employees.txt'))]
 result=[]
 for d in content:result.append(manual(d['file'],d['ar'],d['en'],d['topics'],d['audience']))
 (OUT/'manuals-manifest.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')

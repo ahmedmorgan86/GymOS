@@ -1,0 +1,25 @@
+{
+  "version": "1.1.0",
+  "versionCode": 2,
+  "url": "/downloads/GYMEG-Members-Android-1.1.0.apk",
+  "package": "com.pushtorq.members",
+  "origin": "https://gymeg.vercel.app",
+  "home": "/member",
+  "minAndroid": "8.0",
+  "sha256": "713283d6b9e2d4ae9e994a1462ad414d8a146bee817ae515d3706e3f67dce5ed",
+  "bytes": 53961,
+  "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
+  "builtAt": "2026-10-28T02:41:45.087935+00:00",
+  "independentApplication": true,
+  "requiresReinstallFromPreviousBrand": true,
+  "physicalDeviceTested": false,
+  "sourceHashes": {
+    "AndroidManifest.xml": "eae365aa13fee11b1eb4c9738a85b5d45994afe7c343defcc3d787f9a5b41d4f",
+    "res\\drawable\\logo.png": "1052e34c6302aaa56512e440cb33f9b82f1b37205620d34ea7feaf89ebd3b71b",
+    "res\\mipmap-anydpi-v26\\ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
+    "res\\values\\styles.xml": "2e3ee9323828d302dcabb65bf8847ada74693d4779f4c17d726914e7a9ac0ffc",
+    "res\\xml\\data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
+    "res\\xml\\network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
+    "src\\com\\pushtorq\\members\\MainActivity.java": "f63bceb0921f4d98f6c433534e44cfa3a09081c4a1bf87ae492e4eb4a6fdbd25"
+  }
+}

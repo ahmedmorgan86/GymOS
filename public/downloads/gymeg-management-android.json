@@ -1,0 +1,25 @@
+{
+  "version": "1.1.0",
+  "versionCode": 2,
+  "url": "/downloads/GYMEG-Manager-Android-1.1.0.apk",
+  "package": "com.pushtorq.management",
+  "origin": "https://gymeg.vercel.app",
+  "home": "/clubs",
+  "minAndroid": "8.0",
+  "sha256": "249c3d4159f96d838bcea5143d877954ee7455f86e70c1bfae57786f47a71e83",
+  "bytes": 53961,
+  "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
+  "builtAt": "2026-10-28T02:41:48.613172+00:00",
+  "independentApplication": true,
+  "requiresReinstallFromPreviousBrand": true,
+  "physicalDeviceTested": false,
+  "sourceHashes": {
+    "AndroidManifest.xml": "7337c48b4d4d59bddd455854ae031fde08a389e5cfc8028b718e6fef1efbf9fd",
+    "res\\drawable\\logo.png": "1052e34c6302aaa56512e440cb33f9b82f1b37205620d34ea7feaf89ebd3b71b",
+    "res\\mipmap-anydpi-v26\\ic_launcher.xml": "39706239f4e8c4e1b1ddde8de29f64242a67984307bd7dd0354b321e6128d190",
+    "res\\values\\styles.xml": "2e3ee9323828d302dcabb65bf8847ada74693d4779f4c17d726914e7a9ac0ffc",
+    "res\\xml\\data_extraction_rules.xml": "66c2d7c6ac2a3c03200235a556e0f410620cae5bdfedd4ebdf18528fcbc42886",
+    "res\\xml\\network_security_config.xml": "12c5ef810c159e709efd542129c2439100343e1e176502749d2bf3c1d929010b",
+    "src\\com\\pushtorq\\management\\MainActivity.java": "54864152f47cb3fb84e2fa2e14d3dd1ffa9c49f34a6587b8359fc9bf92678d14"
+  }
+}

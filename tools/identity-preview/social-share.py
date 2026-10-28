@@ -9,10 +9,10 @@ s='''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="
 <rect x="72" y="64" width="276" height="37" rx="18" fill="#7C3AED22" stroke="#A855F744"/>
 <text x="210" y="88" text-anchor="middle" font-family="Inter,DejaVu Sans" font-size="13" font-weight="600" letter-spacing="1.4" fill="#D8C6F7">GYM MANAGEMENT SYSTEM</text>
 '''+logo+'''
-<text x="1118" y="411" text-anchor="end" font-family="Cairo,DejaVu Sans" font-size="49" font-weight="800" fill="#F5F3FF">قوة الإدارة في إيدك</text>
+<text x="1118" y="411" text-anchor="end" font-family="Cairo,DejaVu Sans" font-size="49" font-weight="800" fill="#F5F3FF">جيمك كله في نظام واحد</text>
 <text x="1118" y="465" text-anchor="end" font-family="Cairo,DejaVu Sans" font-size="25" font-weight="600" fill="#BDB0D3">أعضاء · اشتراكات · حضور · مدفوعات</text>
 <rect x="72" y="513" width="1046" height="1" fill="url(#line)"/>
-<text x="72" y="571" font-family="Montserrat,DejaVu Sans" font-size="27" font-weight="700" fill="#F5F3FF">pushtorq.vercel.app</text>
-<text x="1118" y="568" text-anchor="end" font-family="Montserrat,DejaVu Sans" font-size="17" font-weight="700" letter-spacing="3" fill="#A855F7">POWER YOUR GYM</text>
+<text x="72" y="571" font-family="Montserrat,DejaVu Sans" font-size="27" font-weight="700" fill="#F5F3FF">gymeg.vercel.app</text>
+<text x="1118" y="568" text-anchor="end" font-family="Montserrat,DejaVu Sans" font-size="17" font-weight="700" letter-spacing="3" fill="#A855F7">YOUR GYM. ONE SYSTEM.</text>
 </svg>'''
 (B/'social-share.svg').write_text(s)

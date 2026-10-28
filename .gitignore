@@ -106,3 +106,10 @@ next-env.d.ts
 
 /mobile-android/build/
 *.p12
+
+/windows/release-gymeg/
+/windows/store-staging/
+*.jks
+*.keystore
+*.pfx
+*.p12

@@ -16,7 +16,7 @@ export async function reportWorkbook(report:FullReport,ar:boolean){
  data.push(table.headers.map(value=>({value,fontWeight:'bold',textColor:'#FFFFFF',backgroundColor:'#3B1C63',height:36,wrap:true,borderBottomColor:accent,borderBottomStyle:'medium'})));
  const integerHeader=(index:number)=>/(?:دقائق|الدقائق|جلسات|عدد|سعة|زيارات|Days|Minutes|Sessions|Capacity|Quantity|Units|Rank|Sets|Reps)/i.test(table.headers[index]);
  for(const[i,row]of table.rows.entries())data.push(row.map((value,column)=>({value:value??'',wrap:true,alignVertical:'top',backgroundColor:i%2?'#F5F3FF':'#FFFFFF',textColor:'#232B40',...(typeof value==='number'?{format:integerHeader(column)?'#,##0':'#,##0.00;[Red]-#,##0.00'}:{})})));
- data.push([{value:'© Ahmed Morgan '+new Date(report.generatedAt).getUTCFullYear()+' · PUSHTORQ',columnSpan:width,height:26,textColor:'#69748A'}]);
+ data.push([{value:'© Ahmed Morgan '+new Date(report.generatedAt).getUTCFullYear()+' · GYMEG',columnSpan:width,height:26,textColor:'#69748A'}]);
  return{data,sheet:String(index+1).padStart(2,'0')+' '+table.title.replace(/[\\/?*:[\]]/g,' ').slice(0,27),images:[{content:logo,contentType:'image/png',width:64,height:64,dpi:96,anchor:{row:1,column:1},offsetX:8,offsetY:10,title:report.gym}],rightToLeft:ar,stickyRowsCount:6,orientation:'landscape',showGridLines:false,columns:table.headers.map((_,i)=>({width:width===2?(i===0?58:70):i===0?30:25}))};});
  return writeExcel(sheets,{fontFamily:'Cairo',fontSize:11});
 }

@@ -2,4 +2,4 @@
 import {useSyncExternalStore} from 'react';
 const year=()=>new Date().getFullYear();
 const subscribe=(notify:()=>void)=>{const timer=setInterval(notify,60000);return()=>clearInterval(timer);};
-export default function Copyright(){const current=useSyncExternalStore(subscribe,year,year);return <span className="ownership-credit" dir="ltr">PUSHTORQ · © Ahmed Morgan {current}</span>;}
+export default function Copyright(){const current=useSyncExternalStore(subscribe,year,year);return <span className="ownership-credit" dir="ltr">GYMEG · © Ahmed Morgan {current}</span>;}

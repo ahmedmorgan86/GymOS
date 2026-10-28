@@ -18,6 +18,8 @@ def build(role,source_override=None,metadata_name=None,output_role=None):
     password_env='GYMEG_KEYSTORE_PASSWORD' if os.environ.get('GYMEG_KEYSTORE_PASSWORD') else 'PUSHTORQ_KEYSTORE_PASSWORD'
     if not os.environ.get(password_env): raise ValueError('Supply GYMEG_KEYSTORE_PASSWORD through environment')
     source=Path(source_override) if source_override else ROOT/role;work=ROOT/'build'/source.name
+    for source_file in [source/'AndroidManifest.xml',*source.glob('res/**/*.xml'),*source.glob('src/**/*.java')]:
+        if b'\r\n' in source_file.read_bytes():raise ValueError('Android source must use LF before building: '+str(source_file))
     for p in [work,work/'generated',work/'classes',work/'dex']: p.mkdir(parents=True,exist_ok=True)
     run(tools/'aapt2','compile','--dir',source/'res','-o',work/'resources.zip')
     run(tools/'aapt2','link','-o',work/'unsigned.apk','-I',platform,'--manifest',source/'AndroidManifest.xml','--java',work/'generated',work/'resources.zip')
@@ -37,7 +39,7 @@ def build(role,source_override=None,metadata_name=None,output_role=None):
     run(tools/'zipalign','-c','-p','4',output)
     certificate=re.search(r'certificate SHA-256 digest: ([a-f0-9]{64})',verification).group(1)
     tracked=[source/'AndroidManifest.xml']+sorted((source/'res').rglob('*'))+sorted((source/'src').rglob('*'))
-    metadata=dict(version=version,versionCode=code,url='/downloads/'+filename,package=manifest.attrib['package'],origin='https://gymeg.vercel.app',home='/support-login' if role=='support' else '/member' if role=='members' else '/clubs',minAndroid='8.0',sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bytes=output.stat().st_size,certificateSha256=certificate,builtAt=datetime.now(timezone.utc).isoformat(),independentApplication=True,requiresReinstallFromPreviousBrand=manifest.attrib['package'].startswith('com.pushtorq.'),upgradeFromCertificateSha256=certificate,physicalDeviceTested=False,sourceHashes={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked if p.is_file()})
+    metadata=dict(version=version,versionCode=code,url='/downloads/'+filename,package=manifest.attrib['package'],origin='https://gymeg.vercel.app',home='/support-login' if role=='support' else '/member' if role=='members' else '/clubs',minAndroid='8.0',sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bytes=output.stat().st_size,certificateSha256=certificate,builtAt=datetime.now(timezone.utc).isoformat(),independentApplication=True,requiresReinstallFromPreviousBrand=manifest.attrib['package'].startswith('com.pushtorq.'),upgradeFromCertificateSha256=certificate,physicalDeviceTested=False,sourceHashes={p.relative_to(source).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked if p.is_file()})
     (REPO/'public/downloads'/(metadata_name or f'gymeg-{role}-android.json')).write_text(json.dumps(metadata,indent=2)+'\n')
     (work/'signature-verification.txt').write_text(verification)
     print(role+': signed; signature and ZIP alignment verified; '+certificate)

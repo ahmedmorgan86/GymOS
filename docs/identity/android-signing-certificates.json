@@ -32,26 +32,26 @@
   "gymeg-members-1.1.1": {
     "file": "public/downloads/GymEG-Members-Android-1.1.1.apk",
     "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
-    "apkSha256": "82a13b5139b20f47d44fa73c2e228f4523939250a9ba46e01917904bbd4682a4"
+    "apkSha256": "c2834503aed5c2884b6fe8eafeec3c4b8dcbe431845193f150fbdd29b9f6d7ea"
   },
   "gymeg-management-1.1.1": {
     "file": "public/downloads/GymEG-Manager-Android-1.1.1.apk",
     "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
-    "apkSha256": "bbe5ff75172678d623f00b6493d886dc9dc60ab9734eb3d9153e71a62b697977"
+    "apkSha256": "03f1b8c746b0536a5edfaadf9ca951c7fd958c81d4a204db3596a9157ec16394"
   },
   "gymos-members-1.0.2": {
     "file": "public/downloads/GymEG-Members-Legacy-Android-1.0.2.apk",
     "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
-    "apkSha256": "09e6e0839d0012a345f8743d2bab30bf4a23b420fc0a604abbac4deeb3e26a79"
+    "apkSha256": "1f1dab3cfeccf3d8ccdb4b3eb0e03b9d752582fcc3ccfe53129be9aaa47e607b"
   },
   "gymos-management-1.0.1": {
     "file": "public/downloads/GymEG-Manager-Legacy-Android-1.0.1.apk",
     "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
-    "apkSha256": "748be1e5310d6195cbe6747f770328a7f5fa7ffe2b940e98448600ea5c0e2c8c"
+    "apkSha256": "fb0868391f6cffe0a76e3f520860a5d3c169003f8d77d8689fdeee83c74437f2"
   },
   "gymos-support-1.0.1": {
     "file": "public/downloads/GymEG-Support-Android-1.0.1.apk",
     "certificateSha256": "6b70cd2aa1e6f6a71189aae8bcfcef4a4409488625083883622736b818160801",
-    "apkSha256": "7fc0deb8f09405f01019819cb990095f8afd02695416872f4cef481f33ea5d95"
+    "apkSha256": "d589de2e68fd631576c7e4abb06b23bebbedc411e5bb6a2f8e4ee91694063aae"
   }
 }

@@ -1,4 +1,4 @@
-"""Original GYMEG vector artwork. Wordmarks contain outlines, never remote fonts.
+"""Original GymEG vector artwork. Wordmarks contain outlines, never remote fonts.
 
 Run with fonttools installed; uses the repository's OFL Montserrat font.
 Raster outputs are generated separately by build-gymeg-assets.mjs.
@@ -30,19 +30,38 @@ def letters(text, x, baseline, size, color, tracking=0):
 
 def symbol(color='url(#purple)'):
     # Open hexagonal G plus a separate, legible dumbbell. No bitmap tracing.
-    return f'<path d="M245 79 132 14 20 79V209L132 274 244 209V155H145V196H201L132 236 57 192V101L132 57 207 101Z" fill="{color}"/><g fill="{color}"><rect x="78" y="123" width="15" height="50" rx="4"/><rect x="98" y="108" width="21" height="80" rx="5"/><rect x="127" y="137" width="83" height="22" rx="4"/><rect x="218" y="108" width="21" height="80" rx="5"/><rect x="244" y="123" width="15" height="50" rx="4"/></g>'
+    return f'<path d="M245 79 132 14 20 79V209L132 274 244 209V200H174V220H201L132 236 57 192V101L132 57 207 101Z" fill="{color}"/><g fill="{color}"><rect x="78" y="123" width="15" height="50" rx="4"/><rect x="98" y="108" width="21" height="80" rx="5"/><rect x="127" y="137" width="83" height="22" rx="4"/><rect x="218" y="108" width="21" height="80" rx="5"/><rect x="244" y="123" width="15" height="50" rx="4"/></g>'
 
 def svg(body, box, title):
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{box}" role="img" aria-label="{title}"><title>{title}</title>{gradient}{body}</svg>'
 
 for variant,ink,accent in [('dark','#F5F3FF','url(#purple)'),('light','#12101C','url(#purple)'),('mono','#FFFFFF','#FFFFFF'),('print','#12101C','#12101C')]:
     body='<g transform="translate(5 3) scale(.66)">'+symbol(accent)+'</g>'
-    first,end=letters('GYM',205,113,132,ink,1)
+    first,end=letters('Gym',205,113,132,ink,1)
     second,end=letters('EG',end,113,132,accent,1)
     descriptor,_=letters('GYM MANAGEMENT SYSTEM',209,150,18,ink,4.0)
     tagline,_=letters('YOUR GYM. ONE SYSTEM.',209,181,18,accent,2.0)
-    (OUT/f'logo-{variant}.svg').write_text(svg(body+first+second+descriptor+tagline,'0 0 785 195', 'GYMEG — YOUR GYM. ONE SYSTEM.'),encoding='utf-8')
-    (OUT/('symbol.svg' if variant=='dark' else f'symbol-{variant}.svg')).write_text(svg(symbol(accent),'0 0 280 288','GYMEG'),encoding='utf-8')
+    (OUT/f'logo-{variant}.svg').write_text(svg(body+first+second+descriptor+tagline,'0 0 785 195', 'GymEG — YOUR GYM. ONE SYSTEM.'),encoding='utf-8')
+    # Full square and vertical logos keep the exact case in actual outlined artwork.
+    word,end=letters('Gym',0,430,92,ink,0)
+    eg,end=letters('EG',end,430,92,accent,0)
+    centered=f'<g transform="translate({(512-end)/2:.3f} 0)">'+word+eg+'</g>'
+    vertical='<g transform="translate(116 20)">'+symbol(accent)+'</g>'+centered
+    (OUT/f'logo-vertical-{variant}.svg').write_text(svg(vertical,'0 0 512 512','GymEG'),encoding='utf-8')
+    (OUT/f'logo-square-{variant}.svg').write_text(svg(vertical,'0 0 512 512','GymEG'),encoding='utf-8')
+    (OUT/('symbol.svg'  if variant=='dark' else f'symbol-{variant}.svg')).write_text(svg(symbol(accent),'0 0 280 288','GymEG'),encoding='utf-8')
 tile='<rect x="1" y="1" width="510" height="510" rx="110" fill="#12101C" stroke="#A855F7" stroke-opacity=".35" stroke-width="2"/><g transform="translate(71 65) scale(1.32)">'+symbol()+'</g>'
-(OUT/'app-icon.svg').write_text(svg(tile,'0 0 512 512','GYMEG'),encoding='utf-8')
-print('GYMEG: 9 original vector assets generated with outlined wordmarks.')
+(OUT/'compact-icon.svg').write_text(svg(tile,'0 0 512 512','GymEG'),encoding='utf-8')
+word,end=letters('Gym',0,433,87,'#F5F3FF',0)
+eg,end=letters('EG',end,433,87,'url(#purple)',0)
+tile='<rect width="512" height="512" rx="110" fill="#12101C"/><g transform="translate(130 35) scale(.9)">'+symbol()+'</g>'+f'<g transform="translate({(512-end)/2:.3f} 0)">'+word+eg+'</g>'
+(OUT/'app-icon.svg').write_text(svg(tile,'0 0 512 512','GymEG'),encoding='utf-8')
+print('GymEG outlined master, horizontal, square, vertical and compact assets generated.')
+
+# Keep Android adaptive artwork aligned with the SVG master; no monochrome
+# foreground is used for the normal coloured launcher icon.
+for folder in ['mobile-android/members','mobile-android/management','android','android-management','android-support']:
+    root=ROOT/folder/'res'
+    path='M245,79 L132,14 L20,79 L20,209 L132,274 L244,209 L244,200 L174,200 L174,220 L201,220 L132,236 L57,192 L57,101 L132,57 L207,101 Z M78,123 L93,123 L93,173 L78,173 Z M98,108 L119,108 L119,188 L98,188 Z M127,137 L210,137 L210,159 L127,159 Z M218,108 L239,108 L239,188 L218,188 Z M244,123 L259,123 L259,173 L244,173 Z'
+    for name,color in [('ic_monochrome','#FFFFFFFF'),('ic_launcher_foreground','#FFA855F7')]:
+        (root/'drawable'/f'{name}.xml').write_text(f'<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="360" android:viewportHeight="360"><group android:translateX="40" android:translateY="36"><path android:fillColor="{color}" android:pathData="{path}"/></group></vector>\n')

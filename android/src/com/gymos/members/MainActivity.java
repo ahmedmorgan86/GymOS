@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
 
 /** Member-only HTTPS shell. No JavaScript bridge, file access, or device permissions. */
 public final class MainActivity extends Activity {
- private static final String HOST="gymos-enterprise.vercel.app";
+ private static final String HOST="gymeg.vercel.app";
  private static final String HOME="https://"+HOST+"/member";
  private WebView web; private ProgressBar progress; private LinearLayout error;
  private static boolean trusted(Uri uri){return uri!=null&&"https".equals(uri.getScheme())&&HOST.equalsIgnoreCase(uri.getHost())&&(uri.getPort()==-1||uri.getPort()==443)&&uri.getUserInfo()==null;}

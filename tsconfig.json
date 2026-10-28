@@ -50,6 +50,7 @@
     "cloudflare-env.d.ts",
     "lib/connector-preview.d.ts",
     "work",
-    "outputs"
+    "outputs",
+    "release"
   ]
 }

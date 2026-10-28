@@ -1,0 +1,17 @@
+{
+  "project_ref": "frsstuqstutbflkaffcx",
+  "target_site_url": "https://gymeg.vercel.app",
+  "additional_redirect_urls": [
+    "https://gymeg.vercel.app/auth/callback",
+    "https://gymeg.vercel.app/auth/callback?next=/member",
+    "https://gymeg.vercel.app/auth/callback?next=/reset-password"
+  ],
+  "preserve_existing_redirect_urls": true,
+  "activate_site_url_only_after_target_host_and_auth_validation": true,
+  "application_paths_verified": [
+    "app/lib/auth-client.ts",
+    "app/api/password/route.ts",
+    "app/auth/callback/route.ts"
+  ],
+  "applied_to_live_project": false
+}

@@ -1,0 +1,36 @@
+✔ Name blur (Tab focus transition) reserves a barcode; manual override is never replaced; phones normalize (96.2689ms)
+✔ Late barcode reservation cannot overwrite a code manually entered while request is pending (24.7959ms)
+✔ Incomplete name blocks submission and explains separation; no mutation is sent (18.6815ms)
+Received `true` for a non-boolean attribute `unoptimized`.
+
+If you want to write it to the DOM, pass a string instead: unoptimized="true" or unoptimized={value.toString()}.
+✔ Confirmed scan opens full member dialog over another section; repeated scan does not duplicate admission (1187.5022ms)
+Not implemented: HTMLMediaElement's pause() method
+✔ Compact console switches one table, filters instantly, sorts and keeps attendance actions (116.5132ms)
+✔ Member summary keeps secondary data and permitted card, renewal and payment operations reachable (50.2099ms)
+✔ Grouped registration retains every form value and creates one real domain operation (29.5711ms)
+Received `true` for a non-boolean attribute `priority`.
+
+If you want to write it to the DOM, pass a string instead: priority="true" or priority={value.toString()}.
+✔ Login switches day and night modes without losing entered credentials or changing authentication (19.0484ms)
+✔ Member day/night preference persists across profile sections and remount without API mutations (115.6709ms)
+✔ Mouse/focus transition from name to barcode makes one reservation and displays it (25.5ms)
+✔ Failed name reservation can be retried without losing fields (16.8773ms)
+✔ Submit reserves even when name blur did not fire, and malformed success cannot produce an empty code (26.0472ms)
+✔ Clearing subscription start date does not crash the registration form (6.1865ms)
+✔ An existing synthetic member international phone is retained when editing and saving details (3.2386ms)
+✔ Two-part name triggers automatic reservation and the form offers upload and camera sources (12.7673ms)
+✔ Saving waits for image processing and a premature submit cannot silently omit the selected photo (15.1733ms)
+✔ Lost save response can be retried with the same member ID without reserving an already active card again (13.0501ms)
+✔ Workspace retry clears the old error while a fresh read is pending and opens the returned club (121.5982ms)
+Not implemented: HTMLMediaElement's pause() method
+✔ Member action disclosures open renewal and edit forms with focus on their heading (185.8757ms)
+✔ Mobile member cards retain explicit labels, sortable headings and detail actions (144.393ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8655.2957

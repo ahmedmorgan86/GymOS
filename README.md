@@ -1,8 +1,8 @@
-# GYMEG — GYM MANAGEMENT SYSTEM
+# GymEG — GYM MANAGEMENT SYSTEM
 
-Arabic/English Cairo interface for Windows and web. Windows source version: 1.1.12 (GYMEG package built in CI). The portable WPF/WebView2 host uses the same Next.js interface as the website.
+Arabic/English Cairo interface for Windows and web. Windows source version: 1.1.14. The portable WPF/WebView2 host uses the same Next.js interface as the website.
 
-Production service: https://gymeg.vercel.app/
+GymEG target origin: https://gymeg.vercel.app/. This source setting does not reserve a Vercel domain or configure Supabase Auth. Verify hosting ownership, redirects and successful sign-in before distributing the new-origin applications. See docs/GymEG_CONTINUATION_VERIFICATION_2026-10-28_AR.md for verified build results and deployment limits.
 
 ## Product access
 
@@ -38,7 +38,7 @@ Windows 10/11 x64, self-contained .NET 10, requires official Microsoft Edge WebV
 
 Native controls are inside Settings > Windows app settings: choose SQLite backup location, save snapshot, export latest JSON, refresh sign-in and manage official Windows voices. Supabase remains authoritative. SQLite snapshots use Windows DPAPI CurrentUser; export JSON before moving machines/accounts. No database secrets are embedded in the executable. The backup bridge obtains a fresh tenant context and sends X-GymOS-Tenant.
 
-Official music embeds now live inside the music page. The optional expanded native provider player is docked within the main application layout, not a floating or external window. Local music is device/club/branch scoped. Provider accounts/subscriptions/regions can limit playback. Announcements duck local music and stop provider playback; restart the provider manually. Scheduled announcements require the app open and device awake, with one armed speaker device.
+External music platforms open their official site in a small isolated provider window. Local audio remains inside the application. Local music is device/club/branch scoped. Provider accounts/subscriptions/regions can limit playback. Announcements duck local music and stop provider playback; restart the provider manually. Scheduled announcements require the app open and device awake, with one armed speaker device.
 
 Copyright displays © Ahmed Morgan with the current year on web/Windows, including the native splash.
 
@@ -66,7 +66,7 @@ Windows 1.1.6 also saves a DPAPI-protected local first-trial receipt. It never e
 
 ## Provider music - Windows1.1.9 and web
 
-External platforms open their actual canonical site in a separate small window. Windows uses a480x680 isolated provider window; web requests a popup with a direct-link fallback. No embedded preview-player fallback remains in the music UI. Local audio stays inside GYMEG. Sign in with the provider account in its own window; region, subscription and DRM support determine full playback. No provider restriction is bypassed or full-track playback certified.
+External platforms open their actual canonical site in a separate small window. Windows uses a480x680 isolated provider window; web requests a popup with a direct-link fallback. No embedded preview-player fallback remains in the music UI. Local audio stays inside GymEG. Sign in with the provider account in its own window; region, subscription and DRM support determine full playback. No provider restriction is bypassed or full-track playback certified.
 
 Autoplay prompts are limited to supported provider hosts. The web app cannot duck audio in another provider window; announcements and provider volume need actual device acceptance. Windows speech stops its provider window. Use Windows1.1.9 so the host matches the current UI contract.
 
@@ -78,7 +78,7 @@ Apply 20261022212137_member_portal_messaging_presence.sql and 20261022213838_mes
 
 ### Legacy gym import and backup entry
 
-Import & backups is a dedicated owner/full-administrator entry. Legacy tables accept CSV UTF-8, JSON arrays/keyed tables or bounded XLSX (sheet selection). Import members/membership dates first, then plans/historical payments. Each row needs a stable legacy id; payment member refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, amounts use a decimal dot and card/phone columns remain text. Maximum 500 records: 1 MiB CSV/JSON or 2 MiB XLSX, with bounded decompression and no spreadsheet formulas. Preview/map before approving. Invalid rows block the entire save; existing differing records are not overwritten. Historic invoices/debts/visits/passwords/consents are not inferred from member rows. Proprietary SQL/BAK/SQLite files need a supported table export; GYMEG JSON full restoration is separate and confirmed.
+Import & backups is a dedicated owner/full-administrator entry. Legacy tables accept CSV UTF-8, JSON arrays/keyed tables or bounded XLSX (sheet selection). Import members/membership dates first, then plans/historical payments. Each row needs a stable legacy id; payment member refers to the member legacy ID. Keep the same source key across files. Dates are YYYY-MM-DD, amounts use a decimal dot and card/phone columns remain text. Maximum 500 records: 1 MiB CSV/JSON or 2 MiB XLSX, with bounded decompression and no spreadsheet formulas. Preview/map before approving. Invalid rows block the entire save; existing differing records are not overwritten. Historic invoices/debts/visits/passwords/consents are not inferred from member rows. Proprietary SQL/BAK/SQLite files need a supported table export; GymEG JSON full restoration is separate and confirmed.
 
 ### Public search publishing
 

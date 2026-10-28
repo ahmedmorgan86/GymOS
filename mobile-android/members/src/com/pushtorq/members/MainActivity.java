@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
 
 /** Member-only HTTPS shell. No JavaScript bridge, file access, or device permissions. */
 public final class MainActivity extends Activity {
- private static final String HOST="pushtorq.vercel.app";
+ private static final String HOST="gymeg.vercel.app";
  private static final String HOME="https://"+HOST+"/member";
  private android.widget.ImageView splash; private WebView web; private ProgressBar progress; private LinearLayout error;
  private static boolean trusted(Uri uri){return uri!=null&&"https".equals(uri.getScheme())&&HOST.equalsIgnoreCase(uri.getHost())&&(uri.getPort()==-1||uri.getPort()==443)&&uri.getUserInfo()==null;}
@@ -40,7 +40,7 @@ public final class MainActivity extends Activity {
   error=new LinearLayout(this);error.setOrientation(LinearLayout.VERTICAL);error.setGravity(android.view.Gravity.CENTER);error.setPadding(40,40,40,40);error.setBackgroundColor(Color.rgb(18,16,28));
   TextView title=new TextView(this);title.setText("تعذر الاتصال بالنادي\nCheck your internet connection");title.setTextSize(21);title.setTextColor(Color.rgb(245,243,255));title.setGravity(android.view.Gravity.CENTER);error.addView(title);
   Button retry=new Button(this);retry.setText("إعادة المحاولة / Retry");retry.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){loadHome();}});error.addView(retry);error.setVisibility(View.GONE);root.addView(error,new FrameLayout.LayoutParams(-1,-1));
-  WebView.setWebContentsDebuggingEnabled(false);WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(false);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);settings.setSafeBrowsingEnabled(true);settings.setSupportMultipleWindows(false);settings.setJavaScriptCanOpenWindowsAutomatically(false);settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" PUSHTORQMembersAndroid/1.0.0");
+  WebView.setWebContentsDebuggingEnabled(false);WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(false);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);settings.setSafeBrowsingEnabled(true);settings.setSupportMultipleWindows(false);settings.setJavaScriptCanOpenWindowsAutomatically(false);settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" GYMEGMembersAndroid/1.0.0");
   CookieManager.getInstance().setAcceptCookie(true);CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
   web.setWebChromeClient(new WebChromeClient(){@Override public void onProgressChanged(WebView v,int value){if(value==100&&splash!=null)splash.setVisibility(View.GONE);progress.setProgress(value);progress.setVisibility(value<100?View.VISIBLE:View.GONE);}});
   web.setWebViewClient(new WebViewClient(){

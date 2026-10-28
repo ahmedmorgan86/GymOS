@@ -61,10 +61,10 @@ jobs:
       - name: Windows desktop build
         run: dotnet build windows/GymOS.Windows.csproj -c Release
 
-      - name: Publish PUSHTORQ Windows package
-        run: dotnet publish windows/GymOS.Windows.csproj -c Release -r win-x64 --self-contained true -p:EnableCompressionInSingleFile=true -o windows/pushtorq-release
+      - name: Publish GYMEG Windows package
+        run: dotnet publish windows/GymOS.Windows.csproj -c Release -r win-x64 --self-contained true -p:EnableCompressionInSingleFile=true -o windows/gymeg-release
       - uses: actions/upload-artifact@v4
         with:
-          name: PUSHTORQ-Windows-x64
-          path: windows/pushtorq-release/
+          name: GYMEG-Windows-x64
+          path: windows/gymeg-release/
           retention-days: 30

@@ -18,5 +18,15 @@
     "file": "public/downloads/PUSHTORQ-Manager-Android-1.0.0.apk",
     "certificateSha256": "dc1c7062e23a3ca732a06392eeba1a434250e95f2fca63c19533b59e79f7d9f2",
     "apkSha256": "f4d6802f15107d0bdc555475cf301659cbf08592d6d7c251cf25adfa0989f438"
+  },
+  "gymeg-members": {
+    "file": "public/downloads/GYMEG-Members-Android-1.1.0.apk",
+    "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
+    "apkSha256": "713283d6b9e2d4ae9e994a1462ad414d8a146bee817ae515d3706e3f67dce5ed"
+  },
+  "gymeg-management": {
+    "file": "public/downloads/GYMEG-Manager-Android-1.1.0.apk",
+    "certificateSha256": "aa5c45e73c901c4e34d6337ffbbb71584e3318c127bcf52fd7bad25003f6ac94",
+    "apkSha256": "249c3d4159f96d838bcea5143d877954ee7455f86e70c1bfae57786f47a71e83"
   }
 }

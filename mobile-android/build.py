@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build independent PUSHTORQ APKs with official Android SDK tools and an external key."""
+"""Build GYMEG APKs with official Android SDK tools and an external key."""
 import hashlib, json, os, re, subprocess, zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -29,14 +29,14 @@ def build(role):
     run(tools/'zipalign','-f','-p','4',work/'unsigned.apk',work/'aligned.apk')
     manifest=ET.parse(source/'AndroidManifest.xml').getroot();ns='{http://schemas.android.com/apk/res/android}'
     version=manifest.attrib[ns+'versionName'];code=int(manifest.attrib[ns+'versionCode'])
-    name='Members' if role=='members' else 'Manager';filename=f'PUSHTORQ-{name}-Android-{version}.apk';output=REPO/'public/downloads'/filename
+    name='Members' if role=='members' else 'Manager';filename=f'GYMEG-{name}-Android-{version}.apk';output=REPO/'public/downloads'/filename
     run(java,'-jar',tools/'lib/apksigner.jar','sign','--ks',key,'--ks-key-alias',os.environ.get('PUSHTORQ_KEY_ALIAS','pushtorq-android-release'),'--ks-pass','env:PUSHTORQ_KEYSTORE_PASSWORD','--v4-signing-enabled','false','--out',output,work/'aligned.apk')
     verification=run(java,'-jar',tools/'lib/apksigner.jar','verify','--verbose','--print-certs',output)
     run(tools/'zipalign','-c','-p','4',output)
     certificate=re.search(r'certificate SHA-256 digest: ([a-f0-9]{64})',verification).group(1)
     tracked=[source/'AndroidManifest.xml']+sorted((source/'res').rglob('*'))+sorted((source/'src').rglob('*'))
-    metadata=dict(version=version,versionCode=code,url='/downloads/'+filename,package='com.pushtorq.'+role,origin='https://pushtorq.vercel.app',home='/member' if role=='members' else '/clubs',minAndroid='8.0',sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bytes=output.stat().st_size,certificateSha256=certificate,builtAt=datetime.now(timezone.utc).isoformat(),independentApplication=True,physicalDeviceTested=False,sourceHashes={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked if p.is_file()})
-    (REPO/f'public/downloads/pushtorq-{role}-android.json').write_text(json.dumps(metadata,indent=2)+'\n')
+    metadata=dict(version=version,versionCode=code,url='/downloads/'+filename,package='com.pushtorq.'+role,origin='https://gymeg.vercel.app',home='/member' if role=='members' else '/clubs',minAndroid='8.0',sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bytes=output.stat().st_size,certificateSha256=certificate,builtAt=datetime.now(timezone.utc).isoformat(),independentApplication=True,requiresReinstallFromPreviousBrand=True,physicalDeviceTested=False,sourceHashes={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked if p.is_file()})
+    (REPO/f'public/downloads/gymeg-{role}-android.json').write_text(json.dumps(metadata,indent=2)+'\n')
     (work/'signature-verification.txt').write_text(verification)
     print(role+': signed; signature and ZIP alignment verified; '+certificate)
 if __name__=='__main__':

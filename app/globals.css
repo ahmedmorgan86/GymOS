@@ -111,7 +111,7 @@ fieldset{min-inline-size:0}.table-scroll,.class-calendar,.pass-print-area{min-wi
 
 .member-access-panel .member-invitation{display:grid;gap:12px;margin-top:16px}.member-access-panel .member-invitation img{max-width:100%;height:auto}.member-access-panel form{margin-top:16px}.member-access-panel>p{overflow-wrap:anywhere}
 
-/* GYM OS Connect: one workspace with readable mobile priorities. */
+/* GYMEG Connect: one workspace with readable mobile priorities. */
 .connect-workspace .toolbar{display:flex;flex-wrap:wrap;gap:.5rem;margin-block:1rem}.connect-workspace .card{min-width:0;overflow-wrap:anywhere}.connect-workspace .preference-row{flex-wrap:wrap;gap:1rem}.connect-workspace textarea{min-height:6rem}.connect-workspace small{display:block;opacity:.72}.connect-workspace .button{margin:.25rem}.connect-workspace>label{display:block;margin-block:1rem}
 
 .connect-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-block:1rem}.connect-summary .card{padding:1rem}.connect-summary h2{font-size:1.8rem;margin:.3rem 0 0}.connect-summary b{font-size:.9rem}@media(max-width:700px){.connect-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.connect-summary .card{padding:.75rem}.connect-workspace .section-head h1{font-size:1.6rem}}

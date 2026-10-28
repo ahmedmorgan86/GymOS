@@ -13,7 +13,7 @@ def dashboard(title='الإدارة الشاملة للأعضاء والحضور
   y=145+i*54
   if i==1:a.append(rect(996,y,186,43,'url(#button)',10,'none'))
   a.append(text(1164,y+27,l,13,'#FFF' if i==1 else '#B2A9C5',600,'end',True))
- a.extend([text(1090,h-29,'POWER YOUR GYM',9,'#A855F7',650,'middle'),text(940,53,title,22,'#F5F3FF',800,'end',True),text(940,83,'معاينة الهوية الجديدة • بيانات توضيحية',11,'#B2A9C5',500,'end',True)])
+ a.extend([text(1090,h-29,'YOUR GYM. ONE SYSTEM.',9,'#A855F7',650,'middle'),text(940,53,title,22,'#F5F3FF',800,'end',True),text(940,83,'معاينة الهوية الجديدة • بيانات توضيحية',11,'#B2A9C5',500,'end',True)])
  for i,(l,v) in enumerate([('إجمالي الأعضاء','6'),('الموجودون الآن','2'),('اشتراكات سارية','6'),('مديونيات للمتابعة','3')]):
   x=25+i*235;a.extend([rect(x,108,220,83),rect(x+166,124,38,38,'#7C3AED20',10,'none'),text(x+185,150,'↗',24,'#A855F7',700,'middle'),text(x+148,135,l,11,'#B2A9C5',500,'end',True),text(x+148,171,v,27,'#F5F3FF',750,'end')])
  a.extend([rect(25,211,925,91),rect(430,228,500,43,'#241E35',10,'#A855F755'),text(910,255,'ابحث بالاسم أو الهاتف أو الباركود…',12,'#B2A9C5',500,'end',True),button(257,228,153,'إضافة عضو جديد',True),button(144,228,95,'تحديث'),button(43,228,84,'الفلاتر')])
@@ -29,17 +29,17 @@ def dashboard(title='الإدارة الشاملة للأعضاء والحضور
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780">'+defs()+''.join(a)+'</svg>'
 def defs():return '<defs><linearGradient id="button"><stop stop-color="#7C3AED"/><stop offset="1" stop-color="#A855F7"/></linearGradient><radialGradient id="ambient"><stop stop-color="#7C3AED" stop-opacity=".25"/><stop offset="1" stop-color="#12101C" stop-opacity="0"/></radialGradient></defs>'
 def login():
- a=[rect(0,0,370,650,'#171320',24,'#A855F744'),'<ellipse cx="185" cy="30" rx="205" ry="230" fill="url(#ambient)"/>',embed('symbol.svg',139,46,92,92),text(81,179,'PUSH',32,'#F5F3FF',850)+text(181,179,'TORQ',32,'#A855F7',850),text(185,204,'GYM MANAGEMENT SYSTEM',9,'#B2A9C5',500,'middle'),text(185,232,'POWER YOUR GYM',10,'#A855F7',600,'middle'),text(185,291,'تسجيل الدخول',23,'#F5F3FF',800,'middle',True),text(185,321,'أهلاً بعودتك. ناديك تحت سيطرتك.',11,'#B2A9C5',500,'middle',True)]
+ a=[rect(0,0,370,650,'#171320',24,'#A855F744'),'<ellipse cx="185" cy="30" rx="205" ry="230" fill="url(#ambient)"/>',embed('symbol.svg',139,46,92,92),text(81,179,'PUSH',32,'#F5F3FF',850)+text(181,179,'TORQ',32,'#A855F7',850),text(185,204,'GYM MANAGEMENT SYSTEM',9,'#B2A9C5',500,'middle'),text(185,232,'YOUR GYM. ONE SYSTEM.',10,'#A855F7',600,'middle'),text(185,291,'تسجيل الدخول',23,'#F5F3FF',800,'middle',True),text(185,321,'أهلاً بعودتك. ناديك تحت سيطرتك.',11,'#B2A9C5',500,'middle',True)]
  for i,l in enumerate(['البريد الإلكتروني','كلمة المرور']):
   y=349+i*80;a.extend([text(335,y,l,11,'#C4B7D5',600,'end',True),rect(35,y+13,300,45,'#241E35',10,'#FFFFFF16'),text(53,y+42,'you@example.com' if i==0 else '••••••••••',12,'#9587A6')])
- a.extend([button(35,520,300,'تسجيل الدخول',True),text(185,589,'نسيت كلمة المرور؟',11,'#B2A9C5',500,'middle',True),text(185,627,'PUSHTORQ · POWER YOUR GYM',8,'#796C8E',600,'middle')]);return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 650">'+defs()+''.join(a)+'</svg>'
+ a.extend([button(35,520,300,'تسجيل الدخول',True),text(185,589,'نسيت كلمة المرور؟',11,'#B2A9C5',500,'middle',True),text(185,627,'GymEG · YOUR GYM. ONE SYSTEM.',8,'#796C8E',600,'middle')]);return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 650">'+defs()+''.join(a)+'</svg>'
 board=[rect(0,0,1600,1160,'#0D0A14',0,'none'),'<ellipse cx="310" cy="50" rx="700" ry="350" fill="url(#ambient)"/>',embed('logo-dark.svg',45,32,700,183),text(1545,81,'الهوية المقترحة قبل النشر',26,'#F5F3FF',800,'end',True),text(1545,119,'تصميم موحد للإدارة، الحضور، الاشتراكات والتقارير',15,'#B2A9C5',500,'end',True),text(1545,158,'معاينة محلية • لا بيانات عملاء • لا رفع أو نشر',12,'#A855F7',600,'end',True)]
 board.append(login().replace('<svg ', '<svg x="35" y="246" width="370" height="650" ',1));board.append(dashboard().replace('<svg ', '<svg x="430" y="246" width="1130" height="735" ',1));board.append(text(1553,224,'الأعضاء والحضور — ترتيب يومي واضح',14,'#B2A9C5',600,'end',True));board.append(text(220,224,'تسجيل الدخول',14,'#B2A9C5',600,'middle',True))
 colors=['#7C3AED','#A855F7','#12101C','#F5F3FF','#22C55E','#EF4444','#F97316']
 for i,c in enumerate(colors):
  x=36+i*221;board.extend([rect(x,1000,200,56,c,10,'#FFFFFF22'),text(x+100,1083,c,13,'#D8CFE5',600,'middle')])
 board.append(text(800,1132,'اللون الأساسي للهوية موف • الأخضر والأحمر والبرتقالي للحالات والتنبيهات فقط',14,'#B2A9C5',500,'middle',True))
-(D/'PUSHTORQ-design-board.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160">'+defs()+''.join(board)+'</svg>')
+(D/'GymEG-design-board.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160">'+defs()+''.join(board)+'</svg>')
 (B/'dashboard-preview.svg').write_text(dashboard());(B/'login-preview.svg').write_text(login())
 # Public marketing images are explicitly labelled as design previews in the UI.
 for key,title in [('overview','الإدارة الشاملة للأعضاء والحضور'),('shop','المتجر وإدارة المخزون'),('training','التدريب ومتابعة البرامج'),('reports','التقارير والتحصيل')]:

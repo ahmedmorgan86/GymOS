@@ -1,6 +1,6 @@
 export const themes = [
- {id:'violet',ar:'GYMEG الداكن',en:'GYMEG Dark',accent:'#7C3AED',bg:'#12101C',surface:'#1B1729',text:'#F5F3FF',dark:true},
- {id:'pushtorq-light',ar:'GYMEG النهاري',en:'GYMEG Light',accent:'#7C3AED',bg:'#F5F3FF',surface:'#FFFFFF',text:'#21172F',dark:false},
+ {id:'violet',ar:'GymEG الداكن',en:'GymEG Dark',accent:'#7C3AED',bg:'#12101C',surface:'#1B1729',text:'#F5F3FF',dark:true},
+ {id:'pushtorq-light',ar:'GymEG النهاري',en:'GymEG Light',accent:'#7C3AED',bg:'#F5F3FF',surface:'#FFFFFF',text:'#21172F',dark:false},
  {id:'ocean',ar:'المحيط',en:'Ocean',accent:'#087da2',bg:'#eef7fb',surface:'#ffffff',text:'#173447',dark:false},
  {id:'emerald',ar:'زمرد',en:'Emerald',accent:'#16774c',bg:'#f0f8f3',surface:'#ffffff',text:'#20382c',dark:false},
  {id:'sunset',ar:'الغروب',en:'Sunset',accent:'#b54d21',bg:'#fff5ed',surface:'#ffffff',text:'#422c23',dark:false},

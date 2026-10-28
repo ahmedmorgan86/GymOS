@@ -7,10 +7,16 @@ const sdk=process.env.ANDROID_HOME??process.env.ANDROID_SDK_ROOT;
 const tools=sdk?join(sdk,'build-tools'):null;
 const candidates=tools&&existsSync(tools)?readdirSync(tools).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true})).map(v=>join(tools,v,'apksigner')).filter(p=>existsSync(p)):[];
 const signer=process.env.ANDROID_APK_SIGNER??candidates[0];
-if(!signer)throw Error('ANDROID_APK_SIGNER must point to the official Android SDK apksigner');
+// Windows SDKs ship apksigner.bat; invoking the official JAR avoids a shell
+// and works with SDK paths containing spaces or a UNC network share.
+const jars=tools&&existsSync(tools)?readdirSync(tools).sort((a,b)=>b.localeCompare(a,undefined,{numeric:true})).map(v=>join(tools,v,'lib','apksigner.jar')).filter(p=>existsSync(p)):[];
+const jar=process.env.ANDROID_APK_SIGNER_JAR??(!signer&&process.platform==='win32'?jars[0]:null);
+if(!signer&&!jar)throw Error('Set ANDROID_HOME to the official Android SDK, ANDROID_APK_SIGNER to its executable, or ANDROID_APK_SIGNER_JAR to its official JAR');
+const command=jar?(process.env.JAVA??'java'):signer;
+const prefix=jar?['-jar',jar]:[];
 for(const [name,pin] of Object.entries(pins)){
  if(createHash('sha256').update(readFileSync(pin.file)).digest('hex')!==pin.apkSha256)throw Error(name+' APK hash differs from reviewed release');
- const output=execFileSync(signer,['verify','--verbose','--print-certs',pin.file],{encoding:'utf8'});
+ const output=execFileSync(command,[...prefix,'verify','--verbose','--print-certs',pin.file],{encoding:'utf8'});
  console.log(output);
  const digests=[...output.matchAll(/^[^\r\n]*certificate SHA-256 digest:[ \t]*([a-f0-9]{64})[ \t]*$/gim)].map(m=>m[1].toLowerCase());
  const digest=digests[0];

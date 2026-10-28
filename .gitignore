@@ -113,3 +113,8 @@ next-env.d.ts
 *.keystore
 *.pfx
 *.p12
+
+/windows/release-audit-20261029/
+
+__pycache__/
+*.pyc

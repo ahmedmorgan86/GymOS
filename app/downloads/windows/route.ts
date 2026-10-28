@@ -1,2 +1,3 @@
-const windowsRelease='https://github.com/ahmedmorgan86/gymeg/releases/download/windows-1.1.13/GYMEG-Windows-x64-1.1.13.exe';
-export function GET(){return Response.redirect(windowsRelease,307);}
+import {windowsDownload} from '../../lib/windows-release';
+export const runtime='nodejs';
+export async function GET(){return Response.redirect(await windowsDownload(),307);}

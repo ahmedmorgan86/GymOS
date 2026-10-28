@@ -1,0 +1,4 @@
+{
+  "status": "invalidated",
+  "reason": "Requested sizes did not change the actual 320x740 viewport; not accepted as multisize test evidence."
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "A01",
+    "severity": "P1",
+    "status": "FIXED",
+    "title": "إعادة تطبيق bootstrap على قاعدة مأهولة قد تستبدل سياسات العزل",
+    "file": "scripts/migration-preflight.mjs",
+    "line": 2,
+    "detail": "حاجز يرفض القاعدة الحالية؛ تحقق PGlite دون لمس الإنتاج.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A02",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "الصور المرقمة ترفضها سياسة Next Image",
+    "file": "next.config.ts",
+    "line": 3,
+    "detail": "سماح محدد لإصدارات الهوية؛ صورة قبل وبعد واختبار رفض الاستعلامات العشوائية.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A03",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "توقيت أرشيف التقارير كان مثبتًا على القاهرة",
+    "file": "app/api/reports/export/route.ts",
+    "line": 10,
+    "detail": "تمرير منطقة النادي كمعامل SQL واختبار تكامل.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A04",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "تاريخ التقرير غير الصالح يرجع خطأ خدمة",
+    "file": "app/api/reports/export/route.ts",
+    "line": 10,
+    "detail": "400 للتحقق بدل 503؛ اختبار تكامل.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A05",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "صور التسويق والأيقونات لا تطابق الهوية",
+    "file": "scripts/build-gymeg-assets.mjs",
+    "line": 7,
+    "detail": "صور حديثة من واجهات معاينة ببيانات وهمية؛ رموز مربعة وforeground ملون.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A06",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "نافذة العضو تتجاوز شاشة الموبايل وقائمة الإجراءات تغطي المحتوى",
+    "file": "app/member-console.module.css",
+    "line": 19,
+    "detail": "نافذة ضمن viewport وقوائم داخل التدفق؛ لقطة وقياس فعليان 320px.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A07",
+    "severity": "P2",
+    "status": "FIXED",
+    "title": "عرض الجدول الإجباري يخفي بيانات العضو على الموبايل",
+    "file": "app/member-console.module.css",
+    "line": 22,
+    "detail": "كروت معنونة، فرز محفوظ وإجراءات واضحة؛ عرض مقاس 279px داخل صفحة 305px.",
+    "confidence": "confirmed"
+  },
+  {
+    "id": "A08",
+    "severity": "P1",
+    "status": "ACCEPTED_CONSTRAINT",
+    "title": "PIN افتراضي مشترك 123456 بطلب المالك",
+    "file": "app/api/member-code/route.ts",
+    "line": 15,
+    "detail": "لم يتغير طلب المستخدم؛ الخطر قائم للحساب غير المفعل. لا يُعتبر مانعًا برمجيًا مصححًا.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A09",
+    "severity": "P2",
+    "status": "EXTERNAL_TEST_REQUIRED",
+    "title": "الأجهزة والكاميرا ومزودو الرسائل لم يختبروا فعليًا",
+    "file": "app/device-center.tsx",
+    "line": 10,
+    "detail": "نجاح اختبارات التصنيف أو mock لا يثبت التوافق مع جهاز محدد أو تسليم رسالة.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A10",
+    "severity": "P2",
+    "status": "BLOCKED",
+    "title": "Windows بلا شهادة Authenticode موثوقة",
+    "file": "windows/Sign-GYMEG.ps1",
+    "line": 1,
+    "detail": "بناء EXE ناجح، توقيع ناشر موثوق غير متاح. لا تعطيل حماية ولا شهادة مجانية مزعومة.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A11",
+    "severity": "P2",
+    "status": "OPEN",
+    "title": "39 تنبيه أداء RLS و6 سياسات permissive متعددة",
+    "file": "docs/audit/2026-10-29/database-schema-snapshot.json",
+    "line": 1797,
+    "detail": "من المستشار بتاريخ المراجعة؛ لا تعديل سياسات إنتاج ولا ادعاء تحسين أداء بلا قياس.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A12",
+    "severity": "P2",
+    "status": "OPEN",
+    "title": "نقل المخطط الداخلي والأسماء التقنية يحتاج طرحًا منسقًا",
+    "file": "app/lib/database.ts",
+    "line": 11,
+    "detail": "اسم مشروع Supabase أصبح GymEG؛ schema gymos وحزم الهاتف ومجلد النسخ محفوظة، ولم تنفذ إعادة تسمية في الإنتاج.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A13",
+    "severity": "P2",
+    "status": "OPEN",
+    "title": "نشر ملفات Windows وربط الرابط يحتاج تحقق إصدار بعيد",
+    "file": "app/downloads/windows/route.ts",
+    "line": 2,
+    "detail": "صُحح المستودع إلى gymeg؛ لم يتحقق توفر asset الجديد على GitHub؛ الملف المحلي متاح.",
+    "confidence": "bounded"
+  },
+  {
+    "id": "A14",
+    "severity": "P2",
+    "status": "OPEN",
+    "title": "تغيير النطاق لا ينقل تلقائيًا التخزين المحلي والجلسات",
+    "file": "windows/DeploymentOrigin.cs",
+    "line": 3,
+    "detail": "تظل توافقات الروابط القديمة داخل المهاجر فقط؛ يجب مزامنة العمل المعلق قبل إزالة النطاق السابق.",
+    "confidence": "bounded"
+  }
+]

@@ -25,7 +25,7 @@ import java.io.ByteArrayInputStream;
 
 /** Authenticated management HTTPS shell. No JavaScript bridge or broad file access. Camera is granted only after runtime consent for the trusted application origin. */
 public final class MainActivity extends Activity {
- private static final String HOST="gymos-enterprise.vercel.app";
+ private static final String HOST="gymeg.vercel.app";
  private static final String HOME="https://"+HOST+"/clubs";
  private android.widget.ImageView splash;private android.webkit.ValueCallback<Uri[]> fileCallback;private android.webkit.PermissionRequest cameraRequest;private static final int PICK_FILE=7001,CAMERA_PERMISSION=7002;
  private WebView web; private ProgressBar progress; private LinearLayout error;

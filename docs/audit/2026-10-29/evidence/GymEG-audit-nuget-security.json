@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "parameters": "--vulnerable --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "C:/Users/a.morgan/Documents/Codex/2026-10-15/referenced-chatgpt-conversation-this-is-an/outputs/GymOS_Vercel/windows/GymOS.Windows.csproj"
+    }
+  ]
+}

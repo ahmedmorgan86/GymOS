@@ -1,0 +1,2385 @@
+{
+  "tables": [
+    {
+      "rls": true,
+      "name": "member_code_access",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "code_hash",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "code_cipher",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "version",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "revoked",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "inactive",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "phone_hash",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "pin_hash",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "pin_cipher",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "pin_must_change",
+          "type": "boolean",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "member_code_access_pkey",
+          "definition": "CREATE UNIQUE INDEX member_code_access_pkey ON gymos.member_code_access USING btree (owner_id, member_id)"
+        },
+        {
+          "name": "member_code_access_code_hash_key",
+          "definition": "CREATE UNIQUE INDEX member_code_access_code_hash_key ON gymos.member_code_access USING btree (code_hash)"
+        },
+        {
+          "name": "member_phone_lookup",
+          "definition": "CREATE INDEX member_phone_lookup ON gymos.member_code_access USING btree (phone_hash) WHERE (phone_hash IS NOT NULL)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "member_code_access_code_hash_check",
+          "type": "c",
+          "definition": "CHECK ((code_hash ~ '^[a-f0-9]{64}$'::text))"
+        },
+        {
+          "name": "member_code_access_code_hash_key",
+          "type": "u",
+          "definition": "UNIQUE (code_hash)"
+        },
+        {
+          "name": "member_code_access_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id)"
+        },
+        {
+          "name": "member_code_access_phone_hash_check",
+          "type": "c",
+          "definition": "CHECK ((phone_hash ~ '^[a-f0-9]{64}$'::text))"
+        },
+        {
+          "name": "member_code_access_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, member_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "member_code_sessions",
+      "columns": [
+        {
+          "name": "session_hash",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "version",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "member_code_sessions_pkey",
+          "definition": "CREATE UNIQUE INDEX member_code_sessions_pkey ON gymos.member_code_sessions USING btree (session_hash)"
+        },
+        {
+          "name": "member_code_sessions_member",
+          "definition": "CREATE INDEX member_code_sessions_member ON gymos.member_code_sessions USING btree (owner_id, member_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "member_code_sessions_owner_id_member_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id, member_id) REFERENCES gymos.member_code_access(owner_id, member_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_code_sessions_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (session_hash)"
+        },
+        {
+          "name": "member_code_sessions_session_hash_check",
+          "type": "c",
+          "definition": "CHECK ((session_hash ~ '^[a-f0-9]{64}$'::text))"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "member_code_attempts",
+      "columns": [
+        {
+          "name": "bucket",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "attempts",
+          "type": "integer",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "member_code_attempts_pkey",
+          "definition": "CREATE UNIQUE INDEX member_code_attempts_pkey ON gymos.member_code_attempts USING btree (bucket)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "member_code_attempts_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (bucket)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "membership_cards",
+      "columns": [
+        {
+          "name": "code",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "membership_cards_pkey",
+          "definition": "CREATE UNIQUE INDEX membership_cards_pkey ON gymos.membership_cards USING btree (code)"
+        },
+        {
+          "name": "membership_cards_one_active",
+          "definition": "CREATE UNIQUE INDEX membership_cards_one_active ON gymos.membership_cards USING btree (owner_id, member_id) WHERE (status = 'active'::text)"
+        },
+        {
+          "name": "membership_cards_member",
+          "definition": "CREATE INDEX membership_cards_member ON gymos.membership_cards USING btree (owner_id, member_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "membership_cards_code_check",
+          "type": "c",
+          "definition": "CHECK ((code ~ '^[A-Z0-9][A-Z0-9._-]{0,63}$'::text))"
+        },
+        {
+          "name": "membership_cards_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (code)"
+        },
+        {
+          "name": "membership_cards_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['reserved'::text, 'active'::text, 'lost'::text, 'replaced'::text, 'cancelled'::text])))"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "card_number_counters",
+      "columns": [
+        {
+          "name": "day",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "value",
+          "type": "integer",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "card_number_counters_pkey",
+          "definition": "CREATE UNIQUE INDEX card_number_counters_pkey ON gymos.card_number_counters USING btree (day)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "card_number_counters_day_check",
+          "type": "c",
+          "definition": "CHECK ((day ~ '^[0-9]{8}$'::text))"
+        },
+        {
+          "name": "card_number_counters_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (day)"
+        },
+        {
+          "name": "card_number_counters_value_check",
+          "type": "c",
+          "definition": "CHECK (((value >= 1) AND (value <= 99999999)))"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_access",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branches",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "revoked",
+          "type": "integer",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_access_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_access_pkey ON gymos.gym_access USING btree (owner_id, user_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_access_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, user_id)"
+        },
+        {
+          "name": "gym_access_role_check",
+          "type": "c",
+          "definition": "CHECK ((role = ANY (ARRAY['manager'::text, 'reception'::text])))"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_states",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "revision",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "text",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_states_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_states_pkey ON gymos.gym_states USING btree (user_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_states_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (user_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_recovery",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "text",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_recovery_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_recovery_pkey ON gymos.gym_recovery USING btree (id)"
+        },
+        {
+          "name": "gym_recovery_owner_date",
+          "definition": "CREATE INDEX gym_recovery_owner_date ON gymos.gym_recovery USING btree (owner_id, created_at DESC)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_recovery_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_invites",
+      "columns": [
+        {
+          "name": "token_hash",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branches",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "expires_at",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "claimed_by",
+          "type": "text",
+          "not_null": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_invites_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_invites_pkey ON gymos.gym_invites USING btree (token_hash)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_invites_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (token_hash)"
+        },
+        {
+          "name": "gym_invites_role_check",
+          "type": "c",
+          "definition": "CHECK ((role = ANY (ARRAY['manager'::text, 'reception'::text])))"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_entities",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "collection",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "entity_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_entities_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_entities_pkey ON gymos.gym_entities USING btree (owner_id, collection, entity_id)"
+        },
+        {
+          "name": "gym_entities_owner_branch",
+          "definition": "CREATE INDEX gym_entities_owner_branch ON gymos.gym_entities USING btree (owner_id, branch, collection)"
+        },
+        {
+          "name": "gym_members_name",
+          "definition": "CREATE INDEX gym_members_name ON gymos.gym_entities USING btree (owner_id, lower((payload ->> 'name'::text))) WHERE (collection = 'members'::text)"
+        },
+        {
+          "name": "gym_members_phone",
+          "definition": "CREATE INDEX gym_members_phone ON gymos.gym_entities USING btree (owner_id, ((payload ->> 'phone'::text))) WHERE (collection = 'members'::text)"
+        },
+        {
+          "name": "gym_visit_one_open",
+          "definition": "CREATE UNIQUE INDEX gym_visit_one_open ON gymos.gym_entities USING btree (owner_id, ((payload ->> 'member'::text))) WHERE ((collection = 'visits'::text) AND ((payload ->> 'leftAt'::text) IS NULL))"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_entities_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, collection, entity_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_photos",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_photos_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_photos_pkey ON gymos.gym_photos USING btree (owner_id, member_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_photos_content_check",
+          "type": "c",
+          "definition": "CHECK ((length(content) <= 22000))"
+        },
+        {
+          "name": "gym_photos_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, member_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_access_events",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "actor",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "target",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "action",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "details",
+          "type": "jsonb",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_access_events_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_access_events_pkey ON gymos.gym_access_events USING btree (id)"
+        },
+        {
+          "name": "gym_access_events_owner_time",
+          "definition": "CREATE INDEX gym_access_events_owner_time ON gymos.gym_access_events USING btree (owner_id, at DESC)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_access_events_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "commercial_plans",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "currency",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "monthly_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "annual_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "perpetual_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "maintenance_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "limits",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "published",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "revision",
+          "type": "integer",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "commercial_plans_pkey",
+          "definition": "CREATE UNIQUE INDEX commercial_plans_pkey ON gymos.commercial_plans USING btree (id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "commercial_plans_annual_minor_check",
+          "type": "c",
+          "definition": "CHECK (((annual_minor IS NULL) OR (annual_minor >= 0)))"
+        },
+        {
+          "name": "commercial_plans_maintenance_minor_check",
+          "type": "c",
+          "definition": "CHECK (((maintenance_minor IS NULL) OR (maintenance_minor >= 0)))"
+        },
+        {
+          "name": "commercial_plans_monthly_minor_check",
+          "type": "c",
+          "definition": "CHECK (((monthly_minor IS NULL) OR (monthly_minor >= 0)))"
+        },
+        {
+          "name": "commercial_plans_name_check",
+          "type": "c",
+          "definition": "CHECK (((length(name) >= 1) AND (length(name) <= 100)))"
+        },
+        {
+          "name": "commercial_plans_perpetual_minor_check",
+          "type": "c",
+          "definition": "CHECK (((perpetual_minor IS NULL) OR (perpetual_minor >= 0)))"
+        },
+        {
+          "name": "commercial_plans_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "tenants",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "storage_key",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_by",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "tenants_pkey",
+          "definition": "CREATE UNIQUE INDEX tenants_pkey ON gymos.tenants USING btree (id)"
+        },
+        {
+          "name": "tenants_storage_key_key",
+          "definition": "CREATE UNIQUE INDEX tenants_storage_key_key ON gymos.tenants USING btree (storage_key)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "tenants_name_check",
+          "type": "c",
+          "definition": "CHECK (((length(name) >= 1) AND (length(name) <= 120)))"
+        },
+        {
+          "name": "tenants_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "tenants_storage_key_key",
+          "type": "u",
+          "definition": "UNIQUE (storage_key)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "tenant_memberships",
+      "columns": [
+        {
+          "name": "tenant_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branches",
+          "type": "jsonb",
+          "not_null": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "revoked",
+          "type": "boolean",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "tenant_memberships_pkey",
+          "definition": "CREATE UNIQUE INDEX tenant_memberships_pkey ON gymos.tenant_memberships USING btree (tenant_id, user_id)"
+        },
+        {
+          "name": "tenant_memberships_user",
+          "definition": "CREATE INDEX tenant_memberships_user ON gymos.tenant_memberships USING btree (user_id) WHERE (NOT revoked)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "tenant_memberships_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (tenant_id, user_id)"
+        },
+        {
+          "name": "tenant_memberships_role_check",
+          "type": "c",
+          "definition": "CHECK ((role = ANY (ARRAY['owner'::text, 'manager'::text, 'reception'::text])))"
+        },
+        {
+          "name": "tenant_memberships_tenant_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (tenant_id) REFERENCES gymos.tenants(id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "tenant_licenses",
+      "columns": [
+        {
+          "name": "tenant_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "plan_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "mode",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "maintenance_until",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "limits",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "revision",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "tenant_licenses_pkey",
+          "definition": "CREATE UNIQUE INDEX tenant_licenses_pkey ON gymos.tenant_licenses USING btree (tenant_id)"
+        },
+        {
+          "name": "tenant_licenses_plan",
+          "definition": "CREATE INDEX tenant_licenses_plan ON gymos.tenant_licenses USING btree (plan_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "tenant_licenses_mode_check",
+          "type": "c",
+          "definition": "CHECK ((mode = ANY (ARRAY['trial'::text, 'monthly'::text, 'annual'::text, 'perpetual'::text])))"
+        },
+        {
+          "name": "tenant_licenses_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (tenant_id)"
+        },
+        {
+          "name": "tenant_licenses_plan_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_id) REFERENCES gymos.commercial_plans(id)"
+        },
+        {
+          "name": "tenant_licenses_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'active'::text, 'suspended'::text])))"
+        },
+        {
+          "name": "tenant_licenses_tenant_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (tenant_id) REFERENCES gymos.tenants(id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "activation_requests",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "tenant_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "plan_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "mode",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "entitlements",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "expected_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "currency",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "transfer_ref",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "transfer_day",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "paid_minor",
+          "type": "bigint",
+          "not_null": false
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "review_note",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "reviewed_by",
+          "type": "text",
+          "not_null": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "activation_requests_pkey",
+          "definition": "CREATE UNIQUE INDEX activation_requests_pkey ON gymos.activation_requests USING btree (id)"
+        },
+        {
+          "name": "activation_requests_tenant_date",
+          "definition": "CREATE INDEX activation_requests_tenant_date ON gymos.activation_requests USING btree (tenant_id, created_at DESC)"
+        },
+        {
+          "name": "activation_requests_pending",
+          "definition": "CREATE INDEX activation_requests_pending ON gymos.activation_requests USING btree (status, created_at) WHERE (status = ANY (ARRAY['quote_requested'::text, 'pending_review'::text]))"
+        },
+        {
+          "name": "activation_requests_one_open",
+          "definition": "CREATE UNIQUE INDEX activation_requests_one_open ON gymos.activation_requests USING btree (tenant_id) WHERE (status = ANY (ARRAY['quote_requested'::text, 'awaiting_payment'::text, 'pending_review'::text]))"
+        },
+        {
+          "name": "activation_requests_unique_transfer",
+          "definition": "CREATE UNIQUE INDEX activation_requests_unique_transfer ON gymos.activation_requests USING btree (upper(regexp_replace(transfer_ref, '[[:space:]]'::text, ''::text, 'g'::text)), currency) WHERE ((status = 'approved'::text) AND (transfer_ref IS NOT NULL))"
+        },
+        {
+          "name": "activation_requests_plan",
+          "definition": "CREATE INDEX activation_requests_plan ON gymos.activation_requests USING btree (plan_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "activation_requests_expected_minor_check",
+          "type": "c",
+          "definition": "CHECK (((expected_minor IS NULL) OR (expected_minor >= 0)))"
+        },
+        {
+          "name": "activation_requests_mode_check",
+          "type": "c",
+          "definition": "CHECK ((mode = ANY (ARRAY['monthly'::text, 'annual'::text, 'perpetual'::text, 'maintenance'::text])))"
+        },
+        {
+          "name": "activation_requests_paid_minor_check",
+          "type": "c",
+          "definition": "CHECK (((paid_minor IS NULL) OR (paid_minor >= 0)))"
+        },
+        {
+          "name": "activation_requests_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        },
+        {
+          "name": "activation_requests_plan_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (plan_id) REFERENCES gymos.commercial_plans(id)"
+        },
+        {
+          "name": "activation_requests_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['quote_requested'::text, 'awaiting_payment'::text, 'pending_review'::text, 'approved'::text, 'rejected'::text, 'cancelled'::text])))"
+        },
+        {
+          "name": "activation_requests_tenant_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (tenant_id) REFERENCES gymos.tenants(id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "trial_claims",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "tenant_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "trial_claims_pkey",
+          "definition": "CREATE UNIQUE INDEX trial_claims_pkey ON gymos.trial_claims USING btree (owner_id)"
+        },
+        {
+          "name": "trial_claims_tenant_id_key",
+          "definition": "CREATE UNIQUE INDEX trial_claims_tenant_id_key ON gymos.trial_claims USING btree (tenant_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "trial_claims_check",
+          "type": "c",
+          "definition": "CHECK ((ends_at = (starts_at + '720:00:00'::interval)))"
+        },
+        {
+          "name": "trial_claims_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id)"
+        },
+        {
+          "name": "trial_claims_tenant_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (tenant_id) REFERENCES gymos.tenants(id)"
+        },
+        {
+          "name": "trial_claims_tenant_id_key",
+          "type": "u",
+          "definition": "UNIQUE (tenant_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "platform_settings",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "revision",
+          "type": "integer",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "platform_settings_pkey",
+          "definition": "CREATE UNIQUE INDEX platform_settings_pkey ON gymos.platform_settings USING btree (id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "platform_settings_id_check",
+          "type": "c",
+          "definition": "CHECK ((id = 1))"
+        },
+        {
+          "name": "platform_settings_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_backup_transfers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "actor_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "mode",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "bytes",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "digest",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "chunks",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_backup_transfers_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_backup_transfers_pkey ON gymos.gym_backup_transfers USING btree (id)"
+        },
+        {
+          "name": "gym_backup_transfers_scope",
+          "definition": "CREATE INDEX gym_backup_transfers_scope ON gymos.gym_backup_transfers USING btree (owner_id, actor_id, mode, expires_at)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_backup_transfers_bytes_check",
+          "type": "c",
+          "definition": "CHECK (((bytes >= 1) AND (bytes <= 67108864)))"
+        },
+        {
+          "name": "gym_backup_transfers_digest_check",
+          "type": "c",
+          "definition": "CHECK ((digest ~ '^[a-f0-9]{64}$'::text))"
+        },
+        {
+          "name": "gym_backup_transfers_mode_check",
+          "type": "c",
+          "definition": "CHECK ((mode = ANY (ARRAY['upload'::text, 'download'::text])))"
+        },
+        {
+          "name": "gym_backup_transfers_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "platform_admins",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "platform_admins_pkey",
+          "definition": "CREATE UNIQUE INDEX platform_admins_pkey ON gymos.platform_admins USING btree (user_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "platform_admins_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (user_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "commercial_audit",
+      "columns": [
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "actor",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "tenant_id",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "action",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "details",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "commercial_audit_pkey",
+          "definition": "CREATE UNIQUE INDEX commercial_audit_pkey ON gymos.commercial_audit USING btree (id)"
+        },
+        {
+          "name": "commercial_audit_time",
+          "definition": "CREATE INDEX commercial_audit_time ON gymos.commercial_audit USING btree (at DESC)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "commercial_audit_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "gym_activity_archive",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "event_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "at",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "gym_activity_archive_pkey",
+          "definition": "CREATE UNIQUE INDEX gym_activity_archive_pkey ON gymos.gym_activity_archive USING btree (owner_id, event_id)"
+        },
+        {
+          "name": "gym_activity_archive_scope",
+          "definition": "CREATE INDEX gym_activity_archive_scope ON gymos.gym_activity_archive USING btree (owner_id, branch, at, event_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "gym_activity_archive_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, event_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "whatsapp_connections",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "phone_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "token_cipher",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "api_version",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "last_run_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "whatsapp_connections_pkey",
+          "definition": "CREATE UNIQUE INDEX whatsapp_connections_pkey ON gymos.whatsapp_connections USING btree (owner_id, branch)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "whatsapp_connections_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "whatsapp_connections_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, branch)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "member_portal_access",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "invite_hash",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "revoked",
+          "type": "boolean",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "member_portal_access_pkey",
+          "definition": "CREATE UNIQUE INDEX member_portal_access_pkey ON gymos.member_portal_access USING btree (owner_id, member_id)"
+        },
+        {
+          "name": "member_portal_access_invite_hash_key",
+          "definition": "CREATE UNIQUE INDEX member_portal_access_invite_hash_key ON gymos.member_portal_access USING btree (invite_hash)"
+        },
+        {
+          "name": "member_portal_user_per_club",
+          "definition": "CREATE UNIQUE INDEX member_portal_user_per_club ON gymos.member_portal_access USING btree (owner_id, user_id) WHERE ((user_id IS NOT NULL) AND (NOT revoked))"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "member_portal_access_invite_hash_key",
+          "type": "u",
+          "definition": "UNIQUE (invite_hash)"
+        },
+        {
+          "name": "member_portal_access_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_portal_access_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, member_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "member_faces",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "model",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "embedding",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "consented_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "member_faces_pkey",
+          "definition": "CREATE UNIQUE INDEX member_faces_pkey ON gymos.member_faces USING btree (owner_id, member_id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "member_faces_embedding_check",
+          "type": "c",
+          "definition": "CHECK ((jsonb_typeof(embedding) = 'array'::text))"
+        },
+        {
+          "name": "member_faces_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "member_faces_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, member_id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "whatsapp_rules",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "whatsapp_rules_pkey",
+          "definition": "CREATE UNIQUE INDEX whatsapp_rules_pkey ON gymos.whatsapp_rules USING btree (owner_id, id)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "whatsapp_rules_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "whatsapp_rules_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, id)"
+        }
+      ]
+    },
+    {
+      "rls": true,
+      "name": "whatsapp_outbox",
+      "columns": [
+        {
+          "name": "owner_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "branch",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "member_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "rule_id",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "occurrence",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "payload",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "provider_id",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "error",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "whatsapp_outbox_pkey",
+          "definition": "CREATE UNIQUE INDEX whatsapp_outbox_pkey ON gymos.whatsapp_outbox USING btree (owner_id, id)"
+        },
+        {
+          "name": "whatsapp_outbox_owner_id_rule_id_member_id_occurrence_key",
+          "definition": "CREATE UNIQUE INDEX whatsapp_outbox_owner_id_rule_id_member_id_occurrence_key ON gymos.whatsapp_outbox USING btree (owner_id, rule_id, member_id, occurrence)"
+        },
+        {
+          "name": "whatsapp_pending",
+          "definition": "CREATE INDEX whatsapp_pending ON gymos.whatsapp_outbox USING btree (owner_id, status, updated_at)"
+        }
+      ],
+      "forced_rls": true,
+      "constraints": [
+        {
+          "name": "whatsapp_outbox_owner_id_fkey",
+          "type": "f",
+          "definition": "FOREIGN KEY (owner_id) REFERENCES gymos.gym_states(user_id) ON DELETE CASCADE"
+        },
+        {
+          "name": "whatsapp_outbox_owner_id_rule_id_member_id_occurrence_key",
+          "type": "u",
+          "definition": "UNIQUE (owner_id, rule_id, member_id, occurrence)"
+        },
+        {
+          "name": "whatsapp_outbox_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (owner_id, id)"
+        },
+        {
+          "name": "whatsapp_outbox_status_check",
+          "type": "c",
+          "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'sending'::text, 'sent'::text, 'failed'::text, 'unknown'::text, 'cancelled'::text])))"
+        }
+      ]
+    }
+  ],
+  "policies": [
+    {
+      "name": "gym_entities_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_entities",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "gym_photos_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_photos",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "gym_access_events_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_access_events",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "platform_admin_self",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "platform_admins",
+      "using": "(user_id = current_setting('app.actor'::text, true))",
+      "command": "SELECT"
+    },
+    {
+      "name": "tenants_runtime",
+      "check": "((id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "tenants",
+      "using": "((id = current_setting('app.tenant'::text, true)) OR (storage_key = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text))",
+      "command": "ALL"
+    },
+    {
+      "name": "memberships_runtime",
+      "check": "((tenant_id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text) OR (tenant_id IN ( SELECT tenants.id\n   FROM gymos.tenants\n  WHERE (tenants.storage_key = current_setting('app.gym_owner'::text, true)))))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "tenant_memberships",
+      "using": "((user_id = current_setting('app.actor'::text, true)) OR (tenant_id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text) OR (tenant_id IN ( SELECT tenants.id\n   FROM gymos.tenants\n  WHERE (tenants.storage_key = current_setting('app.gym_owner'::text, true)))))",
+      "command": "ALL"
+    },
+    {
+      "name": "licenses_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "tenant_licenses",
+      "using": "((tenant_id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text) OR (tenant_id IN ( SELECT tenants.id\n   FROM gymos.tenants\n  WHERE (tenants.storage_key = current_setting('app.gym_owner'::text, true)))))",
+      "command": "SELECT"
+    },
+    {
+      "name": "licenses_write",
+      "check": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "tenant_licenses",
+      "using": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "command": "ALL"
+    },
+    {
+      "name": "licenses_pending",
+      "check": "((tenant_id = current_setting('app.tenant'::text, true)) AND (status = 'pending'::text) AND (EXISTS ( SELECT 1\n   FROM gymos.tenant_memberships m\n  WHERE ((m.tenant_id = tenant_licenses.tenant_id) AND (m.user_id = current_setting('app.actor'::text, true)) AND (m.role = 'owner'::text) AND (NOT m.revoked)))))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "tenant_licenses",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "plans_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "commercial_plans",
+      "using": "(published OR (current_setting('app.platform'::text, true) = '1'::text) OR (id IN ( SELECT tenant_licenses.plan_id\n   FROM gymos.tenant_licenses)))",
+      "command": "SELECT"
+    },
+    {
+      "name": "plans_write",
+      "check": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "commercial_plans",
+      "using": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "command": "ALL"
+    },
+    {
+      "name": "requests_runtime",
+      "check": "((tenant_id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "activation_requests",
+      "using": "((tenant_id = current_setting('app.tenant'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text))",
+      "command": "ALL"
+    },
+    {
+      "name": "settings_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "platform_settings",
+      "using": "true",
+      "command": "SELECT"
+    },
+    {
+      "name": "settings_write",
+      "check": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "platform_settings",
+      "using": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "command": "ALL"
+    },
+    {
+      "name": "audit_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "commercial_audit",
+      "using": "(current_setting('app.platform'::text, true) = '1'::text)",
+      "command": "SELECT"
+    },
+    {
+      "name": "audit_append",
+      "check": "(actor = current_setting('app.actor'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "commercial_audit",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "partition_runtime",
+      "check": "(user_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_states",
+      "using": "(user_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "partition_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_recovery",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "partition_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_access",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "invitation_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_invites",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (token_hash = current_setting('app.invite_token'::text, true)))",
+      "command": "SELECT"
+    },
+    {
+      "name": "member_portal_update",
+      "check": "((owner_id = current_setting('app.gym_owner'::text, true)) OR ((user_id = current_setting('app.actor'::text, true)) AND (invite_hash IS NULL) AND (NOT revoked)))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_portal_access",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR ((user_id IS NULL) AND (invite_hash = current_setting('app.member_invite'::text, true)) AND (NOT revoked) AND (expires_at > now())))",
+      "command": "UPDATE"
+    },
+    {
+      "name": "invitation_write",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_invites",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "activity_archive_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_activity_archive",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "SELECT"
+    },
+    {
+      "name": "activity_archive_append",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_activity_archive",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "backup_transfer_scope",
+      "check": "((owner_id = current_setting('app.gym_owner'::text, true)) AND (actor_id = current_setting('app.gym_actor'::text, true)))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "gym_backup_transfers",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) AND (actor_id = current_setting('app.gym_actor'::text, true)))",
+      "command": "ALL"
+    },
+    {
+      "name": "trial_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "trial_claims",
+      "using": "((owner_id = current_setting('app.actor'::text, true)) OR (current_setting('app.platform'::text, true) = '1'::text))",
+      "command": "SELECT"
+    },
+    {
+      "name": "member_portal_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_portal_access",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR ((user_id = current_setting('app.actor'::text, true)) AND (NOT revoked)) OR ((invite_hash = current_setting('app.member_invite'::text, true)) AND (NOT revoked) AND (expires_at > now())))",
+      "command": "SELECT"
+    },
+    {
+      "name": "member_portal_insert",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_portal_access",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "member_faces_scope",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_faces",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "whatsapp_connection_scope",
+      "check": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "whatsapp_connections",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "command": "ALL"
+    },
+    {
+      "name": "whatsapp_rule_scope",
+      "check": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "whatsapp_rules",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "command": "ALL"
+    },
+    {
+      "name": "whatsapp_outbox_scope",
+      "check": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "whatsapp_outbox",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (current_setting('app.messaging_worker'::text, true) = '1'::text))",
+      "command": "ALL"
+    },
+    {
+      "name": "member_code_owner",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_access",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "member_code_login",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_access",
+      "using": "((code_hash = current_setting('app.member_code'::text, true)) OR (EXISTS ( SELECT 1\n   FROM gymos.member_code_sessions s\n  WHERE ((s.owner_id = member_code_access.owner_id) AND (s.member_id = member_code_access.member_id) AND (s.session_hash = current_setting('app.member_session'::text, true)) AND (s.expires_at > now())))))",
+      "command": "SELECT"
+    },
+    {
+      "name": "member_sessions_read",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_sessions",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (session_hash = current_setting('app.member_session'::text, true)))",
+      "command": "SELECT"
+    },
+    {
+      "name": "member_sessions_insert",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_sessions",
+      "using": null,
+      "command": "INSERT"
+    },
+    {
+      "name": "member_sessions_delete",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_sessions",
+      "using": "((owner_id = current_setting('app.gym_owner'::text, true)) OR (session_hash = current_setting('app.member_session'::text, true)))",
+      "command": "DELETE"
+    },
+    {
+      "name": "member_attempt_scope",
+      "check": "(bucket = current_setting('app.member_attempt'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_attempts",
+      "using": "(bucket = current_setting('app.member_attempt'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "member_phone_login",
+      "check": null,
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "member_code_access",
+      "using": "(phone_hash = current_setting('app.member_phone'::text, true))",
+      "command": "SELECT"
+    },
+    {
+      "name": "membership_cards_runtime",
+      "check": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "membership_cards",
+      "using": "(owner_id = current_setting('app.gym_owner'::text, true))",
+      "command": "ALL"
+    },
+    {
+      "name": "card_number_allocator",
+      "check": "true",
+      "roles": [
+        "gymos_app"
+      ],
+      "table": "card_number_counters",
+      "using": "true",
+      "command": "ALL"
+    }
+  ],
+  "triggers": [
+    {
+      "name": "sync_tenant_staff",
+      "table": "gym_access",
+      "definition": "CREATE TRIGGER sync_tenant_staff AFTER INSERT OR UPDATE ON gymos.gym_access FOR EACH ROW EXECUTE FUNCTION gymos.sync_tenant_staff()"
+    },
+    {
+      "name": "sync_membership_cards",
+      "table": "gym_entities",
+      "definition": "CREATE TRIGGER sync_membership_cards AFTER INSERT OR UPDATE OF payload ON gymos.gym_entities FOR EACH ROW EXECUTE FUNCTION gymos.sync_membership_cards()"
+    }
+  ],
+  "functions": [
+    {
+      "name": "messaging_cron_valid",
+      "search_path": [
+        "search_path=pg_catalog, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "sync_tenant_staff",
+      "search_path": [
+        "search_path=pg_catalog, gymos"
+      ],
+      "anon_execute": true,
+      "security_definer": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "messaging_encrypt",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "start_public_trial",
+      "search_path": [
+        "search_path=pg_catalog, gymos"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "_messaging_key",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "messaging_decrypt",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "_member_code_key",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "member_pin_matches",
+      "search_path": [
+        "search_path=pg_catalog, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "sync_member_codes",
+      "search_path": [
+        "search_path=pg_catalog, gymos"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "member_code_decrypt",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "member_code_encrypt",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "sync_member_code_accounts",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "member_pin_hash",
+      "search_path": [
+        "search_path=pg_catalog, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "normalize_member_phone",
+      "search_path": [
+        "search_path=pg_catalog"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "new_member_pin",
+      "search_path": [
+        "search_path=pg_catalog"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "member_pin_encrypt",
+      "search_path": [
+        "search_path=pg_catalog, gymos, extensions"
+      ],
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "sync_membership_cards",
+      "search_path": [
+        "search_path=pg_catalog, gymos"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "close_attendance_sessions",
+      "search_path": [
+        "search_path=pg_catalog, gymos"
+      ],
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    }
+  ]
+}

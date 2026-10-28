@@ -43,6 +43,8 @@ jobs:
         run: node --import ./tests/member-console-ui-loader.mjs --test --test-isolation=none tests/member-console-ui.integration.mjs
       - name: Barcode API with PostgreSQL policies and reservation SQL
         run: node --import ./tests/barcode-api-loader.mjs --test --test-isolation=none tests/barcode-api.integration.mjs
+      - name: Report API timezone and scope contract
+        run: node --import ./tests/report-api-loader.mjs --test --test-isolation=none tests/report-api.integration.mjs
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=low
       - name: Verify Android release signatures and original publisher

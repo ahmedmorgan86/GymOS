@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-29",
+  "actualViewport": {
+    "width": 320,
+    "height": 740
+  },
+  "memberDialog": {
+    "top": 0,
+    "bottom": 740,
+    "clientWidth": 288,
+    "scrollWidth": 288
+  },
+  "managementTable": {
+    "width": 279,
+    "pageClientWidth": 305
+  },
+  "otherRequestedViewports": {
+    "status": "not-verified",
+    "reason": "viewport override did not change observed dimensions"
+  },
+  "productionDeployed": false,
+  "supabase": {
+    "displayName": "GymEG",
+    "status": "ACTIVE_HEALTHY",
+    "schemaRenamed": false
+  }
+}

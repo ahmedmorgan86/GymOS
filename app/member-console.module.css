@@ -12,3 +12,45 @@
 .console input[readonly],.dialog input[readonly],.console input:disabled,.dialog input:disabled{background:var(--surface-soft);color:var(--muted)}
 .console textarea,.dialog textarea{min-height:88px;resize:vertical}.dialog label{display:flex;flex-direction:column;gap:6px;font-size:12px!important;margin-bottom:6px}.dialog label:has(input[type=checkbox]){flex-direction:row;align-items:center}.console input[type=checkbox],.dialog input[type=checkbox]{accent-color:var(--accent,var(--purple,var(--pt-primary)));width:16px;height:16px;min-height:0;flex-shrink:0}.dialog input[dir=ltr],.console input[dir=ltr]{text-align:left;font-variant-numeric:tabular-nums}.search input{min-height:48px!important;font-size:16px!important}.dialog input:disabled,.console input:disabled{cursor:not-allowed}
 @media(max-width:650px){.console input:not([type=checkbox]),.console select,.console textarea,.dialog input:not([type=checkbox]),.dialog select,.dialog textarea{font-size:16px!important}}
+
+/* A viewport-height drawer cannot sit inside a padded, centred backdrop.
+   Keep action disclosures in flow on touch screens so they cannot be clipped
+   by the drawer scroll container or cover the renewal form. */
+.backdrop{min-width:0;min-height:0;overscroll-behavior:contain}
+.backdrop .drawer{height:calc(100dvh - 44px);max-height:calc(100dvh - 44px)}
+@media(max-width:650px){
+ .console .responsiveTable{display:block;width:100%;min-width:0;max-width:100%;white-space:normal}
+ .responsiveTable thead,.responsiveTable tbody{display:block}
+ .responsiveTable thead tr{display:flex;flex-wrap:wrap;gap:6px;padding:10px}
+ .responsiveTable th{display:block;padding:6px!important;border:0;border-radius:8px;font-size:12px}
+ .responsiveTable th:not(:has(button)){display:none}
+ .responsiveTable th button{min-height:36px;white-space:normal}
+ .responsiveTable tbody{padding:8px;display:grid;gap:10px}
+ .responsiveTable tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+ .responsiveTable td{display:block;min-width:0;padding:0!important;border:0;white-space:normal;overflow-wrap:anywhere;font-size:13px}
+ .responsiveTable td::before{content:attr(data-label);display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+ .responsiveTable td:first-child,.responsiveTable td:last-child,.responsiveTable td[colspan]{grid-column:1/-1}
+ .responsiveTable td:first-child::before,.responsiveTable td:last-child::before{display:none}
+ .responsiveTable .memberCell{min-width:0;font-weight:800;font-size:15px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+ .responsiveTable .memberCell span:last-child{max-width:none}
+ .responsiveTable .rowActions{padding-top:8px}
+ .responsiveTable .rowActions button{flex:1;min-height:44px;font-size:13px!important;white-space:normal}
+ .tabs{flex-wrap:wrap;padding:8px;gap:4px}.tabs button{flex:1;min-width:0;font-size:13px;white-space:normal}
+ .pager{gap:8px}.pager>div{gap:8px;flex-wrap:wrap}.pager button{min-height:44px}
+}
+@media(max-width:650px){
+ .backdrop{padding:0!important;align-items:stretch;justify-content:stretch;overflow:hidden}
+ .backdrop .dialog{width:100%;max-width:100%;height:100dvh;max-height:100dvh;margin:0;border-radius:0!important;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));overflow-x:hidden;overflow-y:auto;scroll-padding-block:76px 88px}
+ .dialog>.head{top:-14px;align-items:flex-start;gap:8px;flex-wrap:wrap}
+ .dialog>.head h2{min-width:0;overflow-wrap:anywhere;flex:1 1 140px}
+ .dialogControls{flex-wrap:wrap;gap:6px;max-width:100%}
+ .dialogControls button,.actions button,.moreActions summary{min-height:44px}
+ .identity>div{min-width:0;overflow-wrap:anywhere}
+ .actions{align-items:stretch;gap:8px}
+ .actions>button{flex:1 1 120px;white-space:normal;overflow-wrap:anywhere}
+ .moreActions{flex:1 0 100%;width:100%;min-width:0}
+ .moreActions>div{position:static;inset:auto;min-width:0;width:100%;max-width:100%;margin-top:6px;box-shadow:none}
+ .moreActions button{white-space:normal;overflow-wrap:anywhere;min-height:44px}
+ .dialog .saveBar{bottom:calc(-14px - env(safe-area-inset-bottom));padding-bottom:calc(12px + env(safe-area-inset-bottom));flex-wrap:wrap}
+ .dialog .form :global(.form-row){grid-template-columns:minmax(0,1fr)}
+}

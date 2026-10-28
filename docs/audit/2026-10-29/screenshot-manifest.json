@@ -1,0 +1,86 @@
+[
+  {
+    "file": "docs/screenshots/archived/landing-before-image-policy-fix.png",
+    "sha256": "db5201eb69051d81b166b03d5f6a9ab392ad5b05c2d97e3a93352733570b1963",
+    "kind": "before",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/brand-members-corrected.png",
+    "sha256": "13f498901c27d1a3b4edb53aa0d233d0e4ba2644da33ee75ead173dbe304b224",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/brand-reports-corrected.png",
+    "sha256": "408d5bd63899235e6532cec4bb692e788abb81a31b6f21cc8ddb7203b8d13245",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/brand-shop-corrected.png",
+    "sha256": "d200d2551fd4bd14f455e80cee0409534995ac995da1ba77c47ed1ef5c92f669",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/brand-training-corrected.png",
+    "sha256": "9f52e785050766e1a92804d77949c46bcc38ac3719051a1afadae40e815be1b1",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/landing-ar-dark.png",
+    "sha256": "2a35f49d3cd0165b356be20e99d69f202f043a9938e60414f76b32e097dfa701",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/landing-ar-light.png",
+    "sha256": "ff057080e89ab72960adf45d50220d9094a5c8bd89d6533158f036e2dc39802f",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/landing-brand-corrected.png",
+    "sha256": "3c1d19d9c80e69ae3f4335f99521d6f193d22f75cf3420e17bd0ae5e3fd1f7bd",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/desktop/landing-en-light.png",
+    "sha256": "0c2284071ebdf8b3d9ee0e52ed9d75560e74139573d2567b4506acb192a3505a",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/mobile/brand-member-corrected.png",
+    "sha256": "e0a1e67b6fbd5979f405468c8bd78ca4b71fa84bc18132bd9682258c23b5269e",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/mobile/landing-en-light.png",
+    "sha256": "75fdf827a489cefd13e37e91c4d113af467bb66e92a7fc8c0474cb17f98046c4",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/mobile/management-edit-320.png",
+    "sha256": "0f90e62c5c0356e435dbfc0f3611862df2a3205aa0341f7e941f8d82b08b828c",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/mobile/management-member-cards-320.png",
+    "sha256": "737381ef7ccde456b402a27f45bb003d23889726893cf41623e4b3c69a26c76b",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  },
+  {
+    "file": "docs/screenshots/web/mobile/management-renewal-320.png",
+    "sha256": "84e83572548e35ebb52ca885037752cf867825b30e69e23e951b6684ab6edec0",
+    "kind": "browser-local",
+    "note": "ليست شهادة نجاح وظيفي ولا تثبيت هاتف؛ ملفات archived تاريخية"
+  }
+]

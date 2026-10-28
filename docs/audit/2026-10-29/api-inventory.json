@@ -1,0 +1,731 @@
+[
+  {
+    "route": "/api/activity",
+    "file": "app/api/activity/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 6
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context"
+    ],
+    "sql_tables": [
+      "gymos.gym_activity_archive",
+      "gymos.gym_entities"
+    ],
+    "response_statuses": [
+      200,
+      201,
+      250,
+      400,
+      401,
+      403,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/backup",
+    "file": "app/api/backup/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 12
+      },
+      {
+        "method": "POST",
+        "line": 13
+      }
+    ],
+    "auth_symbols": [
+      "administrator",
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "gym_recovery"
+    ],
+    "response_statuses": [
+      300,
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/commercial",
+    "file": "app/api/commercial/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 9
+      },
+      {
+        "method": "POST",
+        "line": 10
+      }
+    ],
+    "auth_symbols": [
+      "sameOrigin"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      415,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/device-events",
+    "file": "app/api/device-events/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 6
+      }
+    ],
+    "auth_symbols": [],
+    "sql_tables": [],
+    "response_statuses": [
+      150,
+      200,
+      250,
+      400,
+      401,
+      409,
+      413,
+      415,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/face",
+    "file": "app/api/face/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 7
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.member_faces"
+    ],
+    "response_statuses": [
+      400,
+      403,
+      404,
+      413,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/health",
+    "file": "app/api/health/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 4
+      }
+    ],
+    "auth_symbols": [],
+    "sql_tables": [],
+    "response_statuses": [
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-access",
+    "file": "app/api/member-access/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 6
+      },
+      {
+        "method": "GET",
+        "line": 8
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.member_portal_access"
+    ],
+    "response_statuses": [
+      254,
+      400,
+      403,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-barcode",
+    "file": "app/api/member-barcode/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 9
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "receptionPermitted",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.membership_cards"
+    ],
+    "response_statuses": [
+      400,
+      401,
+      403,
+      409,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-code",
+    "file": "app/api/member-code/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 7
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "gymos.gym_access_events",
+      "gymos.member_code_access",
+      "gymos.member_code_sessions",
+      "gymos.member_portal_access"
+    ],
+    "response_statuses": [
+      400,
+      403,
+      413,
+      415,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-messages",
+    "file": "app/api/member-messages/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 4
+      }
+    ],
+    "auth_symbols": [
+      "sameOrigin"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      415,
+      429,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-photo",
+    "file": "app/api/member-photo/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 5
+      }
+    ],
+    "auth_symbols": [
+      "context"
+    ],
+    "sql_tables": [
+      "LATERAL",
+      "gymos.gym_entities",
+      "gymos.gym_photos",
+      "gymos.gym_states"
+    ],
+    "response_statuses": [
+      250,
+      400,
+      401,
+      404,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-pin",
+    "file": "app/api/member-pin/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 7
+      }
+    ],
+    "auth_symbols": [
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.member_code_access",
+      "gymos.member_code_attempts",
+      "gymos.member_code_sessions"
+    ],
+    "response_statuses": [
+      200,
+      400,
+      401,
+      403,
+      413,
+      415,
+      429,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-portal",
+    "file": "app/api/member-portal/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 10
+      },
+      {
+        "method": "POST",
+        "line": 17
+      }
+    ],
+    "auth_symbols": [
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "gymos.member_portal_access",
+      "gymos.tenant_licenses",
+      "gymos.tenants"
+    ],
+    "response_statuses": [
+      400,
+      401,
+      403,
+      404,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/member-session",
+    "file": "app/api/member-session/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 10
+      },
+      {
+        "method": "DELETE",
+        "line": 31
+      }
+    ],
+    "auth_symbols": [
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.member_code_access",
+      "gymos.member_code_attempts",
+      "gymos.member_code_sessions",
+      "gymos.tenant_licenses",
+      "gymos.tenants"
+    ],
+    "response_statuses": [
+      400,
+      401,
+      403,
+      413,
+      415,
+      429,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/password",
+    "file": "app/api/password/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 4
+      }
+    ],
+    "auth_symbols": [
+      "serverAuth"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      128,
+      200,
+      254,
+      400,
+      401,
+      403,
+      413,
+      415,
+      429,
+      500,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/presence",
+    "file": "app/api/presence/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 4
+      }
+    ],
+    "auth_symbols": [
+      "context"
+    ],
+    "sql_tables": [
+      "gymos.gym_entities",
+      "gymos.gym_states"
+    ],
+    "response_statuses": [
+      120,
+      401,
+      403,
+      404,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/product-photo",
+    "file": "app/api/product-photo/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 3
+      }
+    ],
+    "auth_symbols": [
+      "context"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      250,
+      401,
+      403,
+      404,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/session",
+    "file": "app/api/session/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 5
+      }
+    ],
+    "auth_symbols": [
+      "serverAuth"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      200,
+      400,
+      401,
+      403,
+      413,
+      415,
+      429,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/sms-dispatch",
+    "file": "app/api/sms-dispatch/route.ts",
+    "methods": [
+      {
+        "method": "POST",
+        "line": 9
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      200,
+      250,
+      400,
+      403,
+      409,
+      413,
+      415,
+      429,
+      502,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/team",
+    "file": "app/api/team/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 11
+      },
+      {
+        "method": "POST",
+        "line": 12
+      }
+    ],
+    "auth_symbols": [
+      "administrator",
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "gym_access",
+      "gym_invites",
+      "gymos.gym_access_events",
+      "gymos.tenant_memberships"
+    ],
+    "response_statuses": [
+      100,
+      400,
+      401,
+      403,
+      404,
+      409,
+      413,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/whatsapp",
+    "file": "app/api/whatsapp/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 9
+      },
+      {
+        "method": "POST",
+        "line": 10
+      }
+    ],
+    "auth_symbols": [
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "sameOrigin"
+    ],
+    "sql_tables": [
+      "SET",
+      "gymos.whatsapp_connections",
+      "gymos.whatsapp_outbox",
+      "gymos.whatsapp_rules"
+    ],
+    "response_statuses": [
+      100,
+      400,
+      403,
+      413,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/workspace",
+    "file": "app/api/workspace/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 10
+      },
+      {
+        "method": "POST",
+        "line": 11
+      }
+    ],
+    "auth_symbols": [
+      "administrator",
+      "assertRequestTenant",
+      "context",
+      "licenseState",
+      "receptionPermitted",
+      "sameOrigin"
+    ],
+    "sql_tables": [],
+    "response_statuses": [
+      300,
+      400,
+      401,
+      403,
+      409,
+      413,
+      415,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/reports/export",
+    "file": "app/api/reports/export/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 9
+      }
+    ],
+    "auth_symbols": [
+      "administrator",
+      "context"
+    ],
+    "sql_tables": [
+      "gymos.gym_activity_archive"
+    ],
+    "response_statuses": [
+      366,
+      400,
+      403,
+      409,
+      413,
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/cron/whatsapp",
+    "file": "app/api/cron/whatsapp/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 5
+      }
+    ],
+    "auth_symbols": [],
+    "sql_tables": [
+      "gymos.whatsapp_connections"
+    ],
+    "response_statuses": [
+      100,
+      403
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/branding/icon",
+    "file": "app/api/branding/icon/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 6
+      }
+    ],
+    "auth_symbols": [],
+    "sql_tables": [],
+    "response_statuses": [
+      180,
+      192,
+      256,
+      503,
+      512
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/branding/manifest",
+    "file": "app/api/branding/manifest/route.ts",
+    "methods": [
+      {
+        "method": "GET",
+        "line": 3
+      }
+    ],
+    "auth_symbols": [],
+    "sql_tables": [],
+    "response_statuses": [
+      503
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  },
+  {
+    "route": "/api/auth/[...all]",
+    "file": "app/api/auth/[...all]/route.ts",
+    "methods": [],
+    "auth_symbols": [],
+    "sql_tables": [],
+    "response_statuses": [
+      404
+    ],
+    "analysis": "Static extraction; helper authorization and request schemas require source tracing, not inferred completion."
+  }
+]

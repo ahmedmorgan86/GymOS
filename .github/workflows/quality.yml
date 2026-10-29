@@ -41,6 +41,8 @@ jobs:
         run: node --import ./tests/usability-loader.mjs --test tests/usability.integration.mjs
       - name: Licensed music and platform directory UI
         run: node --import ./tests/member-console-ui-loader.mjs --test --test-isolation=none tests/commercial-library-ui.integration.mjs
+      - name: Arabic voice comparison and device preferences
+        run: node --import ./tests/member-console-ui-loader.mjs --test --test-isolation=none tests/announcement-voices.integration.mjs
       - name: Unified member form interactions
         run: node --import ./tests/member-console-ui-loader.mjs --test --test-isolation=none tests/member-console-ui.integration.mjs
       - name: Barcode API with PostgreSQL policies and reservation SQL

@@ -11,13 +11,13 @@
   },
   {
     "file": "public/brand/dashboard-preview.svg",
-    "bytes": 26776,
-    "sha256": "404813a29bdc77b3a0e3e05c400ea464e42f5cc1debe3223a0a215028860818e"
+    "bytes": 56186,
+    "sha256": "7f701139872d016b60562b48b0d44d59e6b9696e0b739123390875ba44cb94a0"
   },
   {
     "file": "public/brand/login-preview.svg",
-    "bytes": 3801,
-    "sha256": "142ee5cdb9f8de4092dd46932de49b09b7348a4089f2520b6c573d34525518a2"
+    "bytes": 44434,
+    "sha256": "50c4d4c675f65d677f0a82026e08f5ac38c9cafe31d0cec134b436abde1e033c"
   },
   {
     "file": "public/brand/logo-dark.png",
@@ -141,28 +141,28 @@
   },
   {
     "file": "public/brand/member-preview.svg",
-    "bytes": 15626,
-    "sha256": "4c203bc6c2152be8c443faeb7356bccf2de5246e82488e92c94114653463e380"
+    "bytes": 45029,
+    "sha256": "a448b1fa5e3067e7a88c7db401eed7abe4bab65219fe788c489cc0062c93ce15"
   },
   {
     "file": "public/brand/overview-preview.svg",
-    "bytes": 26776,
-    "sha256": "404813a29bdc77b3a0e3e05c400ea464e42f5cc1debe3223a0a215028860818e"
+    "bytes": 56186,
+    "sha256": "7f701139872d016b60562b48b0d44d59e6b9696e0b739123390875ba44cb94a0"
   },
   {
     "file": "public/brand/reports-preview.svg",
-    "bytes": 26652,
-    "sha256": "bf073f48b0fce027b4511d686afb13b86b4609fc9d4df08246adbb2df63d7c60"
+    "bytes": 56062,
+    "sha256": "95f8cda48282bd10212f3cf1d72553a15528aef2b1f8fcfd90917497d277fdeb"
   },
   {
     "file": "public/brand/shop-preview.svg",
-    "bytes": 26648,
-    "sha256": "79d2add6adbbe319c2bd00ae56ac2b8e3ea06ebd407f2b24dad7c955392a07fd"
+    "bytes": 56058,
+    "sha256": "21a1f6fcbaa74c056e5f758c6292601bb7ab0154b18ea476e36d25e52940f2d8"
   },
   {
     "file": "public/brand/social-share.svg",
-    "bytes": 43524,
-    "sha256": "1501982b77d610c750ded1ebdb500538730ce9db60d1f16e8af280b7ebf0f337"
+    "bytes": 43512,
+    "sha256": "da0979bc6bb6d5c7580c811c3a933b5d4d883afe508e2ceaedd041e368b763f3"
   },
   {
     "file": "public/brand/symbol-light.svg",
@@ -186,8 +186,8 @@
   },
   {
     "file": "public/brand/training-preview.svg",
-    "bytes": 26623,
-    "sha256": "96cc91308ef26968a2495ad9b09f0320582d3c7969cff4e0ba9120b257b760cc"
+    "bytes": 56033,
+    "sha256": "f1efa1c3c2545b23f316c57d81a3f3be55399c5815aaaf7febc8a260d0912611"
   },
   {
     "file": "public/icons/brand-main.svg",
@@ -196,13 +196,13 @@
   },
   {
     "file": "public/icons/brand-members.svg",
-    "bytes": 855,
-    "sha256": "396e1d5d94d901239ad4262e0c41c883d05e0766955a3b727a206edb798d5806"
+    "bytes": 682,
+    "sha256": "3f9c7e7888b3fedee99a03f754a747ce7f1997401157b7cc55d9987d4b657cce"
   },
   {
     "file": "public/icons/brand-support.svg",
-    "bytes": 855,
-    "sha256": "396e1d5d94d901239ad4262e0c41c883d05e0766955a3b727a206edb798d5806"
+    "bytes": 934,
+    "sha256": "91c3439c49bd77cc8d776db1815dea88d5b738e416d31149bb630fa8b5214dc1"
   },
   {
     "file": "public/icons/icon-1024.png",
@@ -271,18 +271,18 @@
   },
   {
     "file": "public/icons/members-180.png",
-    "bytes": 8024,
-    "sha256": "cc9496a74228e7e18163052c1ce3efb0bf5bd7288d564de44e9e0ff71f972b9b"
+    "bytes": 5965,
+    "sha256": "1640a681f9bb19d742a08d7453b6c3bdf7c65ccfc1b8b735e815c545b790b52e"
   },
   {
     "file": "public/icons/members-192.png",
-    "bytes": 8810,
-    "sha256": "3b43d381964229c881bd3a54df647394957f7f454eb7d9f2676217ec004464ea"
+    "bytes": 6485,
+    "sha256": "d202339d6b59318a2b3cce35b90cb76140eea26aa050d25494b77fce12ce6424"
   },
   {
     "file": "public/icons/members-512.png",
-    "bytes": 29383,
-    "sha256": "d35960d9b4dbd2710ba2c6c58cb01df3d6578438ddfb0eb4e7cad387f98c586c"
+    "bytes": 20189,
+    "sha256": "ff47da0b93ab6f13c27754be07dc94c4d36f34c9ef7c0c64145568a11a673cb2"
   },
   {
     "file": "public/icons/support-1024.png",
@@ -291,17 +291,17 @@
   },
   {
     "file": "public/icons/support-180.png",
-    "bytes": 8024,
-    "sha256": "cc9496a74228e7e18163052c1ce3efb0bf5bd7288d564de44e9e0ff71f972b9b"
+    "bytes": 7211,
+    "sha256": "78815f6c31d33eb5aab72d447251ea30cbff1c4ba1fecd00c0250e2da846f885"
   },
   {
     "file": "public/icons/support-192.png",
-    "bytes": 8810,
-    "sha256": "3b43d381964229c881bd3a54df647394957f7f454eb7d9f2676217ec004464ea"
+    "bytes": 7740,
+    "sha256": "bd3c3d147e3ee27be2798459b4d3680b088a0cd23ce9e870403be3aeb0741dfe"
   },
   {
     "file": "public/icons/support-512.png",
-    "bytes": 29383,
-    "sha256": "d35960d9b4dbd2710ba2c6c58cb01df3d6578438ddfb0eb4e7cad387f98c586c"
+    "bytes": 23871,
+    "sha256": "d7a80edea85b351cf387c246e3630253f9b27bc59412cb39bfee259e6bf6bcd5"
   }
 ]

@@ -1,3 +1,4 @@
+import {platformOwnerClub} from './platform-owner-access';
 import {appendPlatformClubs} from './platform-directory';
 import {resolveSupport} from './platform-support';
 import {ownerComplimentary,OWNER_FREE_LIMITS,OWNER_FREE_PLAN} from './platform-owner-license';
@@ -19,13 +20,14 @@ export async function commercialTransaction<T>(user:ChatGPTUser,work:(client:Poo
  const result=await work(client,platform);await client.query('COMMIT');return result;
  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
 }
-export async function selectClub(client:PoolClient,actor:string,id?:string):Promise<Club|null>{
+export async function selectClub(client:PoolClient,actor:string,id?:string,platform=false):Promise<Club|null>{
+ const overseen=await platformOwnerClub(client,platform,actor,id);if(overseen)return overseen;
  // Only the actor's membership is visible before selecting a tenant.
  const rows=(await client.query('SELECT tenant_id,role,branches FROM gymos.tenant_memberships WHERE user_id=$1 AND NOT revoked ORDER BY tenant_id',[actor])).rows;
  for(const membership of rows){await client.query("SELECT set_config('app.tenant',$1,true)",[membership.tenant_id]);const row=(await client.query('SELECT id,storage_key,name FROM gymos.tenants WHERE id=$1',[membership.tenant_id])).rows[0];if(row&&(!id||id===row.id||id===row.storage_key))return{...row,role:membership.role,branches:membership.branches};}
  return null;
 }
-export async function commercialContext(user:ChatGPTUser,id?:string,supportToken?:string){return commercialTransaction(user,async(client,platform)=>{if(supportToken){const result=await resolveSupport(client,platform,user.userId,id,supportToken);result.license=normalizeLicense(result.license);return result;}const club=await selectClub(client,user.userId,id);if(!club)throw new CommercialError('chooseClub',409);const license=normalizeLicense((await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0] as License);return{...club,license,support:undefined};});}
+export async function commercialContext(user:ChatGPTUser,id?:string,supportToken?:string){return commercialTransaction(user,async(client,platform)=>{if(supportToken){const result=await resolveSupport(client,platform,user.userId,id,supportToken);result.license=normalizeLicense(result.license);return {...result,platformOwnerAccess:false};}const club=await selectClub(client,user.userId,id,platform);if(!club)throw new CommercialError('chooseClub',409);const license=normalizeLicense((await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0] as License);return{...club,license,platformOwnerAccess:ownerComplimentary(platform,user.userId),support:undefined};});}
 async function audit(client:PoolClient,user:ChatGPTUser,tenant:string|null,action:string,details:unknown={}){await client.query('INSERT INTO gymos.commercial_audit(id,actor,tenant_id,action,details) VALUES($1,$2,$3,$4,$5)',[randomUUID(),user.userId,tenant,action,JSON.stringify(details)]);}
 function text(value:unknown,max=120){if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new CommercialError('invalid');return value.trim();}
 export async function commercialDirectory(user:ChatGPTUser,platformView=false){return commercialTransaction(user,async(client,platform)=>{
@@ -33,7 +35,7 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
  let clubs:CommercialClub[]=[];
  if(platformView)clubs=(await client.query('SELECT t.id,t.name,t.created_at,l.* FROM gymos.tenants t JOIN gymos.tenant_licenses l ON l.tenant_id=t.id ORDER BY t.created_at DESC LIMIT 500')).rows;
  else{const memberships=(await client.query('SELECT tenant_id FROM gymos.tenant_memberships WHERE user_id=$1 AND NOT revoked ORDER BY tenant_id',[user.userId])).rows;for(const m of memberships){const club=await selectClub(client,user.userId,m.tenant_id);if(club){const license=(await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0];const requests=club.role==='owner'?(await client.query('SELECT * FROM gymos.activation_requests WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT 30',[club.id])).rows:[];const members=club.role==='owner'?(await client.query('SELECT user_id,name,role FROM gymos.tenant_memberships WHERE tenant_id=$1 AND NOT revoked ORDER BY role,name',[club.id])).rows:[];clubs.push({id:club.id,name:club.name,role:club.role,license,requests,members});}}}
- if(!platformView)clubs=await appendPlatformClubs(client,platform,clubs);
+ if(!platformView)clubs=await appendPlatformClubs(client,platform,clubs,ownerComplimentary(platform,user.userId));
  const plans=platformView?(await client.query('SELECT * FROM gymos.commercial_plans ORDER BY id')).rows:[];
  const settings=(await client.query('SELECT payload,revision FROM gymos.platform_settings WHERE id=1')).rows[0];
  const orders=platformView?(await client.query('SELECT r.*,t.name AS club_name FROM gymos.activation_requests r JOIN gymos.tenants t ON t.id=r.tenant_id ORDER BY r.created_at DESC LIMIT 200')).rows:[];
@@ -84,8 +86,8 @@ export async function commercialWork(client:PoolClient,platform:boolean,user:Cha
   }
   await client.query('UPDATE gymos.activation_requests SET status=$1,review_note=$2,reviewed_at=now(),reviewed_by=$3 WHERE id=$4',[action==='approve'?'approved':'rejected',note,user.userId,order.id]);await audit(client,user,order.tenant_id,'order.'+action,{id:order.id});return{ok:true};
  }
- const club=await selectClub(client,user.userId,text(body.tenant));if(!club)throw new CommercialError('forbidden',403);
- if(action==='select')return{id:club.id};
+ const club=await selectClub(client,user.userId,text(body.tenant),platform);if(!club)throw new CommercialError('forbidden',403);
+ if(action==='select'){if(ownerComplimentary(platform,user.userId))await audit(client,user,club.id,'platform.club.opened');return{id:club.id};}
  if(club.role!=='owner')throw new CommercialError('forbidden',403);
  if(action==='trial.start'){try{const result=await client.query('SELECT gymos.start_public_trial($1) AS trial',[club.id]);return{ok:true,...result.rows[0].trial,id:club.id};}catch(e){const message=e instanceof Error?e.message:'';if(message.includes('trial_used'))throw new CommercialError('trialUsed',409);if(message.includes('trial_unavailable'))throw new CommercialError('trialUnavailable',409);throw e;}}
  if(action==='owner.add'||action==='owner.remove'){

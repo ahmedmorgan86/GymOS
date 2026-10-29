@@ -62,6 +62,7 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
   {!preview&&!loading&&!data&&!mustChangePin&&<section className="card member-login"><span className="member-login-icon"><QrCode size={32}/></span><small>{t('ناديك. مساحتك.','YOUR CLUB. YOUR SPACE.')}</small><h2>{staffMode?t('الدخول الإداري مطلوب','Staff access required'):t('كل تمرينة، بداية جديدة.','Every session. A fresh start.')}</h2><p>{staffMode?t('سجل الدخول بحساب إدارة النادي لعرض العضو.','Sign in with your staff account to view this member.'):t('ادخل رقم موبايلك والرقم السري لفتح عضويتك وتدريبك وتقدمك.','Enter your mobile number and PIN to open your membership, training and progress.')}</p>
    {staffMode?<Link className="button primary" href="/sign-in">{t('دخول إدارة النادي','Staff sign-in')}</Link>:<form onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);void phoneSignIn(String(f.get('phone')),String(f.get('pin')),String(f.get('account')??''));}}><label>{t('رقم الموبايل','Mobile number')}<input name="phone" type="tel" dir="ltr" autoComplete="tel" value={phone} onChange={e=>{setPhone(e.target.value);setChoices([]);}} maxLength={50} placeholder="01… / +20…" required/></label><label>{t('الرقم السري — 6 أرقام','PIN — 6 digits')}<input name="pin" type="password" dir="ltr" inputMode="numeric" autoComplete="current-password" minLength={6} maxLength={6} pattern="[0-9٠-٩۰-۹]{6}" onChange={()=>setChoices([])} required/></label>{choices.length>0&&<label>{t('اختر عضويتك','Choose membership')}<select name="account" required><option value="">{t('اختر النادي والفرع','Choose club and branch')}</option>{choices.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label>}<button className="button primary" disabled={busy}>{busy?t('جارٍ الدخول…','Signing in…'):t('افتح مساحتك','Open your space')}<ArrowUpRight size={20}/></button></form>}
 
+
   </section>}
   {mustChangePin&&!staffMode&&<><MemberPinForm ar={ar} mandatory onChanged={pinChanged}/><button className="button secondary" disabled={busy} onClick={()=>void signOut()}>{t('تسجيل الخروج','Sign out')}</button></>}
   {data&&<>
@@ -85,7 +86,9 @@ export default function MemberApp({previewData,staffRequest}:{previewData?:View;
    {!staffMode&&<button className="button secondary" disabled={preview||busy} onClick={()=>void signOut()}>{t('تسجيل الخروج','Sign out')}</button>}
   </>}
 
+
  </div>
- {data&&(<nav className="member-bottom-nav" aria-label={t('أقسام حساب العضو','Member sections')}>{sections.map(x=>{const Icon={profile:UserRound,health:Activity,attendance:CalendarDays,training:Dumbbell,payments:WalletCards,messages:MessageCircle}[x];return <button key={x} aria-label={names[x]} onClick={()=>navigate(x)} aria-current={tab===x?'page':undefined} className={tab===x?'selected':''}><Icon size={22} strokeWidth={1.8}/>{navNames[x]}</button>;})}</nav>)}
+ {data&&(<nav className="member-bottom-nav" aria-label={t('أقسام حساب العضو','Member sections')}>{sections.map(x=>{const Icon={profile:UserRound,health:Activity,attendance:CalendarDays,training:Dumbbell,payments:WalletCards,messages:MessageCircle}[x];return <button key={x} aria-label={names[x]} onClick={()=>navigate(x)} aria-current={tab===x?'page':undefined} className={tab===x?'selected':''}><Icon size={22} strokeWidth={2}/><span>{navNames[x]}</span></button>;})}</nav>)}
  </main>;
 }
+

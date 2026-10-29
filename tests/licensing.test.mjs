@@ -25,3 +25,5 @@ test('quota reductions preserve data but reject growth; numeric prices reject un
  for(const value of [-1,1.5,Infinity,NaN,Number.MAX_SAFE_INTEGER])assert.throws(()=>priceMinor(value));assert.equal(priceMinor('',true),null);assert.equal(priceMinor('1234'),1234);
  assert.throws(()=>limits({branches:0,members:100,staff:1}));
 });
+
+test('Owner workspace entry can show expired trials without changing license write restrictions',async()=>{const {trialWorkspaceLocked}=await import('../app/lib/licensing.ts');const expired={tenant_id:'club',plan_id:'trial',mode:'trial',status:'active',starts_at:'2000-01-01',ends_at:'2000-02-01',maintenance_until:null,limits:{branches:1,members:10,staff:1},revision:0};assert.equal(trialWorkspaceLocked(expired,true),true);assert.equal(trialWorkspaceLocked(expired,true,false,true),false);assert.equal(trialWorkspaceLocked(expired,false,false,true),false);assert.equal(trialWorkspaceLocked(expired,true,true),false);assert.equal(licenseState(expired).writable,false);});

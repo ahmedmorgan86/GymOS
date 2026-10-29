@@ -20,3 +20,5 @@ export function assertGrowth(cap:Limits,before:{branches:number;members:number},
 export function priceMinor(value:unknown,optional=false){if(optional&&(value===null||value===''))return null;const amount=typeof value==='string'?Number(value):value;if(!Number.isSafeInteger(amount)||Number(amount)<0||Number(amount)>100000000000)throw new CommercialError('amount');return Number(amount);}
 
 export function trialClosed(license:License|null|undefined,now=Date.now()){return license?.mode==='trial'&&!licenseState(license,now).writable;}
+
+export function trialWorkspaceLocked(license:License|null|undefined,online:boolean,support=false,platformOwnerAccess=false){return !support&&!platformOwnerAccess&&license?.mode==='trial'&&(!online||!licenseState(license).writable);}

@@ -154,3 +154,12 @@ fieldset{min-inline-size:0}.table-scroll,.class-calendar,.pass-print-area{min-wi
 }
 
 @media(max-width:650px){.modal-backdrop{padding:8px}.modal{max-width:100%;max-height:calc(100dvh - 16px);padding:16px;min-width:0}.modal-top{flex-wrap:wrap;gap:10px}.modal input,.modal select,.modal textarea{max-width:100%;font-size:16px}.modal-top .button{min-height:44px}}
+
+/* Action controls share a visible surface in management, member and support apps. */
+.text-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;max-width:100%;padding:9px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text);font-size:calc(13px * var(--reading-scale,1));font-weight:750;line-height:1.6;text-align:center;text-decoration:none;white-space:normal}
+.text-button:hover:not(:disabled){background:var(--purple-soft);border-color:var(--purple);color:var(--purple)}
+.text-button:disabled{opacity:.5;cursor:not-allowed}
+.commercial-shell header nav>a,.member-preview-notice a,.operation-notice a{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font-weight:750;line-height:1.6;text-decoration:none;text-align:center}
+.commercial-shell header nav>a:hover,.member-preview-notice a:hover,.operation-notice a:hover{background:var(--purple-soft);border-color:var(--purple)}
+.arabic-voice-list{display:grid;gap:12px;margin-block:16px}.arabic-voice-option{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface-soft)}.arabic-voice-option>div{flex:1;min-width:160px;overflow-wrap:anywhere}.arabic-voice-option small{display:block;color:var(--muted)}.arabic-voice-option [aria-pressed=true]{background:var(--purple);color:#fff;border-color:var(--purple)}
+@media(max-width:600px){.text-button{min-height:46px}.commercial-shell header nav{gap:10px;width:100%}.commercial-shell header nav>a{flex:1}.arabic-voice-option .button{flex:1;white-space:normal}}

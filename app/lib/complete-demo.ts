@@ -1,4 +1,5 @@
 import {addDemoScenarios} from './demo-scenarios.ts';
+import {addDemoShowcase} from './demo-showcase.ts';
 import {demoProductImages} from './demo-product-images.ts';
 import {applyOperation,addDays,dayAt,type GymState,type Member} from './domain.ts';
 import {normalize,membershipIssue} from './extensions.ts';
@@ -38,10 +39,10 @@ export function completeDemo(source:GymState,count:number,now:string){
  }
  for(const branch of branches){const prefix=DEMO_PREFIX+branch.id+'-',coach=prefix+'coach-0';if(!s.coachPayouts.some(p=>p.id===coach+'-payout')){const earned=coachBalance(s,coach,branch.id).earned;if(earned)s.coachPayouts.push({id:coach+'-payout',coach,branch:branch.id,minor:Math.floor(earned/2),day:today,method:'transfer',note:'تسوية وهمية للاختبار'});}
   for(let c=0;c<3;c++){const id=prefix+'class-'+c;if(s.classes.some(x=>x.id===id))continue;const day=addDays(today,c+1),eligible=s.members.filter(m=>m.branch===branch.id&&m.id.startsWith(DEMO_PREFIX)&&!m.demo&&!m.archived&&membershipIssue(s,m,day)===null).slice(0,8);s.classes.push({id,branch:branch.id,title:['حديد وقوة — تجريبي','كارديو جماعي — تجريبي','مرونة وحركة — تجريبي'][c],at:stamp(day,16),capacity:4,members:eligible.slice(0,4).map(m=>m.id),waitlist:eligible.slice(4).map(m=>m.id),coach:'كابتن كريم — تجريبي',demo:false,cancelled:false});}
-  const lines=[['ar','أهلًا بكم في النادي التجريبي. نتمنى لكم تمرينًا موفقًا.'],['ar','تبدأ حصة اللياقة الجماعية بعد عشر دقائق. يرجى التوجه إلى القاعة.'],['ar','نرجو من الكابتن كريم التوجه إلى الاستقبال.'],['ar','يرجى إعادة الأوزان إلى أماكنها بعد الاستخدام.'],['ar','يتبقى نصف ساعة على إغلاق النادي. شكرًا لتعاونكم.'],['en','Welcome to the demo gym. Have a great workout.'],['en','The group fitness class starts in ten minutes.'],['en','Please return the weights after use. Thank you.']];for(const [index,[lang,text]]of lines.entries()){const id=prefix+'announcement-'+index;if(!s.announcements!.some(a=>a.id===id))s.announcements!.push({id,branch:branch.id,text,lang:lang as 'ar'|'en',voice:'',rate:0.95,at:stamp(addDays(today,1),7+index),enabled:index===0||index===5,repeat:'daily',timezone:s.settings.timezone,priority:1,quiet:{start:22,end:7}});}
+  const lines=[['ar','أهلًا بكم في النادي التجريبي. نتمنى لكم تمرينًا موفقًا.'],['ar','تبدأ حصة اللياقة الجماعية بعد عشر دقائق. يرجى التوجه إلى القاعة.'],['ar','نرجو من الكابتن كريم التوجه إلى الاستقبال.'],['ar','يرجى إعادة الأوزان إلى أماكنها بعد الاستخدام.'],['ar','يتبقى نصف ساعة على إغلاق النادي. شكرًا لتعاونكم.'],['en','Welcome to the demo gym. Have a great workout.'],['en','The group fitness class starts in ten minutes.'],['en','Please return the weights after use. Thank you.']];for(const [index,[lang,text]]of lines.entries()){const id=prefix+'announcement-'+index;if(!s.announcements!.some(a=>a.id===id))s.announcements!.push({id,branch:branch.id,text,lang:lang as 'ar'|'en',voice:'',rate:0.95,at:stamp(addDays(today,1),7+index),enabled:false,repeat:'daily',timezone:s.settings.timezone,priority:1,quiet:{start:22,end:7}});}
  }
  if(!s.events.some(e=>e.id===DEMO_PREFIX+'seed-event'))s.events.push({id:DEMO_PREFIX+'seed-event',branch:branches[0].id,at:now,kind:'demo.complete',subject:'workspace',actor:'إضافة بيانات اصطناعية بطلب المالك',detail:'Fictional reserved phone numbers; no messaging connections created.'});
- for(const p of s.products??[]){const match=/^sample-full-.+-product-([0-3])$/.exec(p.id);if(match){const i=Number(match[1]);p.brand='GymEG Demo';p.unit=i===3?'قطعة':'عبوة';p.size=['1 كجم','300 جم','60 قرص','60 جم'][i];p.flavor=i===0||i===3?'شوكولاتة':'';p.description='منتج وعبوة اصطناعيان للتدريب على البيع والمخزون؛ ليس منتجًا حقيقيًا أو توصية غذائية.';p.photo=demoProductImages[i];}}
+ for(const p of s.products??[]){const match=/^sample-full-.+-product-([0-3])$/.exec(p.id);if(match){const i=Number(match[1]);p.brand??='GymEG Demo';p.unit??=i===3?'قطعة':'عبوة';p.size??=['1 كجم','300 جم','60 قرص','60 جم'][i];p.flavor??=i===0||i===3?'شوكولاتة':'';p.description??='منتج وعبوة اصطناعيان للتدريب على البيع والمخزون؛ ليس منتجًا حقيقيًا أو توصية غذائية.';p.photo??=demoProductImages[i];}}
  // Upgrade only our synthetic members; retain the explicit label and reserved fictional phones.
  for(const m of s.members){const match=/^sample-full-member-(\d+)$/.exec(m.id);if(!match||before.has(m.id))continue;const i=Number(match[1])-1;m.name=first[i%first.length]+' '+last[Math.floor(i/first.length)%last.length]+' '+last[Math.floor(i/(first.length*last.length))%last.length]+' — تجريبي';}
  for(const branch of branches){const prefix=DEMO_PREFIX+branch.id+'-business-',marker=prefix+'seed';if(s.events.some(e=>e.id===marker))continue;let seq=0;const run=(type:string,data:Record<string,unknown>={})=>{const next=applyOperation(s,{type,branch:branch.id,...data},now,'Synthetic demo setup',()=>prefix+String(++seq));Object.assign(s,next);};
@@ -63,5 +64,6 @@ export function completeDemo(source:GymState,count:number,now:string){
   s.events.push({id:marker,branch:branch.id,at:now,kind:'demo.business',subject:'workspace',actor:'Synthetic demo setup'});
  }
  addDemoScenarios(s,now);
+ addDemoShowcase(s,now);
  return validateBackup(s);
 }

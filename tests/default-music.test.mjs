@@ -1,7 +1,5 @@
-import {test} from 'node:test';
-import assert from 'node:assert/strict';
-import {readFileSync,readdirSync,existsSync} from 'node:fs';
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';
 import {hiddenMusicIds,visibleDefaultMusic} from '../app/lib/default-music.ts';
 const catalog=JSON.parse(readFileSync(new URL('../public/music/default-catalog.json',import.meta.url)));
-test('Retired bundled music catalog is empty and no shipped audio files remain',()=>{assert.deepEqual(catalog.tracks,[]);const folder=new URL('../public/music/defaults/',import.meta.url);assert.deepEqual(existsSync(folder)?readdirSync(folder).filter(x=>/\.mp3$/i.test(x)):[],[]);});
-test('Stale device references cannot restore retired bundled tracks',()=>{assert.deepEqual(hiddenMusicIds('["gymos-default-silver-bullet"]'),[]);assert.deepEqual(visibleDefaultMusic('[]'),[]);assert.deepEqual(hiddenMusicIds('{invalid'),[]);});
+test('Licensed owner-supplied library contains complete local audio, exact hashes and unique identities',()=>{assert.equal(catalog.tracks.length,12);assert.equal(new Set(catalog.tracks.map(t=>t.id)).size,12);for(const t of catalog.tracks){assert.match(t.url,/^\/music\/defaults\/gymeg-training-\d{2}-[a-f0-9]{10}\.mp3$/);const bytes=readFileSync(new URL('../public'+t.url,import.meta.url));assert.equal(bytes.length,t.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),t.sha256);assert.ok(t.durationSeconds>60);assert.match(t.license,/confirmed by platform owner/);}});
+test('Existing and new branches see defaults without database seeding, and hidden IDs cannot inject URLs',()=>{assert.equal(visibleDefaultMusic('[]').length,12);const first=catalog.tracks[0].id;assert.deepEqual(hiddenMusicIds(JSON.stringify([first,first,'https://evil.invalid','gymos-default-silver-bullet'])),[first]);assert.equal(visibleDefaultMusic(JSON.stringify([first])).length,11);assert.equal(visibleDefaultMusic('{invalid').length,12);assert.equal(visibleDefaultMusic('[]').length,12);});

@@ -1,0 +1,11 @@
+# GymEG release follow-up — 2026-10-29
+
+- Vercel project avatar replaced with the current GymEG icon; saved through project settings.
+- PR #58 is merged. Correct production deployment promoted after a later deployment referenced the previous commit. Public production checks passed for homepage, sign-in, member preview, database readiness, anonymous workspace/member-portal rejection, all five marketing image hashes and Windows 1.1.14 download.
+- Added 12 complete MP3 files (73,280,293 bytes; approximately 43.3 minutes). The platform owner supplied them and explicitly confirmed distribution authorization to all clubs. This records the owner's statement; no independent license documents were reviewed. Catalog pins SHA-256, size and parsed MP3 duration. No external preview player is used.
+- Existing and new clubs receive the default catalog without changing customer databases. Playback starts only after user interaction. Hide/restore preferences are isolated by tenant/branch/device, following existing music storage behavior. Device uploads remain local. Hiding music does not delete shared catalog assets for other clubs.
+- Platform administrators see all licensed/trial clubs in their regular club directory, separately labeled platform oversight. Existing owner/manager memberships retain their role. No ownership, membership, tenant data or license changes are performed. Customer cards link to existing platform administration; they cannot select an unauthorized workspace. Existing audited support-session rules remain enforced.
+
+Validation before upload: 244 unit tests passed, 7 optional live-database tests skipped; 3 actual React UI integration tests passed. Typecheck, lint and production build passed. CI will repeat all configured API/integration/security/Android/Windows checks on the uploaded revision.
+
+Commercial limits: software tests do not prove absence of every error. Physical Android/iPhone installation and device/provider acceptance require actual devices/accounts; barcode reader and camera were unavailable. Windows executable remains without a trusted publisher certificate. The explicitly requested shared initial member password 123456 remains unchanged. Music distribution authorization relies on the owner statement above.

@@ -8,3 +8,6 @@
 
 .site{--landing-accent:#7C3AED;--mint:#A855F7}.site[data-public-theme=dark]{--landing-ink:#F5F3FF;--landing-sub:#B2A9C5;--landing-accent:#A855F7;--surface:#1B1729;--soft:#241E35;--border:#ffffff14;--mint:#A855F7;background:#12101C}.site[data-public-theme=light]{--landing-ink:#21172F;--landing-sub:#665B77;--surface:#FFFFFF;--soft:#F5F3FF;--border:#7c3aed1c;background:#F5F3FF}.brand{font-family:Montserrat,Cairo,sans-serif;letter-spacing:-.7px}.brand small{font-family:Inter,Cairo,sans-serif;letter-spacing:1px}
 .site{--text:var(--landing-ink);--muted:var(--landing-sub);--line:var(--border)}
+
+/* Keep platform choices visible without an extra disclosure click. */
+.downloadOptions:not([open])>summary{display:none}.downloadOptions:not([open])>.downloadGrid{display:grid}.downloadOptions{margin-block:20px}

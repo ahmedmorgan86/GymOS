@@ -54,3 +54,15 @@
  .dialog .saveBar{bottom:calc(-14px - env(safe-area-inset-bottom));padding-bottom:calc(12px + env(safe-area-inset-bottom));flex-wrap:wrap}
  .dialog .form :global(.form-row){grid-template-columns:minmax(0,1fr)}
 }
+
+
+/* Member drawer actions: clear primary renewal/payment CTAs and consistent secondary controls. */
+.details>form>button{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;padding:12px 20px;border:1px solid transparent;border-radius:14px;background:var(--accent,var(--purple,var(--pt-primary)));color:var(--club-accent-text,#fff);font:inherit;font-weight:800;line-height:1.5;box-shadow:0 6px 18px #7045db30;transition:filter .18s,transform .18s,box-shadow .18s}
+.details>form>button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 9px 22px #7045db40}
+.details>form>button:active:not(:disabled){transform:translateY(0);box-shadow:0 3px 10px #7045db28}
+.details>form>button:focus-visible,.details section button:not(.button):focus-visible{outline:3px solid color-mix(in srgb,var(--accent,var(--purple,var(--pt-primary))) 45%,transparent);outline-offset:3px}
+.details section button:not(.button){display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:9px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--text);font:inherit;font-weight:700;line-height:1.5;transition:background .18s,border-color .18s,transform .18s}
+.details section button:not(.button):hover:not(:disabled){border-color:var(--accent,var(--purple,var(--pt-primary)));background:var(--purple-soft);transform:translateY(-1px)}
+.details section button:not(.button):disabled,.details>form>button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:650px){.details>form>button,.details section button:not(.button){min-height:46px;white-space:normal}}
+@media(prefers-reduced-motion:reduce){.details>form>button,.details section button:not(.button){transition:none}}

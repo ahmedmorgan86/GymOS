@@ -1,3 +1,4 @@
+import {appendPlatformClubs} from './platform-directory';
 import {resolveSupport} from './platform-support';
 import {ownerComplimentary,OWNER_FREE_LIMITS,OWNER_FREE_PLAN} from './platform-owner-license';
 import 'server-only';
@@ -32,6 +33,7 @@ export async function commercialDirectory(user:ChatGPTUser,platformView=false){r
  let clubs:CommercialClub[]=[];
  if(platformView)clubs=(await client.query('SELECT t.id,t.name,t.created_at,l.* FROM gymos.tenants t JOIN gymos.tenant_licenses l ON l.tenant_id=t.id ORDER BY t.created_at DESC LIMIT 500')).rows;
  else{const memberships=(await client.query('SELECT tenant_id FROM gymos.tenant_memberships WHERE user_id=$1 AND NOT revoked ORDER BY tenant_id',[user.userId])).rows;for(const m of memberships){const club=await selectClub(client,user.userId,m.tenant_id);if(club){const license=(await client.query('SELECT * FROM gymos.tenant_licenses WHERE tenant_id=$1',[club.id])).rows[0];const requests=club.role==='owner'?(await client.query('SELECT * FROM gymos.activation_requests WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT 30',[club.id])).rows:[];const members=club.role==='owner'?(await client.query('SELECT user_id,name,role FROM gymos.tenant_memberships WHERE tenant_id=$1 AND NOT revoked ORDER BY role,name',[club.id])).rows:[];clubs.push({id:club.id,name:club.name,role:club.role,license,requests,members});}}}
+ if(!platformView)clubs=await appendPlatformClubs(client,platform,clubs);
  const plans=platformView?(await client.query('SELECT * FROM gymos.commercial_plans ORDER BY id')).rows:[];
  const settings=(await client.query('SELECT payload,revision FROM gymos.platform_settings WHERE id=1')).rows[0];
  const orders=platformView?(await client.query('SELECT r.*,t.name AS club_name FROM gymos.activation_requests r JOIN gymos.tenants t ON t.id=r.tenant_id ORDER BY r.created_at DESC LIMIT 200')).rows:[];

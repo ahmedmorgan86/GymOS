@@ -48,5 +48,5 @@
 .member-bottom-nav button svg{box-sizing:content-box;width:20px;height:20px;padding:6px;border-radius:11px;color:#c7d1e7;stroke-width:2.2;transition:transform .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease}
 .member-bottom-nav button.selected{color:var(--text);background:transparent}
 .member-bottom-nav button.selected svg{color:#fff;stroke-width:2.5;background:linear-gradient(140deg,#7c3aed,#a855f7);box-shadow:0 5px 14px #7c3aed50;transform:translateY(-1px)}
-.member-bottom-nav button span{font-weight:800}
-@media(max-width:380px){.member-mobile-app .member-bottom-nav{width:calc(100% - 8px);padding-inline:3px}.member-bottom-nav button span{font-size:clamp(7.5px,2.4vw,9px)}}
+.member-bottom-nav button span{display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.35;font-weight:800}
+@media(max-width:380px){.member-mobile-app .member-bottom-nav{width:calc(100% - 8px);padding-inline:3px}.member-bottom-nav button span{font-size:10px}}

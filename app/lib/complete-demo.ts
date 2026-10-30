@@ -28,7 +28,7 @@ export function completeDemo(source:GymState,count:number,now:string){
  const areas=['202','212','213','312','415','617','646','702','808','917','305','206'];const phones=new Set(s.members.map(m=>m.phone));let phoneIndex=0;
  for(let i=0;i<count;i++){const id=DEMO_PREFIX+'member-'+String(i+1).padStart(4,'0');if(before.has(id))continue;let phone:string;do{phone='+1'+areas[Math.floor(phoneIndex/100)]+'55501'+String(phoneIndex%100).padStart(2,'0');phoneIndex++;}while(phones.has(phone));phones.add(phone);
   const branch=branches[Math.floor(i/10)%2].id,prefix=DEMO_PREFIX+branch+'-',kind=i%10,plan=s.plans!.find(p=>p.id===prefix+'plan-'+(kind===3?2:kind===7?1:0))!,start=kind===0||kind===8?addDays(today,-60):kind===2?addDays(today,5):addDays(today,kind===9?-26:-10),end=addDays(start,29+(kind===1?7:0)),joined=addDays(start,-2),member:Member={id,branch,name:first[i%first.length]+' '+last[Math.floor(i/first.length)%last.length]+' — تجريبي '+String(i+1).padStart(4,'0'),phone,joined,expires:end,demo:false,archived:kind===8,consent:false,card:'SAMPLE-'+String(i+1).padStart(6,'0'),whatsapp:{enabled:false,at:now,actor:'بيانات وهمية'},health:{birthDate:(1980+i%25)+'-05-15',height:158+i%31,notes:'ملف وقياسات اصطناعية للتجربة فقط',consentedAt:now},vitals:[{id:id+'-vitals',day:today,weight:58+i%44,waist:68+i%35,pulse:62+i%22,systolic:110+i%15,diastolic:70+i%10,oxygen:98,note:'قيم تجريبية وليست قياسات شخص حقيقي',consentedAt:now}],membershipPeriods:[{id:id+'-term',plan:plan.id,start,end,visits:plan.visits}],contract:{id:id+'-term',plan:plan.id,start,visits:plan.visits}};
-  if(kind===1)member.freezes=[{from:today,to:addDays(today,6)}];if(i%4===0&&![0,1,2,8].includes(kind))member.shift=prefix+'shift';
+  if(kind===1)member.freezes=[{from:today,to:addDays(today,6)}];
   s.members.push(member);const invoice=id+'-invoice',payment=id+'-payment',paid=kind===4?Math.round(plan.minor*0.3):kind===2?0:plan.minor;s.invoices!.push({id:invoice,member:id,branch,title:plan.name,total:plan.minor,due:start,voided:false,allocations:paid?[{payment,minor:paid}]:[]});if(paid)s.payments.push({id:payment,member:id,branch,minor:paid,day:start>today?today:start,method:i%3===0?'cash':i%3===1?'card':'transfer',voided:false});
   if(kind===5||kind===7)s.payments.push({id:id+'-advance',member:id,branch,minor:20000,day:today,method:'cash',voided:false,creditable:true});
   if(kind===6){const nextStart=addDays(end,1),nextEnd=addDays(nextStart,29);member.membershipPeriods!.push({id:id+'-next-term',plan:plan.id,start:nextStart,end:nextEnd,visits:plan.visits});member.expires=nextEnd;s.invoices!.push({id:id+'-next-invoice',member:id,branch,title:plan.name,total:plan.minor,due:nextStart,voided:false,allocations:[]});}
@@ -65,5 +65,9 @@ export function completeDemo(source:GymState,count:number,now:string){
  }
  addDemoScenarios(s,now);
  addDemoShowcase(s,now);
+ // Keep schedule and class tools available, without linking demo members to either.
+ const demoIds=new Set(s.members.filter(m=>/^sample-full-member-\d+$/.test(m.id)).map(m=>m.id));
+ for(const member of s.members)if(demoIds.has(member.id))delete member.shift;
+ for(const item of s.classes)if(item.id.startsWith(DEMO_PREFIX)){item.members=[];item.waitlist=[];}
  return validateBackup(s);
 }

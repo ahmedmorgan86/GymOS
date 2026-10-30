@@ -18,7 +18,7 @@ test('Arabic samples select the matching installed voice and persist per club an
  await React.act(async()=>button('Voice settings').click());
  assert.equal(document.querySelectorAll('.arabic-voice-option').length,2);
  await React.act(async()=>document.querySelector('.arabic-voice-option button').click());
- assert.equal(spoken.length,1);assert.equal(spoken[0].voice,voices[0]);assert.equal(spoken[0].lang,'ar-EG');assert.match(spoken[0].text,/أهلًا/);
+ assert.equal(spoken.length,1);assert.equal(spoken[0].voice,voices[0]);assert.equal(spoken[0].lang,'ar-EG');assert.match(spoken[0].text,/إزيكم يا أبطال/);
  await React.act(async()=>document.querySelectorAll('.arabic-voice-option')[1].querySelectorAll('button')[1].click());
  assert.equal(localStorage.getItem('gymos.speech-voice.club-a.main'),'device:saudi');
  assert.equal(button('Selected voice').getAttribute('aria-pressed'),'true');

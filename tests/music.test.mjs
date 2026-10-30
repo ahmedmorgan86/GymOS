@@ -33,3 +33,9 @@ test('Desktop and web playback use full canonical provider URLs in separate wind
  for(const input of inputs){const link=musicLink(input);assert.ok(link?.embed);const desktop=musicPlaybackTarget(link,true),web=musicPlaybackTarget(link,false);assert.equal(desktop.mode,'native');assert.equal(desktop.url,link.url);assert.equal(web.mode,'popup');assert.equal(web.url,link.url);assert.ok(!/widget\.|embed\.|\/embed\//.test(desktop.url));}
  assert.equal(musicLink(inputs[1]).url,'https://play.anghami.com/song/123');assert.equal(musicLink(inputs[3]).url,'https://www.deezer.com/track/123');assert.equal(musicLink(inputs[4]).url,'https://listen.tidal.com/track/123');
 });
+
+test('Additional major music services are discoverable and only accept their exact HTTPS hosts',()=>{
+ const services=['music.amazon.com','bandcamp.com','www.mixcloud.com','audiomack.com','www.boomplay.com','www.jiosaavn.com','play.qobuz.com','www.pandora.com','www.napster.com','www.iheart.com','music.yandex.com','audius.co'];
+ for(const host of services){const link=musicLink(`https://${host}/artist/track?utm_source=test#fragment`);assert.ok(link,host);assert.equal(link.url,`https://${host}/artist/track`);assert.equal(link.embed,undefined);assert.equal(musicLink(`https://${host}.evil.test/track`),null);assert.equal(musicLink(`http://${host}/track`),null);}
+ assert.equal(musicLink('https://music.amazon.co.uk/').platform,'Amazon Music');
+});

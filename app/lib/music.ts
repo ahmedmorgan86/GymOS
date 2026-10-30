@@ -8,7 +8,23 @@ export const musicPlatforms=[
  {name:'Apple Music',url:'https://music.apple.com/'},
  {name:'Deezer',url:'https://www.deezer.com/'},
  {name:'TIDAL',url:'https://listen.tidal.com/'},
+ {name:'Amazon Music',url:'https://music.amazon.com/'},
+ {name:'Bandcamp',url:'https://bandcamp.com/'},
+ {name:'Mixcloud',url:'https://www.mixcloud.com/'},
+ {name:'Audiomack',url:'https://audiomack.com/'},
+ {name:'Boomplay',url:'https://www.boomplay.com/'},
+ {name:'JioSaavn',url:'https://www.jiosaavn.com/'},
+ {name:'Qobuz',url:'https://play.qobuz.com/'},
+ {name:'Pandora',url:'https://www.pandora.com/'},
+ {name:'Napster',url:'https://www.napster.com/'},
+ {name:'iHeartRadio',url:'https://www.iheart.com/'},
+ {name:'Yandex Music',url:'https://music.yandex.com/'},
+ {name:'Audius',url:'https://audius.co/'},
 ] as const;
+const externalMusicHosts:Record<string,string>={
+ 'music.amazon.com':'Amazon Music','music.amazon.co.uk':'Amazon Music','music.amazon.de':'Amazon Music','music.amazon.fr':'Amazon Music','music.amazon.it':'Amazon Music','music.amazon.es':'Amazon Music','music.amazon.co.jp':'Amazon Music','music.amazon.ca':'Amazon Music','music.amazon.com.au':'Amazon Music',
+ 'bandcamp.com':'Bandcamp','www.bandcamp.com':'Bandcamp','mixcloud.com':'Mixcloud','www.mixcloud.com':'Mixcloud','audiomack.com':'Audiomack','www.audiomack.com':'Audiomack','boomplay.com':'Boomplay','www.boomplay.com':'Boomplay','jiosaavn.com':'JioSaavn','www.jiosaavn.com':'JioSaavn','play.qobuz.com':'Qobuz','qobuz.com':'Qobuz','www.qobuz.com':'Qobuz','pandora.com':'Pandora','www.pandora.com':'Pandora','napster.com':'Napster','www.napster.com':'Napster','iheart.com':'iHeartRadio','www.iheart.com':'iHeartRadio','music.yandex.com':'Yandex Music','music.yandex.ru':'Yandex Music','audius.co':'Audius','www.audius.co':'Audius'
+};
 // Only canonical HTTPS provider URLs are accepted; never accept iframe HTML.
 export function musicLink(raw:string,name=''):MusicLink|null{
  try{
@@ -34,6 +50,7 @@ export function musicLink(raw:string,name=''):MusicLink|null{
   }else if(['listen.tidal.com','tidal.com','www.tidal.com','embed.tidal.com'].includes(host)){
    platform='TIDAL';const match=path.match(/^\/(?:browse\/)?(track|album|video|playlist)s?\/([\w-]+)\/?$/);if(match)embed=`https://embed.tidal.com/${match[1]}s/${match[2]}`;
   }
+  else if(externalMusicHosts[host])platform=externalMusicHosts[host];
   else return null;
   // Strip tracking and fragments; retain only content identifiers for YouTube.
   const clean=new URL('https://'+host+path);if(platform==='Anghami')clean.hostname='play.anghami.com';if(platform==='Apple Music')clean.hostname='music.apple.com';if(platform==='Deezer'){clean.hostname='www.deezer.com';clean.pathname=path.replace(/^\/widget\/(?:auto|dark|light)\//,'/');}if(platform==='TIDAL'){clean.hostname='listen.tidal.com';clean.pathname=path.replace(/^\/browse\//,'/').replace(/^\/(track|album|video|playlist)s\//,'/$1/');}if(platform.startsWith('YouTube'))for(const key of ['v','list']){const value=u.searchParams.get(key);if(value)clean.searchParams.set(key,value);}

@@ -1,7 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {resolveAnnouncementVoice} from '../app/lib/announcement-voice.ts';
+import {announcementVoiceLabel,announcementVoiceSample,resolveAnnouncementVoice} from '../app/lib/announcement-voice.ts';
 const voice=(voiceURI,lang,name=voiceURI)=>({voiceURI,lang,name});
 test('Keeps a saved voice when this device still provides it',()=>{const result=resolveAnnouncementVoice([voice('windows:ar','ar-EG')],'windows:ar','ar');assert.equal(result.voice.voiceURI,'windows:ar');assert.equal(result.exact,true);});
 test('Uses the local Arabic voice when a saved device-specific Arabic voice is missing',()=>{const voices=[voice('local:nabra-ar','ar'),voice('en-US','en-US')],result=resolveAnnouncementVoice(voices,'old-device:ar','ar-EG');assert.equal(result.voice.voiceURI,'local:nabra-ar');assert.equal(result.exact,false);});
 test('Falls back only to a voice in the saved message language',()=>{const voices=[voice('en-GB','en-GB'),voice('en-US','en-US'),voice('windows:ar','ar-EG')];assert.equal(resolveAnnouncementVoice(voices,'removed','en').voice.voiceURI,'en-US');assert.equal(resolveAnnouncementVoice(voices,'removed','ar').voice.voiceURI,'windows:ar');assert.equal(resolveAnnouncementVoice(voices,'removed','fr').voice,null);});
+test('Labels Egyptian Arabic clearly and provides a colloquial preview sample',()=>{const egyptian=voice('windows:ar-eg','ar-EG','Microsoft Arabic');assert.match(announcementVoiceLabel(egyptian,true),/مصري/);assert.match(announcementVoiceLabel(egyptian,false),/Egyptian Arabic/);assert.match(announcementVoiceSample(egyptian),/إزيكم/);assert.match(announcementVoiceSample(voice('local:nabra-ar','ar')),/أَهْلًا/);});

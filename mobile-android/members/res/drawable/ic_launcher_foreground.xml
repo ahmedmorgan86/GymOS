@@ -1,1 +1,5 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="360" android:viewportHeight="360"><group android:translateX="40" android:translateY="36"><path android:fillColor="#FFA855F7" android:pathData="M245,79 L132,14 L20,79 L20,209 L132,274 L244,209 L244,200 L174,200 L174,220 L201,220 L132,236 L57,192 L57,101 L132,57 L207,101 Z M78,123 L93,123 L93,173 L78,173 Z M98,108 L119,108 L119,188 L98,188 Z M127,137 L210,137 L210,159 L127,159 Z M218,108 L239,108 L239,188 L218,188 Z M244,123 L259,123 L259,173 L244,173 Z"/></group></vector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="360" android:viewportHeight="360">
+  <path android:fillColor="#00000000" android:strokeColor="#FFA855F7" android:strokeWidth="18" android:strokeLineJoin="round" android:pathData="M180,42 L300,111 L300,249 L180,318 L60,249 L60,111 Z"/>
+  <path android:fillColor="#FFF5F3FF" android:pathData="M180,98 A34,34 0,1 0,180 166 A34,34 0,1 0,180 98 Z"/>
+  <path android:fillColor="#FFF5F3FF" android:pathData="M95,270 C100,217 132,189 180,189 C228,189 260,217 265,270 Z"/>
+</vector>

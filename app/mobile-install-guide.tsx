@@ -6,7 +6,7 @@ import './member-install/install.css';
 export default function MobileInstallGuide({kind,en=false}:{kind:'members'|'management';en?:boolean}){
  const member=kind==='members',release=member?members:management,home=member?'/member':'/clubs';
  const t=(ar:string,english:string)=>en?english:ar;
- const name=member?'GymEG Members':'GymEG Manager',entry=member?'/mobile/member':'/mobile/management';
+ const name=member?(en?'GymEG Members':'GymEG الأعضاء'):(en?'GymEG Manager':'GymEG إدارة النادي'),entry=member?'/mobile/member':'/mobile/management';
  return <main className="mobile-install-guide" dir={en?'ltr':'rtl'}>
   <header><Link href="/">GymEG</Link><Link href={(member?'/member-install':'/management-install')+(en?'':'?lang=en')}>{en?'العربية':'English'}</Link></header>
   <section className="install-intro"><small>YOUR GYM. ONE SYSTEM.</small><h1>{name}</h1><p>{t('التطبيق الجديد، بنفس حسابك وبياناتك الحالية.','Your new app, with your existing account and records.')}</p><Link className="button secondary" href={home}>{t('فتح نسخة الويب','Open web app')}</Link></section>

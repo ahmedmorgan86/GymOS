@@ -1,0 +1,172 @@
+import { z } from 'zod';
+import { RuleError, type GymState, type Operation } from './domain.ts';
+
+export const audioAssetSchema = z.object({
+  id: z.string().min(1).max(250),
+  name: z.string().min(1).max(200),
+  uri: z.string().min(1).max(20000),
+  mimeType: z.string().min(1).max(200),
+  bytes: z.number().int().nonnegative().max(500_000_000),
+  duration: z.number().nonnegative().max(3600),
+  enabled: z.boolean().default(true),
+  volume: z.number().min(0).max(100).default(100),
+  repeat: z.number().int().min(1).max(50).default(1),
+  gapSeconds: z.number().int().min(0).max(600).default(0),
+  fadeIn: z.number().int().min(0).max(30).default(0),
+  fadeOut: z.number().int().min(0).max(30).default(0),
+});
+
+export const scheduleSchema = z.object({
+  mode: z.enum(['daily', 'once', 'weekdays', 'interval']),
+  days: z.array(z.number().int().min(0).max(6)).default([]),
+  intervalDays: z.number().int().min(1).max(365).default(1),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  hasEndDate: z.boolean().default(false),
+  times: z.array(z.string().regex(/^\d{2}:\d{2}$/)).default(['08:00']),
+});
+
+export const announcementSchema = z.object({
+  id: z.string().min(1).max(250),
+  branch: z.string().min(1).max(250),
+  title: z.string().trim().min(1).max(200),
+  enabled: z.boolean().default(true),
+  intro: audioAssetSchema.nullable().default(null),
+  primary: audioAssetSchema.required(),
+  outro: audioAssetSchema.nullable().default(null),
+  schedule: scheduleSchema,
+  primaryRepeat: z.number().int().min(1).max(50).default(1),
+  primaryGapSeconds: z.number().int().min(0).max(600).default(0),
+  createdAt: z.string().datetime({ offset: true }).default(new Date().toISOString()),
+  updatedAt: z.string().datetime({ offset: true }).default(new Date().toISOString()),
+});
+
+export type AudioAsset = z.infer<typeof audioAssetSchema>;
+export type AnnouncementSchedule = z.infer<typeof scheduleSchema>;
+export type Announcement = z.infer<typeof announcementSchema>;
+
+export function defaultAnnouncement(branch: string, id = crypto.randomUUID()): Announcement {
+  return {
+    id,
+    branch,
+    title: 'نداء جديد',
+    enabled: true,
+    intro: null,
+    primary: {
+      id: crypto.randomUUID(),
+      name: 'ملف النداء الأساسي',
+      uri: '',
+      mimeType: 'audio/mpeg',
+      bytes: 0,
+      duration: 0,
+      enabled: true,
+      volume: 100,
+      repeat: 1,
+      gapSeconds: 0,
+      fadeIn: 0,
+      fadeOut: 0,
+    },
+    outro: null,
+    schedule: {
+      mode: 'daily',
+      days: [],
+      intervalDays: 1,
+      times: ['08:00'],
+      startDate: undefined,
+      endDate: undefined,
+      hasEndDate: false,
+    },
+    primaryRepeat: 1,
+    primaryGapSeconds: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export function announcementOperation(s: GymState, op: Operation, now: string, newId: () => string): boolean {
+  if (!op.type.startsWith('announcement.')) return false;
+  const count = s.announcements?.length ?? 0;
+  if (count > 5000) throw new RuleError('limit');
+
+  switch (op.type) {
+    case 'announcement.add': {
+      const parsed = announcementSchema.safeParse(op.payload ?? {});
+      if (!parsed.success) throw new RuleError('invalid');
+      const announcement = parsed.data;
+      announcement.id = announcement.id || newId();
+      announcement.branch = String(op.branch ?? announcement.branch);
+      (s.announcements ??= []).push(announcement);
+      return true;
+    }
+    case 'announcement.update': {
+      const payload = op.payload as Partial<Announcement> | undefined;
+      if (!payload || !payload.id) throw new RuleError('invalid');
+      const index = (s.announcements ?? []).findIndex((announcement) => announcement.id === payload.id && announcement.branch === op.branch);
+      if (index === -1) throw new RuleError('notFound');
+      const current = s.announcements![index];
+      const merged = announcementSchema.parse({ ...current, ...payload, updatedAt: new Date(now).toISOString() });
+      s.announcements![index] = merged;
+      return true;
+    }
+    case 'announcement.remove': {
+      const id = String(op.id ?? '');
+      if (!id) throw new RuleError('invalid');
+      if (!s.announcements) return true;
+      s.announcements = s.announcements.filter((announcement) => !(announcement.id === id && announcement.branch === op.branch));
+      return true;
+    }
+    case 'announcement.toggle': {
+      const id = String(op.id ?? '');
+      if (!id) throw new RuleError('invalid');
+      const item = (s.announcements ?? []).find((announcement) => announcement.id === id && announcement.branch === op.branch);
+      if (!item) throw new RuleError('notFound');
+      item.enabled = !item.enabled;
+      item.updatedAt = new Date(now).toISOString();
+      return true;
+    }
+    default:
+      throw new RuleError('invalid');
+  }
+}
+
+export function announcementDueTimes(announcement: Announcement, from: Date = new Date()): Date[] {
+  const times = announcement.schedule.times.length ? announcement.schedule.times : ['08:00'];
+  const result: Date[] = [];
+  const start = new Date(from);
+  start.setSeconds(0, 0);
+
+  const scheduleDates = [start.toISOString().slice(0, 10)];
+  for (const time of times) {
+    const [h, m] = time.split(':').map(Number);
+    const next = new Date(start);
+    next.setHours(h, m, 0, 0);
+    if (next.getTime() < start.getTime()) next.setDate(next.getDate() + 1);
+    if (announcement.schedule.mode === 'once') {
+      if (announcement.schedule.startDate && announcement.schedule.startDate === next.toISOString().slice(0, 10)) result.push(next);
+      continue;
+    }
+    if (announcement.schedule.mode === 'daily' || announcement.schedule.mode === 'weekdays' || announcement.schedule.mode === 'interval') {
+      for (const day of scheduleDates) {
+        const date = new Date(`${day}T${time}:00`);
+        if (date.getTime() >= start.getTime()) result.push(date);
+      }
+    }
+  }
+
+  return result.sort((a, b) => a.getTime() - b.getTime());
+}
+
+export function scheduleSummary(announcement: Announcement): string {
+  if (!announcement.enabled) return 'موقوف';
+  const mode = {
+    daily: 'يومي',
+    once: 'مرة واحدة',
+    weekdays: 'أيام محددة',
+    interval: 'فترات',
+  }[announcement.schedule.mode];
+  return `${mode} · ${announcement.schedule.times.join(', ')}`;
+}
+
+export function announcementSummary(announcement: Announcement): string {
+  return `${announcement.title} · ${announcement.primary?.name ?? 'بدون ملف أساسي'}`;
+}
